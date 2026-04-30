@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Program - The Green Space</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f1f4ee;
+      --nav-bg: #3a5241;
+      --nav-text: #e4ece0;
+      --primary: #4a7a57;
+      --light-green: #e4ece0;
+      --white: #fdfffe;
+      --text: #2a3828;
+      --text-muted: #5a6e58;
+      --border: #c4d4be;
+      --summary-bg: #e8f0e4;
+      --active-bg: #d4e4cc;
+      --shadow: 0 2px 12px rgba(40, 60, 40, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg);
+      font-family: 'Lato', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    nav {
+      background-color: var(--nav-bg);
+      padding: 18px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--nav-text);
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--nav-text);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 400;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+
+    .dropdown { position: relative; }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 18px);
+      left: 0;
+      background-color: var(--nav-bg);
+      min-width: 180px;
+      border-radius: 0 0 8px 8px;
+      padding: 8px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .dropdown:hover .dropdown-menu { display: block; }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 20px;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-size: 14px;
+      opacity: 0.85;
+      transition: opacity 0.2s, background 0.2s;
+    }
+
+    .dropdown-menu a:hover {
+      opacity: 1;
+      background-color: rgba(255,255,255,0.08);
+    }
+
+    .program-layout {
+      display: flex;
+      min-height: calc(100vh - 62px);
+    }
+
+    .sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      background-color: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 48px 0;
+      position: sticky;
+      top: 62px;
+      height: calc(100vh - 62px);
+      overflow-y: auto;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 700;
+      padding: 0 28px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-module {
+      padding: 16px 28px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-module:hover { background-color: var(--summary-bg); }
+
+    .sidebar-module.active {
+      background-color: var(--active-bg);
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-module-number {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-module-title {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 64px 80px;
+      max-width: 820px;
+    }
+
+    .module-section { display: none; }
+    .module-section.active { display: block; }
+
+    .module-header { margin-bottom: 48px; }
+
+    .module-label {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .module-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .summary-box {
+      background-color: var(--summary-bg);
+      border-radius: 8px;
+      padding: 32px 36px;
+      margin-bottom: 48px;
+      border: 1px solid var(--border);
+    }
+
+    .summary-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .summary-box ul { list-style: none; padding: 0; }
+
+    .summary-box ul li {
+      font-size: 15px;
+      color: var(--text-muted);
+      padding: 6px 0 6px 20px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .summary-box ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 15px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--primary);
+    }
+
+    .video-placeholder {
+      background-color: var(--light-green);
+      border-radius: 8px;
+      aspect-ratio: 16/9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+
+    .video-placeholder p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    .play-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .play-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+      margin-left: 3px;
+    }
+
+    .content-block { margin-bottom: 48px; }
+
+    .content-block h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .content-block p {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.9;
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background-color: var(--border);
+      margin: 48px 0;
+    }
+
+    .audio-placeholder {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .audio-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--summary-bg);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .audio-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--primary);
+    }
+
+    .audio-title {
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .audio-duration {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* EMOTION TABS */
+    .emotion-tab-buttons {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+
+    .emotion-tab-btn {
+      padding: 12px 28px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 15px;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .emotion-tab-btn:hover { color: var(--text); }
+
+    .emotion-tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 700;
+    }
+
+    .emotion-tab-content { display: none; }
+    .emotion-tab-content.active { display: block; }
+
+    footer {
+      background-color: var(--nav-bg);
+      color: var(--nav-text);
+      text-align: center;
+      padding: 32px 40px;
+      font-size: 14px;
+      font-weight: 300;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">The Green Space</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="program.html">Program</a></li>
+      <li class="dropdown">
+        <a href="about.html">About Us</a>
+        <div class="dropdown-menu">
+          <a href="about.html#people">People</a>
+          <a href="about.html#the-program">The Program</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="program-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-label">Program Modules</div>
+
+      <div class="sidebar-module active" onclick="showModule(1)">
+        <div class="sidebar-module-number">Module 1</div>
+        <div class="sidebar-module-title">Compassion and our tricky brains</div>
+      </div>
+      <div class="sidebar-module" onclick="showModule(2)">
+        <div class="sidebar-module-number">Module 2</div>
+        <div class="sidebar-module-title">Our three circles</div>
+      </div>
+      <div class="sidebar-module" onclick="showModule(3)">
+        <div class="sidebar-module-number">Module 3</div>
+        <div class="sidebar-module-title">Working with your inner critic</div>
+      </div>
+      <div class="sidebar-module" onclick="showModule(4)">
+        <div class="sidebar-module-number">Module 4</div>
+        <div class="sidebar-module-title">Building your compassionate self</div>
+      </div>
+      <div class="sidebar-module" onclick="showModule(5)">
+        <div class="sidebar-module-number">Module 5</div>
+        <div class="sidebar-module-title">Working with complex emotions</div>
+      </div>
+      <div class="sidebar-module" onclick="showModule(6)">
+        <div class="sidebar-module-number">Module 6</div>
+        <div class="sidebar-module-title">Next steps</div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <!-- MODULE 1 -->
+      <div class="module-section active" id="module-1">
+        <div class="module-header">
+          <div class="module-label">Module 1</div>
+          <h1>Compassion and our tricky brains</h1>
+        </div>
+        <div class="summary-box">
+          <h3>What this module covers</h3>
+          <ul>
+            <li>Why our brains are wired to struggle</li>
+            <li>Understanding the evolutionary origins of difficult emotions</li>
+            <li>An introduction to compassion focused therapy</li>
+            <li>Why self-criticism is so common and how compassion offers an alternative</li>
+          </ul>
+        </div>
+        <div class="video-placeholder">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p>Video will be added here</p>
+        </div>
+        <div class="content-block">
+          <h2>About this module</h2>
+          <p>Your written content for module 1 will go here.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div class="content-block">
+          <h2>Audio practices</h2>
+          <div class="audio-placeholder">
+            <div class="audio-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </div>
+            <div>
+              <div class="audio-title">Guided audio — Module 1</div>
+              <div class="audio-duration">Audio will be added here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 2 -->
+      <div class="module-section" id="module-2">
+        <div class="module-header">
+          <div class="module-label">Module 2</div>
+          <h1>Our three circles</h1>
+        </div>
+        <div class="summary-box">
+          <h3>What this module covers</h3>
+          <ul>
+            <li>Understanding the three emotion regulation systems</li>
+            <li>The threat, drive, and soothing circles explained</li>
+            <li>How modern life disrupts the balance between systems</li>
+            <li>Practical ways to activate your soothing system</li>
+          </ul>
+        </div>
+        <div class="video-placeholder">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p>Video will be added here</p>
+        </div>
+        <div class="content-block">
+          <h2>About this module</h2>
+          <p>Your written content for module 2 will go here.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div class="content-block">
+          <h2>Audio practices</h2>
+          <div class="audio-placeholder">
+            <div class="audio-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </div>
+            <div>
+              <div class="audio-title">Guided audio — Module 2</div>
+              <div class="audio-duration">Audio will be added here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 3 -->
+      <div class="module-section" id="module-3">
+        <div class="module-header">
+          <div class="module-label">Module 3</div>
+          <h1>Working with your inner critic</h1>
+        </div>
+        <div class="summary-box">
+          <h3>What this module covers</h3>
+          <ul>
+            <li>Understanding where self-critical voices come from</li>
+            <li>Recognising the different forms your inner critic takes</li>
+            <li>Learning to relate to self-criticism with curiosity rather than shame</li>
+            <li>Compassionate responses to difficult self-talk</li>
+          </ul>
+        </div>
+        <div class="video-placeholder">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p>Video will be added here</p>
+        </div>
+        <div class="content-block">
+          <h2>About this module</h2>
+          <p>Your written content for module 3 will go here.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div class="content-block">
+          <h2>Audio practices</h2>
+          <div class="audio-placeholder">
+            <div class="audio-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </div>
+            <div>
+              <div class="audio-title">Guided audio — Module 3</div>
+              <div class="audio-duration">Audio will be added here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 4 -->
+      <div class="module-section" id="module-4">
+        <div class="module-header">
+          <div class="module-label">Module 4</div>
+          <h1>Building your compassionate self</h1>
+        </div>
+        <div class="summary-box">
+          <h3>What this module covers</h3>
+          <ul>
+            <li>What it means to develop a compassionate identity</li>
+            <li>Qualities of the compassionate self — wisdom, strength, warmth</li>
+            <li>Compassionate imagery and visualisation practices</li>
+            <li>How to bring the compassionate self into everyday life</li>
+          </ul>
+        </div>
+        <div class="video-placeholder">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p>Video will be added here</p>
+        </div>
+        <div class="content-block">
+          <h2>About this module</h2>
+          <p>Your written content for module 4 will go here.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div class="content-block">
+          <h2>Audio practices</h2>
+          <div class="audio-placeholder">
+            <div class="audio-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </div>
+            <div>
+              <div class="audio-title">Guided audio — Module 4</div>
+              <div class="audio-duration">Audio will be added here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 5 -->
+      <div class="module-section" id="module-5">
+        <div class="module-header">
+          <div class="module-label">Module 5</div>
+          <h1>Working with complex emotions</h1>
+        </div>
+        <div class="summary-box">
+          <h3>What this module covers</h3>
+          <ul>
+            <li>Understanding why certain emotions feel overwhelming</li>
+            <li>Compassionate approaches to anger, sadness, and anxiety</li>
+            <li>How to stay present with difficult feelings without being swept away</li>
+            <li>Specific practices for each emotion</li>
+          </ul>
+        </div>
+        <div class="video-placeholder">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p>Video will be added here</p>
+        </div>
+        <div class="content-block">
+          <h2>About this module</h2>
+          <p>Your written introduction to module 5 will go here.</p>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- EMOTION SUB-TABS -->
+        <div class="emotion-tab-buttons">
+          <button class="emotion-tab-btn active" onclick="showEmotion(event, 'anger')">Anger</button>
+          <button class="emotion-tab-btn" onclick="showEmotion(event, 'sadness')">Sadness</button>
+          <button class="emotion-tab-btn" onclick="showEmotion(event, 'anxiety')">Anxiety</button>
+        </div>
+
+        <div class="emotion-tab-content active" id="emotion-anger">
+          <div class="content-block">
+            <h2>Working with anger</h2>
+            <p>Your written content about working with anger will go here.</p>
+          </div>
+          <div class="audio-placeholder">
+            <div class="audio-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </div>
+            <div>
+              <div class="audio-title">Guided audio — Working with anger</div>
+              <div class="audio-duration">Audio will be added here</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="emotion-tab-content" id="emotion-sadness">
+          <div class="content-block">
+            <h2>Working with sadness</h2>
+            <p>Your written content about working with sadness will go here.</p>
+          </div>
+          <div class="audio-placeholder">
+            <div class="audio-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </div>
+            <div>
+              <div class="audio-title">Guided audio — Working with sadness</div>
+              <div class="audio-duration">Audio will be added here</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="emotion-tab-content" id="emotion-anxiety">
+          <div class="content-block">
+            <h2>Working with anxiety</h2>
+            <p>Your written content about working with anxiety will go here.</p>
+          </div>
+          <div class="audio-placeholder">
+            <div class="audio-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </div>
+            <div>
+              <div class="audio-title">Guided audio — Working with anxiety</div>
+              <div class="audio-duration">Audio will be added here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 6 -->
+      <div class="module-section" id="module-6">
+        <div class="module-header">
+          <div class="module-label">Module 6</div>
+          <h1>Next steps</h1>
+        </div>
+        <div class="summary-box">
+          <h3>What this module covers</h3>
+          <ul>
+            <li>Reflecting on your journey through the program</li>
+            <li>Identifying the practices that have resonated most with you</li>
+            <li>How to continue building your compassionate self beyond this program</li>
+            <li>Further resources and support options</li>
+          </ul>
+        </div>
+        <div class="video-placeholder">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p>Video will be added here</p>
+        </div>
+        <div class="content-block">
+          <h2>About this module</h2>
+          <p>Your written content for module 6 will go here.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div class="content-block">
+          <h2>Audio practices</h2>
+          <div class="audio-placeholder">
+            <div class="audio-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </div>
+            <div>
+              <div class="audio-title">Guided audio — Module 6</div>
+              <div class="audio-duration">Audio will be added here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <footer>
+    <p>2026 The Green Space. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function showModule(num) {
+      document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
+      document.getElementById('module-' + num).classList.add('active');
+      document.querySelectorAll('.sidebar-module')[num - 1].classList.add('active');
+    }
+
+    function showEmotion(event, emotion) {
+      document.querySelectorAll('.emotion-tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.emotion-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('emotion-' + emotion).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
