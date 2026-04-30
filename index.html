@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Green Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background-color: #e8f5e9;
+        font-family: 'Lato', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        background-color: #2e7d32;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      nav h1 {
+        color: white;
+        font-family: 'Playfair Display', serif;
+        margin: 0;
+        font-size: 28px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 16px;
+      }
+
+      .banner {
+        background-color: #c8e6c9;
+        text-align: center;
+        padding: 80px 20px;
+      }
+
+      .banner h2 {
+        font-family: 'Playfair Display', serif;
+        color: #1b5e20;
+        font-size: 42px;
+        margin: 0;
+      }
+
+      .banner p {
+        color: #33691e;
+        font-size: 20px;
+        line-height: 1.8;
+        max-width: 600px;
+        margin: 20px auto;
+      }
+
+      .content {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .card h3 {
+        color: #2e7d32;
+        font-family: 'Playfair Display', serif;
+        font-size: 24px;
+      }
+
+      .card p {
+        color: #444444;
+        line-height: 1.8;
+      }
+
+      .login-section {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        margin: 20px auto;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .login-section h3 {
+        color: #2e7d32;
+        font-family: 'Playfair Display', serif;
+      }
+
+      .google-btn {
+        background-color: white;
+        border: 2px solid #2e7d32;
+        color: #2e7d32;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px auto;
+        width: 100%;
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+      }
+
+      .google-btn:hover {
+        background-color: #e8f5e9;
+      }
+
+      .sign-out-btn {
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .user-info {
+        display: none;
+        text-align: center;
+        padding: 10px;
+        color: #2e7d32;
+        font-weight: bold;
+      }
+
+      /* 
+        HONEYPOT STYLE
+        This hides the field completely from real users
+        but bots will still find and fill it in
+      */
+      .honeypot {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 0;
+        width: 0;
+        z-index: -1;
+      }
+
+      .bot-message {
+        display: none;
+        background-color: #ffebee;
+        color: #c62828;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        margin: 20px auto;
+        max-width: 400px;
+      }
+
+      footer {
+        background-color: #2e7d32;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Navigation -->
+    <nav>
+      <h1>🌿 The Green Room</h1>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <!-- Banner -->
+    <div class="banner">
+      <h2>Welcome to The Green Room</h2>
+      <p>A calm and supportive space designed to help you 
+      on your mental health journey</p>
+    </div>
+
+    <div class="content">
+
+      <!-- Login Section -->
+      <div class="login-section">
+        <h3>🌿 Sign In</h3>
+        <p>Sign in to access your personalised resources</p>
+
+        <!-- 
+          HONEYPOT FIELD
+          Real users never see this because it is
+          hidden with CSS. Bots will fill it in
+          automatically which triggers the block.
+        -->
+        <div class="honeypot" aria-hidden="true">
+          <input 
+            type="text" 
+            id="honeypot-field"
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+            placeholder="Leave this empty"
+          />
+        </div>
+
+        <button class="google-btn" onclick="handleSignIn()">
+          Sign in with Google
+        </button>
+
+        <div class="user-info" id="userInfo">
+          <p id="userName"></p>
+          <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
+        </div>
+      </div>
+
+      <!-- Bot blocked message -->
+      <div class="bot-message" id="botMessage">
+        ⛔ Access denied. Automated sign ins are not permitted.
+      </div>
+
+      <!-- Content Cards -->
+      <div class="card">
+        <h3>🌱 About This Space</h3>
+        <p>The Green Room is a safe and welcoming environment 
+        where you can access resources, tools, and support 
+        for your mental health and wellbeing.</p>
+      </div>
+
+      <div class="card">
+        <h3>🎯 What You'll Find Here</h3>
+        <p>Guided videos, audio resources, wellbeing 
+        questionnaires, and practical tools to support 
+        your journey.</p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2026 The Green Room. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBHsFsPPs0MB9KN5A9rE-59FPk3kI-pF08",
+        authDomain: "thegreenroom-ea1e7.firebaseapp.com",
+        projectId: "thegreenroom-ea1e7",
+        storageBucket: "thegreenroom-ea1e7.firebasestorage.app",
+        messagingSenderId: "785185935884",
+        appId: "1:785185935884:web:0bd81551cb70ecc3669429",
+        measurementId: "G-LN48FS5392"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      // Check if user is already signed in
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          document.getElementById('userInfo').style.display = 'block';
+          document.getElementById('userName').textContent = 
+            `Welcome back, ${user.displayName} 🌿`;
+          document.querySelector('.google-btn').style.display = 'none';
+        } else {
+          document.getElementById('userInfo').style.display = 'none';
+          document.querySelector('.google-btn').style.display = 'flex';
+        }
+      });
+
+      // Honeypot check before allowing sign in
+      window.handleSignIn = async () => {
+        const honeypot = document.getElementById('honeypot-field').value;
+        
+        // If honeypot field has anything in it, it's a bot
+        if (honeypot) {
+          document.querySelector('.google-btn').style.display = 'none';
+          document.getElementById('botMessage').style.display = 'block';
+          console.warn('Bot detected via honeypot');
+          return;
+        }
+
+        // Real user — proceed with Google sign in
+        try {
+          await signInWithPopup(auth, provider);
+        } catch (error) {
+          console.error("Sign in error:", error);
+        }
+      };
+
+      window.signOut = async () => {
+        try {
+          await firebaseSignOut(auth);
+        } catch (error) {
+          console.error("Sign out error:", error);
+        }
+      };
+    </script>
+
+  </body>
+</html>
+
+
+
+
+
+
