@@ -11,7 +11,6 @@
       --nav-bg: #3a5241;
       --nav-text: #e4ece0;
       --primary: #4a7a57;
-      --light-green: #e4ece0;
       --white: #fdfffe;
       --text: #2a3828;
       --text-muted: #5a6e58;
@@ -20,6 +19,7 @@
       --shadow: 0 2px 12px rgba(40, 60, 40, 0.08);
     }
 
+    html { scroll-behavior: smooth; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
@@ -65,6 +65,13 @@
 
     .nav-links a:hover { opacity: 1; }
 
+    .nav-links a.active-page {
+      opacity: 1;
+      font-weight: 700;
+      border-bottom: 2px solid var(--nav-text);
+      padding-bottom: 2px;
+    }
+
     .dropdown { position: relative; }
 
     .dropdown-menu {
@@ -88,12 +95,50 @@
       text-decoration: none;
       font-size: 14px;
       opacity: 0.85;
+      transition: opacity 0.2s, background 0.2s;
     }
 
     .dropdown-menu a:hover {
       opacity: 1;
       background-color: rgba(255,255,255,0.08);
     }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--nav-text);
+    }
+
+    .mobile-menu {
+      display: none;
+      background-color: var(--nav-bg);
+      padding: 16px 24px 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .mobile-menu a {
+      display: block;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-size: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      opacity: 0.9;
+    }
+
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu.open { display: block; }
 
     .page-header {
       padding: 80px 40px 60px;
@@ -223,6 +268,33 @@
       margin-bottom: 16px;
     }
 
+    .back-to-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 44px;
+      height: 44px;
+      background-color: var(--primary);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(40, 60, 40, 0.2);
+      transition: background-color 0.2s;
+      z-index: 99;
+    }
+
+    .back-to-top:hover { background-color: #3d6648; }
+    .back-to-top.visible { display: flex; }
+
+    .back-to-top svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
     footer {
       background-color: var(--nav-bg);
       color: var(--nav-text);
@@ -230,6 +302,23 @@
       padding: 32px 40px;
       font-size: 14px;
       font-weight: 300;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .page-header { padding: 48px 24px 40px; }
+      .page-header h1 { font-size: 36px; }
+
+      .about-tabs { padding: 0 24px 60px; }
+
+      .people-grid { grid-template-columns: 1fr; }
+
+      .tab-btn { padding: 12px 16px; font-size: 14px; }
+
+      .back-to-top { bottom: 20px; right: 20px; }
     }
   </style>
 </head>
@@ -241,14 +330,25 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="program.html">Program</a></li>
       <li class="dropdown">
-        <a href="about.html">About Us</a>
+        <a href="about.html" class="active-page">About Us</a>
         <div class="dropdown-menu">
           <a href="about.html#people">People</a>
           <a href="about.html#the-program">The Program</a>
         </div>
       </li>
     </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="program.html">Program</a>
+    <a href="about.html">About Us</a>
+    <a href="about.html#people">— People</a>
+    <a href="about.html#the-program">— The Program</a>
+  </div>
 
   <div class="page-header">
     <h1>About Us</h1>
@@ -267,7 +367,7 @@
           <div class="person-avatar"></div>
           <h3>Name here</h3>
           <div class="person-role">Role here</div>
-          <p>A short bio about this person will go here. Describe their background, qualifications, and connection to the program.</p>
+          <p>A short bio about this person will go here.</p>
         </div>
         <div class="person-card">
           <div class="person-avatar"></div>
@@ -281,9 +381,9 @@
     <div class="tab-content" id="tab-the-program">
       <div class="program-about">
         <h2>Why we created The Green Space</h2>
-        <p>Your explanation of why this program was created will go here. Share the story, the research behind it, and the vision for what it aims to achieve.</p>
+        <p>Your explanation of why this program was created will go here.</p>
         <h2>The approach</h2>
-        <p>An explanation of compassion focused therapy and why it was chosen for this program will go here.</p>
+        <p>An explanation of compassion focused therapy and why it was chosen will go here.</p>
         <h2>Who it is for</h2>
         <p>A description of who this program is designed to help will go here.</p>
       </div>
@@ -294,12 +394,20 @@
     <p>2026 The Green Space. All rights reserved.</p>
   </footer>
 
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">
+    <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+  </button>
+
   <script>
     function showTab(event, tab) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('tab-' + tab).classList.add('active');
       event.target.classList.add('active');
+    }
+
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
     }
 
     window.addEventListener('load', () => {
@@ -311,6 +419,16 @@
         document.querySelectorAll('.tab-btn')[hash === 'people' ? 0 : 1].classList.add('active');
       }
     });
+
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTop');
+      if (window.scrollY > 300) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+    });
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   </script>
 
 </body>
