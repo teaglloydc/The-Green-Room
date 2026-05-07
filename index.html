@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Green Space</title>
+  <title>The Green Room</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -29,7 +29,6 @@
       line-height: 1.7;
     }
 
-    /* NAV */
     nav {
       background-color: var(--nav-bg);
       padding: 18px 40px;
@@ -104,7 +103,6 @@
       background-color: rgba(255,255,255,0.08);
     }
 
-    /* HAMBURGER */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -120,13 +118,12 @@
       width: 24px;
       height: 2px;
       background-color: var(--nav-text);
-      transition: all 0.3s;
     }
 
     .mobile-menu {
       display: none;
       background-color: var(--nav-bg);
-      padding: 16px 40px 24px;
+      padding: 16px 24px 24px;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
@@ -143,7 +140,6 @@
     .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu.open { display: block; }
 
-    /* HERO */
     .hero {
       padding: 110px 40px 100px;
       max-width: 800px;
@@ -222,6 +218,48 @@
       font-weight: 300;
     }
 
+    .steps-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .step-card {
+      background-color: var(--white);
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .step-number {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .step-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .step-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
     .modules-grid {
       max-width: 900px;
       margin: 0 auto;
@@ -264,7 +302,6 @@
       line-height: 1.3;
     }
 
-    /* BACK TO TOP */
     .back-to-top {
       position: fixed;
       bottom: 32px;
@@ -279,7 +316,7 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 12px rgba(40, 60, 40, 0.2);
-      transition: background-color 0.2s, opacity 0.3s;
+      transition: background-color 0.2s;
       z-index: 99;
     }
 
@@ -301,24 +338,23 @@
       font-weight: 300;
     }
 
-    /* MOBILE */
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
-
       .hero { padding: 60px 24px 60px; }
       .hero h1 { font-size: 36px; }
       .hero p { font-size: 16px; }
-
       .section { padding: 0 24px 60px; }
       .section h2 { font-size: 28px; }
-
+      .steps-grid {
+        grid-template-columns: 1fr;
+        padding: 0 24px 60px;
+      }
       .modules-grid {
         grid-template-columns: 1fr;
         padding: 0 24px 60px;
       }
-
       .back-to-top { bottom: 20px; right: 20px; }
     }
   </style>
@@ -326,10 +362,11 @@
 <body>
 
   <nav>
-    <a href="index.html" class="nav-logo">The Green Space</a>
+    <a href="index.html" class="nav-logo">The Green Room</a>
     <ul class="nav-links">
       <li><a href="index.html" class="active-page">Home</a></li>
-      <li><a href="program.html">Program</a></li>
+      <li><a href="YOUR-QUALTRICS-LINK-HERE" target="_blank">Begin the Study</a></li>
+      <li><a href="access.html">Enter Code</a></li>
       <li class="dropdown">
         <a href="about.html">About Us</a>
         <div class="dropdown-menu">
@@ -345,7 +382,8 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">Home</a>
-    <a href="program.html">Program</a>
+    <a href="YOUR-QUALTRICS-LINK-HERE" target="_blank">Begin the Study</a>
+    <a href="access.html">Enter Code</a>
     <a href="about.html">About Us</a>
     <a href="about.html#people">— People</a>
     <a href="about.html#the-program">— The Program</a>
@@ -353,47 +391,71 @@
 
   <div class="hero">
     <h1>A space to grow with compassion</h1>
-    <p>The Green Space is a self-guided mental health program grounded in compassion focused therapy, designed to help you understand your mind and build resilience.</p>
-    <a href="program.html" class="btn-primary">Begin the Program</a>
+    <p>The Green Room is a self-guided mental health program grounded in compassion focused therapy, designed to help you understand your mind and build resilience.</p>
+    <a href="YOUR-QUALTRICS-LINK-HERE" target="_blank" class="btn-primary">Begin the Study</a>
   </div>
 
   <div class="divider"></div>
 
   <div class="section">
-    <p class="section-label">About the Program</p>
-    <h2>What to expect</h2>
-    <p>This program guides you through six modules, each building on the last. You will find videos, written reflections, and guided audio practices to work through at your own pace, in your own time.</p>
+    <p class="section-label">How it works</p>
+    <h2>Your journey through the program</h2>
+    <p>The Green Room follows a simple, supported process to ensure your privacy and wellbeing throughout.</p>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">Step 1</div>
+      <h3>Complete the survey</h3>
+      <p>Read the information sheet, provide consent, and complete the pre-program measures via a secure Qualtrics survey. This takes approximately 15-20 minutes.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">Step 2</div>
+      <h3>Receive your access code</h3>
+      <p>Once your survey is submitted, you will automatically receive a unique access code by email. This code is yours alone and is not linked to your name on this website.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">Step 3</div>
+      <h3>Enter the program</h3>
+      <p>Return to The Green Room, enter your access code, and begin working through the six modules at your own pace.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-label">The Program</p>
+    <h2>Six modules at your own pace</h2>
+    <p>Work through each module in your own time with videos, written content, and guided audio practices.</p>
   </div>
 
   <div class="modules-grid">
-    <a href="program.html" class="module-card">
+    <div class="module-card">
       <div class="module-number">Module 1</div>
       <h3>Compassion and our tricky brains</h3>
-    </a>
-    <a href="program.html" class="module-card">
+    </div>
+    <div class="module-card">
       <div class="module-number">Module 2</div>
       <h3>Our three circles</h3>
-    </a>
-    <a href="program.html" class="module-card">
+    </div>
+    <div class="module-card">
       <div class="module-number">Module 3</div>
       <h3>Working with your inner critic</h3>
-    </a>
-    <a href="program.html" class="module-card">
+    </div>
+    <div class="module-card">
       <div class="module-number">Module 4</div>
       <h3>Building your compassionate self</h3>
-    </a>
-    <a href="program.html" class="module-card">
+    </div>
+    <div class="module-card">
       <div class="module-number">Module 5</div>
       <h3>Working with complex emotions</h3>
-    </a>
-    <a href="program.html" class="module-card">
+    </div>
+    <div class="module-card">
       <div class="module-number">Module 6</div>
       <h3>Next steps</h3>
-    </a>
+    </div>
   </div>
 
   <footer>
-    <p>2026 The Green Space. All rights reserved.</p>
+    <p>2026 The Green Room. All rights reserved.</p>
   </footer>
 
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">
@@ -404,13 +466,11 @@
     function toggleMenu() {
       document.getElementById('mobileMenu').classList.toggle('open');
     }
-
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('backToTop');
       if (window.scrollY > 300) btn.classList.add('visible');
       else btn.classList.remove('visible');
     });
-
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -418,6 +478,8 @@
 
 </body>
 </html>
+
+
 
 
 

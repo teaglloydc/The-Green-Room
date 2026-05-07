@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Program - The Green Space</title>
+  <title>The Program - The Green Room</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -31,7 +31,6 @@
       line-height: 1.7;
     }
 
-    /* NAV */
     nav {
       background-color: var(--nav-bg);
       padding: 18px 40px;
@@ -143,13 +142,11 @@
     .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu.open { display: block; }
 
-    /* LAYOUT */
     .program-layout {
       display: flex;
       min-height: calc(100vh - 62px);
     }
 
-    /* SIDEBAR */
     .sidebar {
       width: 280px;
       flex-shrink: 0;
@@ -172,7 +169,6 @@
       margin-bottom: 8px;
     }
 
-    /* PROGRESS BAR */
     .progress-bar-container {
       padding: 0 28px;
       margin-bottom: 28px;
@@ -232,7 +228,6 @@
       line-height: 1.4;
     }
 
-    /* COMPLETION TICK */
     .completion-tick {
       width: 20px;
       height: 20px;
@@ -260,7 +255,6 @@
 
     .completion-tick.done svg { display: block; }
 
-    /* MAIN CONTENT */
     .main-content {
       flex: 1;
       padding: 64px 80px;
@@ -281,7 +275,6 @@
       margin-bottom: 12px;
     }
 
-    /* PROGRESS INDICATOR */
     .module-progress {
       display: inline-block;
       font-size: 13px;
@@ -301,7 +294,6 @@
       line-height: 1.2;
     }
 
-    /* SUMMARY BOX */
     .summary-box {
       background-color: var(--summary-bg);
       border-radius: 8px;
@@ -339,7 +331,6 @@
       background-color: var(--primary);
     }
 
-    /* VIDEO */
     .video-placeholder {
       background-color: var(--light-green);
       border-radius: 8px;
@@ -375,7 +366,6 @@
       margin-left: 3px;
     }
 
-    /* CONTENT */
     .content-block { margin-bottom: 48px; }
 
     .content-block h2 {
@@ -401,7 +391,6 @@
       margin: 48px 0;
     }
 
-    /* AUDIO */
     .audio-placeholder {
       background-color: var(--white);
       border: 1px solid var(--border);
@@ -442,7 +431,6 @@
       color: var(--text-muted);
     }
 
-    /* EMOTION TABS */
     .emotion-tab-buttons {
       display: flex;
       border-bottom: 1px solid var(--border);
@@ -473,7 +461,6 @@
     .emotion-tab-content { display: none; }
     .emotion-tab-content.active { display: block; }
 
-    /* MODULE NAVIGATION BUTTONS */
     .module-nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -528,7 +515,53 @@
       fill: currentColor;
     }
 
-    /* BACK TO TOP */
+    /* POST MEASURES BOX */
+    .post-measures-box {
+      margin-top: 40px;
+    }
+
+    .post-measures-box .summary-box {
+      text-align: center;
+      background-color: var(--active-bg);
+    }
+
+    .post-measures-box .summary-box h3 {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .post-measures-box .summary-box p {
+      font-size: 15px;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 24px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-post-measures {
+      display: inline-block;
+      background-color: var(--primary);
+      color: white;
+      padding: 14px 36px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-post-measures:hover { background-color: #3d6648; }
+
+    .post-measures-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 16px;
+      font-weight: 300;
+    }
+
     .back-to-top {
       position: fixed;
       bottom: 32px;
@@ -565,7 +598,6 @@
       font-weight: 300;
     }
 
-    /* MOBILE */
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
@@ -606,13 +638,9 @@
       }
 
       .completion-tick { display: none; }
-
       .main-content { padding: 32px 24px; }
-
       .module-header h1 { font-size: 30px; }
-
       .module-nav-buttons { flex-wrap: wrap; gap: 12px; }
-
       .back-to-top { bottom: 20px; right: 20px; }
     }
   </style>
@@ -620,7 +648,7 @@
 <body>
 
   <nav>
-    <a href="index.html" class="nav-logo">The Green Space</a>
+    <a href="index.html" class="nav-logo">The Green Room</a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="program.html" class="active-page">Program</a></li>
@@ -1073,13 +1101,28 @@
             Mark program complete
           </button>
         </div>
+
+        <!-- POST PROGRAM MEASURES -->
+        <div class="post-measures-box" id="postMeasuresBox" style="display:none;">
+          <div class="summary-box">
+            <h3>You have completed The Green Room program</h3>
+            <p>Thank you for completing all six modules. The final step is to complete a short post-program survey so we can understand how the program has affected your wellbeing. This takes approximately 15 minutes.</p>
+            <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE"
+              target="_blank"
+              class="btn-post-measures">
+              Complete post-program survey
+            </a>
+            <p class="post-measures-note">You will be taken to a secure Qualtrics survey. Your responses are linked to your access code only — not your name.</p>
+          </div>
+        </div>
+
       </div>
 
     </main>
   </div>
 
   <footer>
-    <p>2026 The Green Space. All rights reserved.</p>
+    <p>2026 The Green Room. All rights reserved.</p>
   </footer>
 
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">
@@ -1093,6 +1136,9 @@
     function init() {
       completed.forEach(num => applyCompletion(num));
       updateProgress();
+      if (completed.includes(6)) {
+        document.getElementById('postMeasuresBox').style.display = 'block';
+      }
     }
 
     function showModule(num) {
@@ -1117,7 +1163,12 @@
         applyCompletion(num);
         updateProgress();
       }
-      if (num < TOTAL_MODULES) showModule(num + 1);
+      if (num === TOTAL_MODULES) {
+        document.getElementById('postMeasuresBox').style.display = 'block';
+        document.getElementById('postMeasuresBox').scrollIntoView({ behavior: 'smooth' });
+      } else {
+        showModule(num + 1);
+      }
     }
 
     function applyCompletion(num) {
@@ -1148,6 +1199,95 @@
     }
 
     init();
+  </script>
+
+  <!-- SESSION TRACKING -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBHsFsPPs0MB9KN5A9rE-59FPk3kI-pF08",
+      authDomain: "thegreenroom-ea1e7.firebaseapp.com",
+      projectId: "thegreenroom-ea1e7",
+      storageBucket: "thegreenroom-ea1e7.firebasestorage.app",
+      messagingSenderId: "785185935884",
+      appId: "1:785185935884:web:0bd81551cb70ecc3669429",
+      measurementId: "G-LN48FS5392"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const accessCode = sessionStorage.getItem('accessCode');
+    let sessionDocId = null;
+    let moduleStartTime = null;
+    let currentModule = 1;
+
+    async function startSession() {
+      if (!accessCode) return;
+      try {
+        const sessionRef = await addDoc(collection(db, 'sessions'), {
+          code: accessCode,
+          sessionStart: serverTimestamp(),
+          sessionEnd: null
+        });
+        sessionDocId = sessionRef.id;
+        logModuleVisit(1);
+      } catch (e) {
+        console.error('Session start error:', e);
+      }
+    }
+
+    async function logModuleVisit(moduleNum) {
+      if (!accessCode || !sessionDocId) return;
+      moduleStartTime = Date.now();
+      currentModule = moduleNum;
+      try {
+        const sessionRef = doc(db, 'sessions', sessionDocId);
+        await updateDoc(sessionRef, {
+          [`module_${moduleNum}_visited`]: serverTimestamp()
+        });
+      } catch (e) {
+        console.error('Module visit log error:', e);
+      }
+    }
+
+    async function logModuleDuration(moduleNum) {
+      if (!accessCode || !sessionDocId || !moduleStartTime) return;
+      const duration = Math.round((Date.now() - moduleStartTime) / 1000);
+      try {
+        const sessionRef = doc(db, 'sessions', sessionDocId);
+        await updateDoc(sessionRef, {
+          [`module_${moduleNum}_durationSeconds`]: duration
+        });
+      } catch (e) {
+        console.error('Duration log error:', e);
+      }
+    }
+
+    async function endSession() {
+      if (!accessCode || !sessionDocId) return;
+      await logModuleDuration(currentModule);
+      try {
+        const sessionRef = doc(db, 'sessions', sessionDocId);
+        await updateDoc(sessionRef, { sessionEnd: serverTimestamp() });
+      } catch (e) {
+        console.error('Session end error:', e);
+      }
+    }
+
+    const originalShowModule = window.showModule;
+    window.showModule = function(num) {
+      logModuleDuration(currentModule);
+      originalShowModule(num);
+      logModuleVisit(num);
+    };
+
+    startSession();
+    window.addEventListener('beforeunload', endSession);
+    window.addEventListener('pagehide', endSession);
   </script>
 
 </body>
