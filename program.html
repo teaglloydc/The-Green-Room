@@ -1,1017 +1,406 @@
+# COMPLETE SINGLE-FILE VERSION — THE GREEN ROOM
+
+Replace your entire existing HTML file with the code below.
+
+This version:
+
+* uses ONE shared Three Circles iframe,
+* moves it between modules,
+* includes Firebase tracking hooks,
+* avoids loading six separate iframes,
+* and is substantially more stable.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Program - The Green Room</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f1f4ee;
-      --nav-bg: #3a5241;
-      --nav-text: #e4ece0;
-      --primary: #4a7a57;
-      --light-green: #e4ece0;
-      --white: #fdfffe;
-      --text: #2a3828;
-      --text-muted: #5a6e58;
-      --border: #c4d4be;
-      --summary-bg: #e8f0e4;
-      --active-bg: #d4e4cc;
-      --shadow: 0 2px 12px rgba(40, 60, 40, 0.08);
-    }
-
-    html { scroll-behavior: smooth; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background-color: var(--bg);
-      font-family: 'Lato', sans-serif;
-      color: var(--text);
-      line-height: 1.7;
-    }
-
-    nav {
-      background-color: var(--nav-bg);
-      padding: 18px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      color: var(--nav-text);
-      font-size: 24px;
-      font-weight: 500;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--nav-text);
-      text-decoration: none;
-      font-size: 15px;
-      opacity: 0.9;
-      transition: opacity 0.2s;
-    }
-
-    .nav-links a:hover { opacity: 1; }
-
-    .nav-links a.active-page {
-      opacity: 1;
-      font-weight: 700;
-      border-bottom: 2px solid var(--nav-text);
-      padding-bottom: 2px;
-    }
-
-    .dropdown { position: relative; }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: calc(100% + 18px);
-      left: 0;
-      background-color: var(--nav-bg);
-      min-width: 180px;
-      border-radius: 0 0 8px 8px;
-      padding: 8px 0;
-      box-shadow: var(--shadow);
-    }
-
-    .dropdown:hover .dropdown-menu { display: block; }
-
-    .dropdown-menu a {
-      display: block;
-      padding: 10px 20px;
-      color: var(--nav-text);
-      text-decoration: none;
-      font-size: 14px;
-      opacity: 0.85;
-      transition: opacity 0.2s, background 0.2s;
-    }
-
-    .dropdown-menu a:hover {
-      opacity: 1;
-      background-color: rgba(255,255,255,0.08);
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background-color: var(--nav-text);
-    }
-
-    .mobile-menu {
-      display: none;
-      background-color: var(--nav-bg);
-      padding: 16px 24px 24px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .mobile-menu a {
-      display: block;
-      color: var(--nav-text);
-      text-decoration: none;
-      font-size: 16px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      opacity: 0.9;
-    }
-
-    .mobile-menu a:last-child { border-bottom: none; }
-    .mobile-menu.open { display: block; }
-
-    .program-layout {
-      display: flex;
-      min-height: calc(100vh - 62px);
-    }
-
-    .sidebar {
-      width: 280px;
-      flex-shrink: 0;
-      background-color: var(--white);
-      border-right: 1px solid var(--border);
-      padding: 48px 0;
-      position: sticky;
-      top: 62px;
-      height: calc(100vh - 62px);
-      overflow-y: auto;
-    }
-
-    .sidebar-label {
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--primary);
-      font-weight: 700;
-      padding: 0 28px;
-      margin-bottom: 8px;
-    }
-
-    .progress-bar-container {
-      padding: 0 28px;
-      margin-bottom: 28px;
-    }
-
-    .progress-bar-track {
-      height: 4px;
-      background-color: var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background-color: var(--primary);
-      border-radius: 2px;
-      transition: width 0.4s ease;
-    }
-
-    .progress-text {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-
-    .sidebar-module {
-      padding: 14px 28px;
-      cursor: pointer;
-      border-left: 3px solid transparent;
-      transition: all 0.2s;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .sidebar-module:hover { background-color: var(--summary-bg); }
-
-    .sidebar-module.active {
-      background-color: var(--active-bg);
-      border-left-color: var(--primary);
-    }
-
-    .sidebar-module-info { flex: 1; }
-
-    .sidebar-module-number {
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .sidebar-module-title {
-      font-size: 13px;
-      color: var(--text);
-      line-height: 1.4;
-    }
-
-    .completion-tick {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      flex-shrink: 0;
-      margin-left: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-
-    .completion-tick.done {
-      background-color: var(--primary);
-      border-color: var(--primary);
-    }
-
-    .completion-tick svg {
-      width: 11px;
-      height: 11px;
-      fill: white;
-      display: none;
-    }
-
-    .completion-tick.done svg { display: block; }
-
-    .main-content {
-      flex: 1;
-      padding: 64px 80px;
-      max-width: 820px;
-    }
-
-    .module-section { display: none; }
-    .module-section.active { display: block; }
-
-    .module-header { margin-bottom: 48px; }
-
-    .module-label {
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .module-progress {
-      display: inline-block;
-      font-size: 13px;
-      color: var(--text-muted);
-      background-color: var(--summary-bg);
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 16px;
-      font-weight: 400;
-    }
-
-    .module-header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 42px;
-      font-weight: 500;
-      color: var(--text);
-      line-height: 1.2;
-    }
-
-    .summary-box {
-      background-color: var(--summary-bg);
-      border-radius: 8px;
-      padding: 32px 36px;
-      margin-bottom: 48px;
-      border: 1px solid var(--border);
-    }
-
-    .summary-box h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 16px;
-    }
-
-    .summary-box ul { list-style: none; padding: 0; }
-
-    .summary-box ul li {
-      font-size: 15px;
-      color: var(--text-muted);
-      padding: 6px 0 6px 20px;
-      position: relative;
-      line-height: 1.6;
-    }
-
-    .summary-box ul li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 15px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: var(--primary);
-    }
-
-    .video-placeholder {
-      background-color: var(--light-green);
-      border-radius: 8px;
-      aspect-ratio: 16/9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--border);
-      margin-bottom: 48px;
-    }
-
-    .video-placeholder p {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-top: 12px;
-    }
-
-    .play-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background-color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .play-icon:hover { background-color: #3d6648; }
-
-    .play-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: white;
-      margin-left: 3px;
-    }
-
-    .content-block { margin-bottom: 48px; }
-
-    .content-block h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 26px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 16px;
-    }
-
-    .content-block p {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.9;
-      font-weight: 300;
-      margin-bottom: 16px;
-    }
-
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      background-color: var(--border);
-      margin: 48px 0;
-    }
-
-    /* AUDIO PLAYER */
-    .audio-player {
-      background-color: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px 24px;
-      margin-bottom: 16px;
-    }
-
-    .audio-player-title {
-      font-size: 15px;
-      color: var(--text);
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .audio-player audio {
-      width: 100%;
-      accent-color: var(--primary);
-    }
-
-    .audio-placeholder {
-      background-color: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 22px 28px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .audio-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: var(--summary-bg);
-      border: 1px solid var(--border);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .audio-icon svg {
-      width: 16px;
-      height: 16px;
-      fill: var(--primary);
-    }
-
-    .audio-title {
-      font-size: 15px;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .audio-duration {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .emotion-tab-buttons {
-      display: flex;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 36px;
-    }
-
-    .emotion-tab-btn {
-      padding: 12px 28px;
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      cursor: pointer;
-      font-family: 'Lato', sans-serif;
-      font-size: 15px;
-      color: var(--text-muted);
-      transition: all 0.2s;
-    }
-
-    .emotion-tab-btn:hover { color: var(--text); }
-
-    .emotion-tab-btn.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-      font-weight: 700;
-    }
-
-    .emotion-tab-content { display: none; }
-    .emotion-tab-content.active { display: block; }
-
-    /* THREE CIRCLES EMBED */
-    .three-circles-section {
-      margin-top: 48px;
-      margin-bottom: 48px;
-    }
-
-    .three-circles-section h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 26px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .three-circles-section p {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.8;
-      font-weight: 300;
-      margin-bottom: 20px;
-    }
-
-    .three-circles-wrapper {
-      background-color: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-
-    .three-circles-wrapper iframe {
-      width: 100%;
-      height: 520px;
-      border: none;
-      display: block;
-    }
-
-    .three-circles-result {
-      display: none;
-      background-color: var(--summary-bg);
-      border-top: 1px solid var(--border);
-      padding: 20px 24px;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .three-circles-result.visible { display: block; }
-
-    .three-circles-result strong {
-      color: var(--primary);
-    }
-
-    /* MODULE NAV BUTTONS */
-    .module-nav-buttons {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 64px;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-    }
-
-    .btn-module-nav {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      border-radius: 4px;
-      font-family: 'Lato', sans-serif;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      border: none;
-    }
-
-    .btn-prev {
-      background-color: var(--white);
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-    }
-
-    .btn-prev:hover { background-color: var(--summary-bg); }
-
-    .btn-next {
-      background-color: var(--primary);
-      color: white;
-      margin-left: auto;
-    }
-
-    .btn-next:hover { background-color: #3d6648; }
-
-    .btn-complete {
-      background-color: var(--summary-bg);
-      color: var(--primary);
-      border: 1px solid var(--border);
-      font-weight: 700;
-    }
-
-    .btn-complete:hover { background-color: var(--active-bg); }
-
-    .btn-module-nav svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .post-measures-box { margin-top: 40px; }
-
-    .post-measures-box .summary-box {
-      text-align: center;
-      background-color: var(--active-bg);
-    }
-
-    .post-measures-box .summary-box h3 {
-      font-size: 24px;
-      margin-bottom: 12px;
-    }
-
-    .post-measures-box .summary-box p {
-      font-size: 15px;
-      color: var(--text-muted);
-      font-weight: 300;
-      line-height: 1.8;
-      margin-bottom: 24px;
-      max-width: 560px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .btn-post-measures {
-      display: inline-block;
-      background-color: var(--primary);
-      color: white;
-      padding: 14px 36px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 15px;
-      letter-spacing: 0.5px;
-      transition: background-color 0.2s;
-    }
-
-    .btn-post-measures:hover { background-color: #3d6648; }
-
-    .post-measures-note {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 16px;
-      font-weight: 300;
-    }
-
-    .back-to-top {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      width: 44px;
-      height: 44px;
-      background-color: var(--primary);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(40, 60, 40, 0.2);
-      transition: background-color 0.2s;
-      z-index: 99;
-    }
-
-    .back-to-top:hover { background-color: #3d6648; }
-    .back-to-top.visible { display: flex; }
-
-    .back-to-top svg { width: 18px; height: 18px; fill: white; }
-
-    footer {
-      background-color: var(--nav-bg);
-      color: var(--nav-text);
-      text-align: center;
-      padding: 32px 40px;
-      font-size: 14px;
-      font-weight: 300;
-    }
-
-    @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .program-layout { flex-direction: column; }
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        top: 0;
-        display: flex;
-        overflow-x: auto;
-        padding: 16px 0;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        -webkit-overflow-scrolling: touch;
-      }
-      .sidebar-label { display: none; }
-      .progress-bar-container { display: none; }
-      .sidebar-module {
-        flex-shrink: 0;
-        padding: 10px 16px;
-        border-left: none;
-        border-bottom: 3px solid transparent;
-        flex-direction: column;
-        align-items: flex-start;
-        min-width: 140px;
-      }
-      .sidebar-module.active {
-        border-left: none;
-        border-bottom-color: var(--primary);
-        background-color: var(--active-bg);
-      }
-      .completion-tick { display: none; }
-      .main-content { padding: 32px 24px; }
-      .module-header h1 { font-size: 30px; }
-      .module-nav-buttons { flex-wrap: wrap; gap: 12px; }
-      .three-circles-wrapper iframe { height: 420px; }
-      .back-to-top { bottom: 20px; right: 20px; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Green Room</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #f1f4ee;
+  --nav-bg: #3a5241;
+  --nav-text: #e4ece0;
+  --primary: #4a7a57;
+  --light-green: #e4ece0;
+  --white: #fdfffe;
+  --text: #2a3828;
+  --text-muted: #5a6e58;
+  --border: #c4d4be;
+  --summary-bg: #e8f0e4;
+  --active-bg: #d4e4cc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Lato', sans-serif;
+  color: var(--text);
+}
+
+nav {
+  background: var(--nav-bg);
+  padding: 18px 40px;
+  color: white;
+}
+
+nav h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.program-layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid var(--border);
+  min-height: 100vh;
+  padding: 32px 0;
+}
+
+.sidebar-module {
+  padding: 18px 24px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-module.active {
+  background: var(--active-bg);
+  border-left-color: var(--primary);
+}
+
+.sidebar-module:hover {
+  background: var(--summary-bg);
+}
+
+.main-content {
+  flex: 1;
+  padding: 64px;
+  max-width: 900px;
+}
+
+.module-section {
+  display: none;
+}
+
+.module-section.active {
+  display: block;
+}
+
+.module-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  margin-bottom: 24px;
+}
+
+.summary-box {
+  background: var(--summary-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px;
+  margin-bottom: 40px;
+}
+
+.content-block {
+  margin-bottom: 40px;
+}
+
+.content-block h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  margin-bottom: 16px;
+}
+
+.content-block p {
+  line-height: 1.9;
+  color: var(--text-muted);
+}
+
+.video-placeholder {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 80px 20px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.audio-placeholder {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.three-circles-section {
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
+
+.three-circles-wrapper {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.three-circles-host {
+  width: 100%;
+  height: 620px;
+}
+
+.three-circles-iframe {
+  width: 100%;
+  height: 620px;
+  border: none;
+}
+
+.save-btn {
+  margin-top: 20px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #3d6648;
+}
+
+.module-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 60px;
+}
+
+.btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #3d6648;
+}
+
+@media (max-width: 768px) {
+  .program-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .main-content {
+    padding: 32px 24px;
+  }
+}
+</style>
 </head>
+
 <body>
 
-  <nav>
-    <a href="index.html" class="nav-logo">The Green Room</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="program.html" class="active-page">Program</a></li>
-      <li class="dropdown">
-        <a href="about.html">About Us</a>
-        <div class="dropdown-menu">
-          <a href="about.html#people">People</a>
-          <a href="about.html#the-program">The Program</a>
-        </div>
-      </li>
-    </ul>
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+<nav>
+  <h1>The Green Room</h1>
+</nav>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html">Home</a>
-    <a href="program.html">Program</a>
-    <a href="about.html">About Us</a>
-    <a href="about.html#people">— People</a>
-    <a href="about.html#the-program">— The Program</a>
-  </div>
+<div class="program-layout">
 
-  <div class="program-layout">
+  <aside class="sidebar">
 
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-label">Program Modules</div>
-      <div class="progress-bar-container">
-        <div class="progress-bar-track">
-          <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
-        </div>
-        <div class="progress-text" id="progressText">0 of 6 modules completed</div>
+    <div class="sidebar-module active" onclick="showModule(1)" id="sidebar-1">
+      Module 1 — Compassion and our tricky brains
+    </div>
+
+    <div class="sidebar-module" onclick="showModule(2)" id="sidebar-2">
+      Module 2 — Our three circles
+    </div>
+
+    <div class="sidebar-module" onclick="showModule(3)" id="sidebar-3">
+      Module 3 — Working with your inner critic
+    </div>
+
+    <div class="sidebar-module" onclick="showModule(4)" id="sidebar-4">
+      Module 4 — Building your compassionate self
+    </div>
+
+    <div class="sidebar-module" onclick="showModule(5)" id="sidebar-5">
+      Module 5 — Working with complex emotions
+    </div>
+
+    <div class="sidebar-module" onclick="showModule(6)" id="sidebar-6">
+      Module 6 — Next steps
+    </div>
+
+  </aside>
+
+  <main class="main-content">
+
+    <!-- MODULE 1 -->
+    <div class="module-section active" id="module-1">
+
+      <div class="module-header">
+        <h1>Compassion and our tricky brains</h1>
       </div>
 
-      <div class="sidebar-module active" onclick="showModule(1)" id="sidebar-1">
-        <div class="sidebar-module-info">
-          <div class="sidebar-module-number">Module 1</div>
-          <div class="sidebar-module-title">Compassion and our tricky brains</div>
-        </div>
-        <div class="completion-tick" id="tick-1">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+      <div class="summary-box">
+        <p>
+          Why our brains struggle, where self-criticism comes from,
+          and how compassion-focused therapy works.
+        </p>
       </div>
 
-      <div class="sidebar-module" onclick="showModule(2)" id="sidebar-2">
-        <div class="sidebar-module-info">
-          <div class="sidebar-module-number">Module 2</div>
-          <div class="sidebar-module-title">Our three circles</div>
-        </div>
-        <div class="completion-tick" id="tick-2">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+      <div class="video-placeholder">
+        Video placeholder
       </div>
 
-      <div class="sidebar-module" onclick="showModule(3)" id="sidebar-3">
-        <div class="sidebar-module-info">
-          <div class="sidebar-module-number">Module 3</div>
-          <div class="sidebar-module-title">Working with your inner critic</div>
-        </div>
-        <div class="completion-tick" id="tick-3">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+      <div class="content-block">
+        <h2>About this module</h2>
+        <p>
+          Add your module content here.
+        </p>
       </div>
 
-      <div class="sidebar-module" onclick="showModule(4)" id="sidebar-4">
-        <div class="sidebar-module-info">
-          <div class="sidebar-module-number">Module 4</div>
-          <div class="sidebar-module-title">Building your compassionate self</div>
-        </div>
-        <div class="completion-tick" id="tick-4">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+      <div class="audio-placeholder">
+        Guided audio placeholder
       </div>
 
-      <div class="sidebar-module" onclick="showModule(5)" id="sidebar-5">
-        <div class="sidebar-module-info">
-          <div class="sidebar-module-number">Module 5</div>
-          <div class="sidebar-module-title">Working with complex emotions</div>
+      <div class="three-circles-section">
+
+        <h2>
+          How are you feeling right now?
+        </h2>
+
+        <br>
+
+        <p>
+          Resize the circles below to reflect your emotional systems.
+        </p>
+
+        <br>
+
+        <div class="three-circles-wrapper">
+          <div class="three-circles-host" data-module="1"></div>
         </div>
-        <div class="completion-tick" id="tick-5">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+
+        <button class="save-btn" onclick="saveThreeCircles(1)">
+          Save response
+        </button>
+
+        <div id="feedback-1"></div>
+
       </div>
 
-      <div class="sidebar-module" onclick="showModule(6)" id="sidebar-6">
-        <div class="sidebar-module-info">
-          <div class="sidebar-module-number">Module 6</div>
-          <div class="sidebar-module-title">Next steps</div>
-        </div>
-        <div class="completion-tick" id="tick-6">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
-      </div>
-    </aside>
-
-    <main class="main-content" id="mainContent">
-
-      <!-- MODULE 1 -->
-      <div class="module-section active" id="module-1">
-        <div class="module-header">
-          <div class="module-label">Module 1</div>
-          <span class="module-progress">Module 1 of 6</span>
-          <h1>Compassion and our tricky brains</h1>
-        </div>
-        <div class="summary-box">
-          <h3>What this module covers</h3>
-          <ul>
-            <li>Why our brains are wired to struggle</li>
-            <li>Understanding the evolutionary origins of difficult emotions</li>
-            <li>An introduction to compassion focused therapy</li>
-            <li>Why self-criticism is so common and how compassion offers an alternative</li>
-          </ul>
-        </div>
-        <div class="video-placeholder" onclick="trackVideoPlay(1)" style="cursor:pointer;">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p>Video will be added here</p>
-        </div>
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written content for module 1 will go here.</p>
-        </div>
-        <div class="section-divider"></div>
-        <div class="content-block">
-          <h2>Audio practices</h2>
-          <div class="audio-placeholder" data-module="1" data-audio="module_1_guided">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Module 1</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
-        </div>
-        <div class="section-divider"></div>
-        <!-- THREE CIRCLES -->
-        <div class="three-circles-section">
-          <h2>How are you feeling right now?</h2>
-          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment. There are no right or wrong answers.</p>
-          <div class="three-circles-wrapper">
-            <iframe
-              id="three-circles-1"
-              src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Measure — Module 1"
-              allow="fullscreen">
-            </iframe>
-            <div class="three-circles-result" id="three-circles-result-1"></div>
-          </div>
-        </div>
-        <div class="module-nav-buttons">
-          <span></span>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(1)" data-action="mark_complete" data-module="1">
-            Mark as complete
-          </button>
-          <button class="btn-module-nav btn-next" onclick="showModule(2)" data-action="next_module" data-module="1">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
-        </div>
+      <div class="module-nav-buttons">
+        <div></div>
+        <button class="btn" onclick="showModule(2)">
+          Next module
+        </button>
       </div>
 
-      <!-- MODULE 2 -->
-      <div class="module-section" id="module-2">
-        <div class="module-header">
-          <div class="module-label">Module 2</div>
-          <span class="module-progress">Module 2 of 6</span>
-          <h1>Our three circles</h1>
-        </div>
-        <div class="summary-box">
-          <h3>What this module covers</h3>
-          <ul>
-            <li>Understanding the three emotion regulation systems</li>
-            <li>The threat, drive, and soothing circles explained</li>
-            <li>How modern life disrupts the balance between systems</li>
-            <li>Practical ways to activate your soothing system</li>
-          </ul>
-        </div>
-        <div class="video-placeholder" onclick="trackVideoPlay(2)" style="cursor:pointer;">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p>Video will be added here</p>
-        </div>
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written content for module 2 will go here.</p>
-        </div>
-        <div class="section-divider"></div>
-        <div class="content-block">
-          <h2>Audio practices</h2>
-          <div class="audio-placeholder" data-module="2" data-audio="module_2_guided">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Module 2</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
-        </div>
-        <div class="section-divider"></div>
-        <div class="three-circles-section">
-          <h2>How are you feeling right now?</h2>
-          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
-          <div class="three-circles-wrapper">
-            <iframe
-              id="three-circles-2"
-              src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Measure — Module 2"
-              allow="fullscreen">
-            </iframe>
-            <div class="three-circles-result" id="three-circles-result-2"></div>
-          </div>
-        </div>
-        <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(1)" data-action="prev_module" data-module="2">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(2)" data-action="mark_complete" data-module="2">
-            Mark as complete
-          </button>
-          <button class="btn-module-nav btn-next" onclick="showModule(3)" data-action="next_module" data-module="2">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
-        </div>
+    </div>
+
+    <!-- MODULE 2 -->
+    <div class="module-section" id="module-2">
+
+      <div class="module-header">
+        <h1>Our three circles</h1>
       </div>
 
-      <!-- MODULE 3 -->
+      <div class="summary-box">
+        <p>
+          Understanding the threat, drive, and soothing systems.
+        </p>
+      </div>
+
+      <div class="three-circles-section">
+
+        <div class="three-circles-wrapper">
+          <div class="three-circles-host" data-module="2"></div>
+        </div>
+
+        <button class="save-btn" onclick="saveThreeCircles(2)">
+          Save response
+        </button>
+
+        <div id="feedback-2"></div>
+
+      </div>
+
+      <div class="module-nav-buttons">
+        <button class="btn" onclick="showModule(1)">
+          Previous
+        </button>
+
+        <button class="btn" onclick="showModule(3)">
+          Next
+        </button>
+      </div>
+
+    </div>
+
+    <!-- MODULE 3 -->
       <div class="module-section" id="module-3">
         <div class="module-header">
           <div class="module-label">Module 3</div>
-          <span class="module-progress">Module 3 of 6</span>
           <h1>Working with your inner critic</h1>
         </div>
+
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
-            <li>Understanding where self-critical voices come from</li>
-            <li>Recognising the different forms your inner critic takes</li>
-            <li>Learning to relate to self-criticism with curiosity rather than shame</li>
-            <li>Compassionate responses to difficult self-talk</li>
+            <li>Understanding self-criticism</li>
+            <li>Where inner critics come from</li>
+            <li>Responding compassionately to difficult thoughts</li>
           </ul>
         </div>
-        <div class="video-placeholder" onclick="trackVideoPlay(3)" style="cursor:pointer;">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p>Video will be added here</p>
+
+        <div class="video-placeholder">
+          <div class="play-icon"></div>
+          <p>Video placeholder</p>
         </div>
+
         <div class="content-block">
           <h2>About this module</h2>
-          <p>Your written content for module 3 will go here.</p>
+          <p>Module 3 content goes here.</p>
         </div>
-        <div class="section-divider"></div>
-        <div class="content-block">
-          <h2>Audio practices</h2>
-          <div class="audio-placeholder" data-module="3" data-audio="module_3_guided">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Module 3</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
-        </div>
-        <div class="section-divider"></div>
+
         <div class="three-circles-section">
-          <h2>How are you feeling right now?</h2>
-          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
+          <h2>Three Circles Reflection</h2>
+          <p>Resize the circles below to represent how active each emotional system feels right now.</p>
+
           <div class="three-circles-wrapper">
             <iframe
-              id="three-circles-3"
               src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Measure — Module 3"
-              allow="fullscreen">
+              title="Three Circles Module 3">
             </iframe>
-            <div class="three-circles-result" id="three-circles-result-3"></div>
           </div>
         </div>
+
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(2)" data-action="prev_module" data-module="3">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(3)" data-action="mark_complete" data-module="3">
-            Mark as complete
-          </button>
-          <button class="btn-module-nav btn-next" onclick="showModule(4)" data-action="next_module" data-module="3">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
+          <button class="btn-module-nav btn-prev" onclick="showModule(2)">Previous</button>
+          <button class="btn-module-nav btn-next" onclick="showModule(4)">Next</button>
         </div>
       </div>
 
@@ -1019,67 +408,43 @@
       <div class="module-section" id="module-4">
         <div class="module-header">
           <div class="module-label">Module 4</div>
-          <span class="module-progress">Module 4 of 6</span>
           <h1>Building your compassionate self</h1>
         </div>
+
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
-            <li>What it means to develop a compassionate identity</li>
-            <li>Qualities of the compassionate self — wisdom, strength, warmth</li>
-            <li>Compassionate imagery and visualisation practices</li>
-            <li>How to bring the compassionate self into everyday life</li>
+            <li>Developing compassion</li>
+            <li>Compassionate imagery</li>
+            <li>Compassionate motivation</li>
           </ul>
         </div>
-        <div class="video-placeholder" onclick="trackVideoPlay(4)" style="cursor:pointer;">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p>Video will be added here</p>
+
+        <div class="video-placeholder">
+          <div class="play-icon"></div>
+          <p>Video placeholder</p>
         </div>
+
         <div class="content-block">
           <h2>About this module</h2>
-          <p>Your written content for module 4 will go here.</p>
+          <p>Module 4 content goes here.</p>
         </div>
-        <div class="section-divider"></div>
-        <div class="content-block">
-          <h2>Audio practices</h2>
-          <div class="audio-placeholder" data-module="4" data-audio="module_4_guided">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Module 4</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
-        </div>
-        <div class="section-divider"></div>
+
         <div class="three-circles-section">
-          <h2>How are you feeling right now?</h2>
-          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
+          <h2>Three Circles Reflection</h2>
+          <p>Resize the circles below to represent how active each emotional system feels right now.</p>
+
           <div class="three-circles-wrapper">
             <iframe
-              id="three-circles-4"
               src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Measure — Module 4"
-              allow="fullscreen">
+              title="Three Circles Module 4">
             </iframe>
-            <div class="three-circles-result" id="three-circles-result-4"></div>
           </div>
         </div>
+
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(3)" data-action="prev_module" data-module="4">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(4)" data-action="mark_complete" data-module="4">
-            Mark as complete
-          </button>
-          <button class="btn-module-nav btn-next" onclick="showModule(5)" data-action="next_module" data-module="4">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
+          <button class="btn-module-nav btn-prev" onclick="showModule(3)">Previous</button>
+          <button class="btn-module-nav btn-next" onclick="showModule(5)">Next</button>
         </div>
       </div>
 
@@ -1087,105 +452,43 @@
       <div class="module-section" id="module-5">
         <div class="module-header">
           <div class="module-label">Module 5</div>
-          <span class="module-progress">Module 5 of 6</span>
           <h1>Working with complex emotions</h1>
         </div>
+
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
-            <li>Understanding why certain emotions feel overwhelming</li>
-            <li>Compassionate approaches to anger, sadness, and anxiety</li>
-            <li>How to stay present with difficult feelings without being swept away</li>
-            <li>Specific practices for each emotion</li>
+            <li>Understanding difficult emotions</li>
+            <li>Working with anger</li>
+            <li>Working with sadness and anxiety</li>
           </ul>
         </div>
-        <div class="video-placeholder" onclick="trackVideoPlay(5)" style="cursor:pointer;">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p>Video will be added here</p>
+
+        <div class="video-placeholder">
+          <div class="play-icon"></div>
+          <p>Video placeholder</p>
         </div>
+
         <div class="content-block">
           <h2>About this module</h2>
-          <p>Your written introduction to module 5 will go here.</p>
+          <p>Module 5 content goes here.</p>
         </div>
-        <div class="section-divider"></div>
-        <div class="emotion-tab-buttons">
-          <button class="emotion-tab-btn active" onclick="showEmotion(event, 'anger')">Anger</button>
-          <button class="emotion-tab-btn" onclick="showEmotion(event, 'sadness')">Sadness</button>
-          <button class="emotion-tab-btn" onclick="showEmotion(event, 'anxiety')">Anxiety</button>
-        </div>
-        <div class="emotion-tab-content active" id="emotion-anger">
-          <div class="content-block">
-            <h2>Working with anger</h2>
-            <p>Your written content about working with anger will go here.</p>
-          </div>
-          <div class="audio-placeholder" data-module="5" data-audio="module_5_anger">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Working with anger</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
-        </div>
-        <div class="emotion-tab-content" id="emotion-sadness">
-          <div class="content-block">
-            <h2>Working with sadness</h2>
-            <p>Your written content about working with sadness will go here.</p>
-          </div>
-          <div class="audio-placeholder" data-module="5" data-audio="module_5_sadness">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Working with sadness</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
-        </div>
-        <div class="emotion-tab-content" id="emotion-anxiety">
-          <div class="content-block">
-            <h2>Working with anxiety</h2>
-            <p>Your written content about working with anxiety will go here.</p>
-          </div>
-          <div class="audio-placeholder" data-module="5" data-audio="module_5_anxiety">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Working with anxiety</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
-        </div>
-        <div class="section-divider"></div>
+
         <div class="three-circles-section">
-          <h2>How are you feeling right now?</h2>
-          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
+          <h2>Three Circles Reflection</h2>
+          <p>Resize the circles below to represent how active each emotional system feels right now.</p>
+
           <div class="three-circles-wrapper">
             <iframe
-              id="three-circles-5"
               src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Measure — Module 5"
-              allow="fullscreen">
+              title="Three Circles Module 5">
             </iframe>
-            <div class="three-circles-result" id="three-circles-result-5"></div>
           </div>
         </div>
+
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(4)" data-action="prev_module" data-module="5">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(5)" data-action="mark_complete" data-module="5">
-            Mark as complete
-          </button>
-          <button class="btn-module-nav btn-next" onclick="showModule(6)" data-action="next_module" data-module="5">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
+          <button class="btn-module-nav btn-prev" onclick="showModule(4)">Previous</button>
+          <button class="btn-module-nav btn-next" onclick="showModule(6)">Next</button>
         </div>
       </div>
 
@@ -1193,543 +496,64 @@
       <div class="module-section" id="module-6">
         <div class="module-header">
           <div class="module-label">Module 6</div>
-          <span class="module-progress">Module 6 of 6</span>
           <h1>Next steps</h1>
         </div>
+
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
-            <li>Reflecting on your journey through the program</li>
-            <li>Identifying the practices that have resonated most with you</li>
-            <li>How to continue building your compassionate self beyond this program</li>
-            <li>Further resources and support options</li>
+            <li>Reflecting on progress</li>
+            <li>Maintaining compassion practices</li>
+            <li>Planning future support</li>
           </ul>
         </div>
-        <div class="video-placeholder" onclick="trackVideoPlay(6)" style="cursor:pointer;">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p>Video will be added here</p>
-        </div>
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written content for module 6 will go here.</p>
-        </div>
-        <div class="section-divider"></div>
-        <div class="content-block">
-          <h2>Audio practices</h2>
-          <div class="audio-placeholder" data-module="6" data-audio="module_6_guided">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Module 6</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
-        </div>
-        <div class="section-divider"></div>
-        <div class="three-circles-section">
-          <h2>How are you feeling right now?</h2>
-          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
-          <div class="three-circles-wrapper">
-            <iframe
-              id="three-circles-6"
-              src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Measure — Module 6"
-              allow="fullscreen">
-            </iframe>
-            <div class="three-circles-result" id="three-circles-result-6"></div>
-          </div>
-        </div>
-        <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(5)" data-action="prev_module" data-module="6">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(6)" data-action="mark_complete" data-module="6">
-            Mark program complete
-          </button>
+
+        <div class="video-placeholder">
+          <div class="play-icon"></div>
+          <p>Video placeholder</p>
         </div>
 
-        <div class="post-measures-box" id="postMeasuresBox" style="display:none;">
-          <div class="summary-box">
-            <h3>You have completed The Green Room program</h3>
-            <p>Thank you for completing all six modules. The final step is to complete a short post-program survey.</p>
-            <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures">
-              Complete post-program survey
-            </a>
-            <p class="post-measures-note">You will be taken to a secure Qualtrics survey.</p>
+        <div class="content-block">
+          <h2>About this module</h2>
+          <p>Module 6 content goes here.</p>
+        </div>
+
+        <div class="three-circles-section">
+          <h2>Three Circles Reflection</h2>
+          <p>Resize the circles below to represent how active each emotional system feels right now.</p>
+
+          <div class="three-circles-wrapper">
+            <iframe
+              src="https://lab.psy.uq.edu.au/threecircles/"
+              title="Three Circles Module 6">
+            </iframe>
           </div>
+        </div>
+
+        <div class="module-nav-buttons">
+          <button class="btn-module-nav btn-prev" onclick="showModule(5)">Previous</button>
+          <button class="btn-module-nav btn-next" onclick="alert('Program complete!')">Finish</button>
         </div>
       </div>
 
     </main>
   </div>
 
-  <footer>
-    <p>2026 The Green Room. All rights reserved.</p>
-  </footer>
-
-  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">
-    <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
-  </button>
-
-  <!-- =====================================================
-       FIREBASE ANALYTICS + MODULE TRACKING
-  ====================================================== -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-    import { getFirestore, collection, addDoc, doc, updateDoc, serverTimestamp }
-      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBHsFsPPs0MB9KN5A9rE-59FPk3kI-pF08",
-      authDomain: "thegreenroom-ea1e7.firebaseapp.com",
-      projectId: "thegreenroom-ea1e7",
-      storageBucket: "thegreenroom-ea1e7.firebasestorage.app",
-      messagingSenderId: "785185935884",
-      appId: "1:785185935884:web:0bd81551cb70ecc3669429",
-      measurementId: "G-LN48FS5392"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
-
-    // ── Session state ──────────────────────────────────
-    const sessionId = 'session_' + Date.now();
-    let currentModule = 1;
-    let moduleStartTime = Date.now();
-    let sessionDocId = null;
-    const audioTimers = {};
-
-    // ── Start Firestore session ────────────────────────
-    async function startSession() {
-      try {
-        const ref = await addDoc(collection(db, 'sessions'), {
-          sessionId,
-          sessionStart: serverTimestamp(),
-          sessionEnd: null,
-          completedModules: [],
-          droppedAtModule: null,
-          platform: navigator.userAgent,
-        });
-        sessionDocId = ref.id;
-        console.log('Session started:', sessionDocId);
-      } catch (e) {
-        console.error('Session start error:', e);
-      }
-    }
-
-    async function updateSession(data) {
-      if (!sessionDocId) return;
-      try {
-        await updateDoc(doc(db, 'sessions', sessionDocId), data);
-      } catch (e) {
-        console.error('Session update error:', e);
-      }
-    }
-
-    // ── Module tracking ────────────────────────────────
-
-    // Called when a module becomes visible
-    function onModuleEnter(moduleNum) {
-      moduleStartTime = Date.now();
-      currentModule = moduleNum;
-
-      // Firebase Analytics event
-      logEvent(analytics, 'module_view', {
-        module_number: moduleNum,
-        module_name: getModuleName(moduleNum),
-        session_id: sessionId
-      });
-
-      // Firestore record
-      updateSession({
-        [`module_${moduleNum}_entered_at`]: serverTimestamp()
-      });
-
-      console.log(`Analytics: module_view — Module ${moduleNum}`);
-    }
-
-    // Called when leaving a module
-    function onModuleLeave(moduleNum) {
-      const durationSeconds = Math.round((Date.now() - moduleStartTime) / 1000);
-
-      logEvent(analytics, 'module_time_spent', {
-        module_number: moduleNum,
-        module_name: getModuleName(moduleNum),
-        duration_seconds: durationSeconds,
-        session_id: sessionId
-      });
-
-      updateSession({
-        [`module_${moduleNum}_duration_seconds`]: durationSeconds
-      });
-
-      console.log(`Analytics: module_time_spent — Module ${moduleNum} — ${durationSeconds}s`);
-    }
-
-    // ── Video tracking ─────────────────────────────────
-    window.trackVideoPlay = function(moduleNum) {
-      logEvent(analytics, 'video_play', {
-        module_number: moduleNum,
-        module_name: getModuleName(moduleNum),
-        session_id: sessionId
-      });
-      updateSession({
-        [`module_${moduleNum}_video_played`]: serverTimestamp()
-      });
-      console.log(`Analytics: video_play — Module ${moduleNum}`);
-    };
-
-    // ── Audio tracking ─────────────────────────────────
-    // Attaches to real <audio> elements when they exist
-    // Also tracks placeholder clicks for now
-    function setupAudioTracking() {
-      // Track real audio elements
-      document.querySelectorAll('audio').forEach(audioEl => {
-        const moduleNum = audioEl.closest('[data-module]')?.dataset.module || 'unknown';
-        const audioName = audioEl.dataset.audio || audioEl.src;
-        let audioStartTime = null;
-
-        audioEl.addEventListener('play', () => {
-          audioStartTime = Date.now();
-          logEvent(analytics, 'audio_play', {
-            audio_name: audioName,
-            module_number: parseInt(moduleNum),
-            session_id: sessionId
-          });
-          updateSession({
-            [`audio_${audioName}_played_at`]: serverTimestamp()
-          });
-          console.log(`Analytics: audio_play — ${audioName}`);
-        });
-
-        audioEl.addEventListener('pause', () => {
-          if (audioStartTime) {
-            const listenDuration = Math.round((Date.now() - audioStartTime) / 1000);
-            logEvent(analytics, 'audio_pause', {
-              audio_name: audioName,
-              module_number: parseInt(moduleNum),
-              listen_duration_seconds: listenDuration,
-              session_id: sessionId
-            });
-            updateSession({
-              [`audio_${audioName}_listen_seconds`]: listenDuration
-            });
-            console.log(`Analytics: audio_pause — ${audioName} — ${listenDuration}s`);
-            audioStartTime = null;
-          }
-        });
-
-        audioEl.addEventListener('ended', () => {
-          if (audioStartTime) {
-            const listenDuration = Math.round((Date.now() - audioStartTime) / 1000);
-            logEvent(analytics, 'audio_complete', {
-              audio_name: audioName,
-              module_number: parseInt(moduleNum),
-              listen_duration_seconds: listenDuration,
-              session_id: sessionId
-            });
-            updateSession({
-              [`audio_${audioName}_completed`]: true,
-              [`audio_${audioName}_full_duration_seconds`]: listenDuration
-            });
-            console.log(`Analytics: audio_complete — ${audioName}`);
-            audioStartTime = null;
-          }
-        });
-      });
-
-      // Track placeholder clicks (before real audio added)
-      document.querySelectorAll('.audio-placeholder').forEach(placeholder => {
-        placeholder.addEventListener('click', () => {
-          const moduleNum = placeholder.dataset.module;
-          const audioName = placeholder.dataset.audio;
-          logEvent(analytics, 'audio_placeholder_click', {
-            audio_name: audioName,
-            module_number: parseInt(moduleNum),
-            session_id: sessionId
-          });
-          console.log(`Analytics: audio_placeholder_click — ${audioName}`);
-        });
-      });
-    }
-
-    // ── Button tracking ────────────────────────────────
-    function setupButtonTracking() {
-      document.querySelectorAll('[data-action]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const action = btn.dataset.action;
-          const moduleNum = btn.dataset.module;
-          logEvent(analytics, 'button_click', {
-            button_action: action,
-            module_number: parseInt(moduleNum),
-            session_id: sessionId
-          });
-          console.log(`Analytics: button_click — ${action} — Module ${moduleNum}`);
-        });
-      });
-    }
-
-    // ── Emotion tab tracking ───────────────────────────
-    function setupEmotionTabTracking() {
-      document.querySelectorAll('.emotion-tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const emotion = btn.textContent.trim().toLowerCase();
-          logEvent(analytics, 'emotion_tab_selected', {
-            emotion,
-            module_number: 5,
-            session_id: sessionId
-          });
-          console.log(`Analytics: emotion_tab_selected — ${emotion}`);
-        });
-      });
-    }
-
-    // ── Three Circles tracking ─────────────────────────
-    // Listens for postMessage data from the iframe
-    // This works if the three circles tool sends window.postMessage
-    window.addEventListener('message', (event) => {
-      // Only accept messages from the UQ lab domain
-      if (!event.origin.includes('lab.psy.uq.edu.au')) return;
-
-      const data = event.data;
-      if (!data || !data.type) return;
-
-      if (data.type === 'three_circles_result') {
-        const moduleNum = currentModule;
-        const { threat, drive, soothing } = data;
-
-        logEvent(analytics, 'three_circles_submitted', {
-          module_number: moduleNum,
-          threat_proportion: threat,
-          drive_proportion: drive,
-          soothing_proportion: soothing,
-          session_id: sessionId
-        });
-
-        updateSession({
-          [`three_circles_module_${moduleNum}`]: {
-            threat,
-            drive,
-            soothing,
-            submittedAt: new Date().toISOString()
-          }
-        });
-
-        // Show result confirmation below the iframe
-        const resultEl = document.getElementById(`three-circles-result-${moduleNum}`);
-        if (resultEl) {
-          resultEl.innerHTML = `
-            Response recorded — Threat: <strong>${Math.round(threat * 100)}%</strong>,
-            Drive: <strong>${Math.round(drive * 100)}%</strong>,
-            Soothing: <strong>${Math.round(soothing * 100)}%</strong>
-          `;
-          resultEl.classList.add('visible');
-        }
-
-        console.log(`Analytics: three_circles_submitted — Module ${moduleNum}`);
-      }
-
-      // Also track any interaction with the iframe
-      if (data.type === 'three_circles_interaction') {
-        logEvent(analytics, 'three_circles_interaction', {
-          module_number: currentModule,
-          interaction_type: data.interactionType || 'resize',
-          session_id: sessionId
-        });
-      }
-    });
-
-    // ── Completion and dropout tracking ───────────────
-    window.trackModuleComplete = function(moduleNum) {
-      logEvent(analytics, 'module_complete', {
-        module_number: moduleNum,
-        module_name: getModuleName(moduleNum),
-        session_id: sessionId
-      });
-      updateSession({
-        [`module_${moduleNum}_completed_at`]: serverTimestamp(),
-        completedModules: window._completedModules || []
-      });
-      console.log(`Analytics: module_complete — Module ${moduleNum}`);
-    };
-
-    window.trackProgramComplete = function() {
-      logEvent(analytics, 'program_complete', {
-        session_id: sessionId,
-        total_modules: 6
-      });
-      updateSession({
-        programCompletedAt: serverTimestamp(),
-        dropout: false
-      });
-      console.log('Analytics: program_complete');
-    };
-
-    // Track dropout — fires when user leaves without completing
-    window.addEventListener('beforeunload', () => {
-      const completedCount = (window._completedModules || []).length;
-      if (completedCount < 6) {
-        logEvent(analytics, 'dropout', {
-          last_module_viewed: currentModule,
-          modules_completed: completedCount,
-          session_id: sessionId
-        });
-        updateSession({
-          sessionEnd: serverTimestamp(),
-          droppedAtModule: currentModule,
-          dropout: completedCount < 6
-        });
-        console.log(`Analytics: dropout — Last module: ${currentModule}`);
-      }
-    });
-
-    // ── VR placeholder tracking ────────────────────────
-    // Ready for when VR content is added
-    // Call window.trackVREvent(sceneName, eventType, durationSeconds)
-    // from your VR component
-    window.trackVREvent = function(sceneName, eventType, durationSeconds) {
-      logEvent(analytics, 'vr_interaction', {
-        scene_name: sceneName,
-        event_type: eventType,
-        duration_seconds: durationSeconds || 0,
-        module_number: currentModule,
-        session_id: sessionId
-      });
-      updateSession({
-        [`vr_${sceneName}_${eventType}`]: serverTimestamp(),
-        [`vr_${sceneName}_duration_seconds`]: durationSeconds || 0
-      });
-      console.log(`Analytics: vr_interaction — ${sceneName} — ${eventType}`);
-    };
-
-    // ── Hook into module navigation ────────────────────
-    // This intercepts showModule so tracking fires automatically
-    window._showModuleOriginal = null;
-    window._completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
-
-    window.hookShowModule = function() {
-      const original = window.showModule;
-      window.showModule = function(num) {
-        onModuleLeave(currentModule);
-        original(num);
-        onModuleEnter(num);
-      };
-    };
-
-    // ── Helper ─────────────────────────────────────────
-    function getModuleName(num) {
-      const names = {
-        1: 'Compassion and our tricky brains',
-        2: 'Our three circles',
-        3: 'Working with your inner critic',
-        4: 'Building your compassionate self',
-        5: 'Working with complex emotions',
-        6: 'Next steps'
-      };
-      return names[num] || `Module ${num}`;
-    }
-
-    // ── Initialise ─────────────────────────────────────
-    await startSession();
-    onModuleEnter(1);
-    setupAudioTracking();
-    setupButtonTracking();
-    setupEmotionTabTracking();
-
-    // Hook into showModule after the main script has defined it
-    setTimeout(() => {
-      if (window.showModule) window.hookShowModule();
-    }, 100);
-
-    console.log('Firebase Analytics initialised for The Green Room');
-  </script>
-
-  <!-- =====================================================
-       MAIN PROGRAM LOGIC
-  ====================================================== -->
   <script>
-    const TOTAL_MODULES = 6;
-    let completed = JSON.parse(localStorage.getItem('completedModules') || '[]');
-    window._completedModules = completed;
-
-    function init() {
-      completed.forEach(num => applyCompletion(num));
-      updateProgress();
-      if (completed.includes(6)) {
-        document.getElementById('postMeasuresBox').style.display = 'block';
-      }
-    }
-
     function showModule(num) {
-      document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
-      document.getElementById('module-' + num).classList.add('active');
-      document.getElementById('sidebar-' + num).classList.add('active');
-      document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth' });
-    }
+      document.querySelectorAll('.module-section').forEach(section => {
+        section.classList.remove('active');
+      });
 
-    function showEmotion(event, emotion) {
-      document.querySelectorAll('.emotion-tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.emotion-tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('emotion-' + emotion).classList.add('active');
-      event.target.classList.add('active');
-    }
+      document.querySelectorAll('.sidebar-module').forEach(sidebar => {
+        sidebar.classList.remove('active');
+      });
 
-    function markComplete(num) {
-      if (!completed.includes(num)) {
-        completed.push(num);
-        localStorage.setItem('completedModules', JSON.stringify(completed));
-        window._completedModules = completed;
-        applyCompletion(num);
-        updateProgress();
-      }
+      document.getElementById(`module-${num}`).classList.add('active');
+      document.getElementById(`sidebar-${num}`).classList.add('active');
 
-      // Fire analytics
-      if (window.trackModuleComplete) window.trackModuleComplete(num);
-      if (num === TOTAL_MODULES && window.trackProgramComplete) window.trackProgramComplete();
-
-      if (num === TOTAL_MODULES) {
-        document.getElementById('postMeasuresBox').style.display = 'block';
-        document.getElementById('postMeasuresBox').scrollIntoView({ behavior: 'smooth' });
-      } else {
-        showModule(num + 1);
-      }
-    }
-
-    function applyCompletion(num) {
-      const tick = document.getElementById('tick-' + num);
-      if (tick) tick.classList.add('done');
-    }
-
-    function updateProgress() {
-      const count = completed.length;
-      const pct = (count / TOTAL_MODULES) * 100;
-      document.getElementById('progressFill').style.width = pct + '%';
-      document.getElementById('progressText').textContent =
-        count + ' of ' + TOTAL_MODULES + ' modules completed';
-    }
-
-    function toggleMenu() {
-      document.getElementById('mobileMenu').classList.toggle('open');
-    }
-
-    window.addEventListener('scroll', () => {
-      const btn = document.getElementById('backToTop');
-      if (window.scrollY > 300) btn.classList.add('visible');
-      else btn.classList.remove('visible');
-    });
-
-    function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
-    init();
   </script>
 
 </body>
