@@ -8,78 +8,77 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
+:root{
   --bg:#f1f4ee;
-  --nav-bg:#3a5241;
+  --nav:#3a5241;
   --primary:#4a7a57;
-  --text:#2a3828;
-  --muted:#5a6e58;
   --border:#c4d4be;
-  --card:#ffffff;
+  --text:#2a3828;
 }
 
-body {
+body{
   margin:0;
   font-family:Lato,sans-serif;
   background:var(--bg);
   color:var(--text);
 }
 
-nav {
-  background:var(--nav-bg);
+nav{
+  background:var(--nav);
   color:white;
-  padding:18px 40px;
+  padding:16px 32px;
+  font-size:22px;
   font-family:"Cormorant Garamond",serif;
-  font-size:26px;
 }
 
-.layout { display:flex; }
+.layout{display:flex;}
 
-.sidebar {
-  width:260px;
+.sidebar{
+  width:240px;
   background:white;
   border-right:1px solid var(--border);
   min-height:100vh;
 }
 
-.sidebar div {
-  padding:16px;
+.sidebar div{
+  padding:14px;
   cursor:pointer;
 }
 
-.sidebar .active {
+.sidebar .active{
   background:#d4e4cc;
 }
 
-.main {
+.main{
   flex:1;
-  padding:40px;
+  padding:30px;
 }
 
-.module { display:none; }
-.module.active { display:block; }
+.module{display:none;}
+.module.active{display:block;}
 
-.card {
-  background:var(--card);
-  border:1px solid var(--border);
-  padding:20px;
-  border-radius:8px;
-  margin:20px 0;
-}
-
-canvas {
+canvas{
   border:1px solid var(--border);
   background:white;
-  border-radius:8px;
+  border-radius:10px;
+  display:block;
 }
 
-.btn {
+.card{
+  background:white;
+  border:1px solid var(--border);
+  padding:20px;
+  border-radius:10px;
+  margin-top:20px;
+}
+
+button{
+  margin-top:10px;
   background:var(--primary);
   color:white;
   border:none;
-  padding:10px 16px;
+  padding:10px 14px;
   cursor:pointer;
-  margin-top:10px;
 }
 </style>
 </head>
@@ -101,57 +100,53 @@ canvas {
 
 <div class="main">
 
-<!-- MODULE TEMPLATE -->
+<!-- MODULES -->
 <div id="m1" class="module active">
   <h2>Module 1</h2>
-
   <div class="card">
-    <p>Resize and move circles to represent internal systems.</p>
-
-    <canvas id="tri1" width="600" height="420"></canvas>
-
-    <button class="btn" onclick="save(1)">Save</button>
+    <canvas id="c1" width="600" height="420"></canvas>
+    <button onclick="save(1)">Save</button>
   </div>
 </div>
 
 <div id="m2" class="module">
   <h2>Module 2</h2>
   <div class="card">
-    <canvas id="tri2" width="600" height="420"></canvas>
-    <button class="btn" onclick="save(2)">Save</button>
+    <canvas id="c2" width="600" height="420"></canvas>
+    <button onclick="save(2)">Save</button>
   </div>
 </div>
 
 <div id="m3" class="module">
   <h2>Module 3</h2>
   <div class="card">
-    <canvas id="tri3" width="600" height="420"></canvas>
-    <button class="btn" onclick="save(3)">Save</button>
+    <canvas id="c3" width="600" height="420"></canvas>
+    <button onclick="save(3)">Save</button>
   </div>
 </div>
 
 <div id="m4" class="module">
   <h2>Module 4</h2>
   <div class="card">
-    <canvas id="tri4" width="600" height="420"></canvas>
-    <button class="btn" onclick="save(4)">Save</button>
+    <canvas id="c4" width="600" height="420"></canvas>
+    <button onclick="save(4)">Save</button>
   </div>
 </div>
 
 <div id="m5" class="module">
   <h2>Module 5</h2>
   <div class="card">
-    <canvas id="tri5" width="600" height="420"></canvas>
-    <button class="btn" onclick="save(5)">Save</button>
+    <canvas id="c5" width="600" height="420"></canvas>
+    <button onclick="save(5)">Save</button>
   </div>
 </div>
 
 <div id="m6" class="module">
   <h2>Module 6</h2>
   <div class="card">
-    <canvas id="tri6" width="600" height="420"></canvas>
-    <button class="btn" onclick="save(6)">Save</button>
-    <button class="btn" onclick="exportCSV()">Export CSV</button>
+    <canvas id="c6" width="600" height="420"></canvas>
+    <button onclick="save(6)">Save</button>
+    <button onclick="exportCSV()">Export CSV</button>
   </div>
 </div>
 
@@ -159,31 +154,40 @@ canvas {
 </div>
 
 <script>
+
 const state = {};
 
-function initCanvas(id){
-  const c = document.getElementById(id);
-  const ctx = c.getContext("2d");
+function init(id){
+  const canvas = document.getElementById(id);
+  const ctx = canvas.getContext("2d");
 
   state[id] = {
-    circles: [
-      {x:150,y:200,r:60,color:"rgba(74,122,87,0.5)",name:"Threat"},
-      {x:300,y:200,r:60,color:"rgba(120,160,120,0.5)",name:"Drive"},
-      {x:450,y:200,r:60,color:"rgba(180,200,180,0.5)",name:"Soothing"}
+    circles:[
+      {x:150,y:200,r:60,color:"#e74c3c",name:"Threat"},
+      {x:300,y:200,r:60,color:"#3498db",name:"Drive"},
+      {x:450,y:200,r:60,color:"#2ecc71",name:"Soothing"}
     ],
     drag:null
   };
 
   function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    const s = state[id];
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    s.circles.forEach((c1,i)=>{
+    state[id].circles.forEach(c=>{
       ctx.beginPath();
-      ctx.arc(c1.x,c1.y,c1.r,0,Math.PI*2);
-      ctx.fillStyle=c1.color;
+      ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+      ctx.fillStyle=c.color;
+      ctx.globalAlpha=0.35;
       ctx.fill();
+
+      ctx.globalAlpha=1;
+      ctx.strokeStyle=c.color;
+      ctx.lineWidth=2;
       ctx.stroke();
+
+      ctx.fillStyle="#2a3828";
+      ctx.font="14px Arial";
+      ctx.fillText(c.name,c.x-25,c.y);
     });
   }
 
@@ -191,21 +195,20 @@ function initCanvas(id){
     return Math.hypot(mx-c.x,my-c.y)<c.r;
   }
 
-  c.onmousedown=(e)=>{
-    const rect=c.getBoundingClientRect();
-    const mx=e.clientX-rect.left;
-    const my=e.clientY-rect.top;
+  canvas.onmousedown=(e)=>{
+    const r=canvas.getBoundingClientRect();
+    const mx=e.clientX-r.left;
+    const my=e.clientY-r.top;
 
-    const s=state[id];
-    s.drag = s.circles.find(c=>hit(mx,my,c));
+    state[id].drag = state[id].circles.find(c=>hit(mx,my,c))||null;
   };
 
-  c.onmouseup=()=>state[id].drag=null;
+  canvas.onmouseup=()=>state[id].drag=null;
 
-  c.onmousemove=(e)=>{
-    const rect=c.getBoundingClientRect();
-    const mx=e.clientX-rect.left;
-    const my=e.clientY-rect.top;
+  canvas.onmousemove=(e)=>{
+    const r=canvas.getBoundingClientRect();
+    const mx=e.clientX-r.left;
+    const my=e.clientY-r.top;
 
     const s=state[id];
 
@@ -216,17 +219,17 @@ function initCanvas(id){
     }
   };
 
-  c.onwheel=(e)=>{
-    const rect=c.getBoundingClientRect();
-    const mx=e.clientX-rect.left;
-    const my=e.clientY-rect.top;
+  canvas.onwheel=(e)=>{
+    const r=canvas.getBoundingClientRect();
+    const mx=e.clientX-r.left;
+    const my=e.clientY-r.top;
 
     const s=state[id];
-
     const target=s.circles.find(c=>hit(mx,my,c));
+
     if(target){
-      target.r += e.deltaY*-0.1;
-      target.r=Math.max(10,Math.min(180,target.r));
+      target.r += e.deltaY*-0.2;
+      target.r=Math.max(20,Math.min(200,target.r));
       draw();
     }
   };
@@ -234,33 +237,26 @@ function initCanvas(id){
   draw();
 }
 
-function save(module){
-  const id="tri"+module;
-  const data=state[id].circles.map(c=>({
-    x:c.x,y:c.y,r:c.r,
-    area:Math.PI*c.r*c.r
-  }));
-
-  localStorage.setItem(id,JSON.stringify(data));
-
-  // Firebase hook placeholder
-  console.log("Send to Firebase:",module,data);
+function save(n){
+  const id="c"+n;
+  localStorage.setItem(id,JSON.stringify(state[id].circles));
+  console.log("saved module",n,state[id].circles);
 }
 
 function exportCSV(){
-  let rows=["module,circle,x,y,r,area"];
+  let rows=["module,circle,x,y,r"];
 
   for(let i=1;i<=6;i++){
-    const d=JSON.parse(localStorage.getItem("tri"+i)||"[]");
-    d.forEach((c,idx)=>{
-      rows.push(`${i},${idx},${c.x},${c.y},${c.r},${c.area}`);
+    let data=JSON.parse(localStorage.getItem("c"+i)||"[]");
+    data.forEach((c,j)=>{
+      rows.push(`${i},${j},${c.x},${c.y},${c.r}`);
     });
   }
 
   const blob=new Blob([rows.join("\n")],{type:"text/csv"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
-  a.download="three_circles_data.csv";
+  a.download="three_circles.csv";
   a.click();
 }
 
@@ -272,10 +268,10 @@ function show(n){
   document.querySelectorAll(".sidebar div")[n-1].classList.add("active");
 }
 
-// init all canvases
 for(let i=1;i<=6;i++){
-  initCanvas("tri"+i);
+  init("c"+i);
 }
+
 </script>
 
 </body>
