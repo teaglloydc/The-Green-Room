@@ -357,7 +357,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s;
     }
+
+    .play-icon:hover { background-color: #3d6648; }
 
     .play-icon svg {
       width: 20px;
@@ -389,6 +393,27 @@
       height: 1px;
       background-color: var(--border);
       margin: 48px 0;
+    }
+
+    /* AUDIO PLAYER */
+    .audio-player {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+
+    .audio-player-title {
+      font-size: 15px;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .audio-player audio {
+      width: 100%;
+      accent-color: var(--primary);
     }
 
     .audio-placeholder {
@@ -461,6 +486,59 @@
     .emotion-tab-content { display: none; }
     .emotion-tab-content.active { display: block; }
 
+    /* THREE CIRCLES EMBED */
+    .three-circles-section {
+      margin-top: 48px;
+      margin-bottom: 48px;
+    }
+
+    .three-circles-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .three-circles-section p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+
+    .three-circles-wrapper {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .three-circles-wrapper iframe {
+      width: 100%;
+      height: 520px;
+      border: none;
+      display: block;
+    }
+
+    .three-circles-result {
+      display: none;
+      background-color: var(--summary-bg);
+      border-top: 1px solid var(--border);
+      padding: 20px 24px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .three-circles-result.visible { display: block; }
+
+    .three-circles-result strong {
+      color: var(--primary);
+    }
+
+    /* MODULE NAV BUTTONS */
     .module-nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -580,11 +658,7 @@
     .back-to-top:hover { background-color: #3d6648; }
     .back-to-top.visible { display: flex; }
 
-    .back-to-top svg {
-      width: 18px;
-      height: 18px;
-      fill: white;
-    }
+    .back-to-top svg { width: 18px; height: 18px; fill: white; }
 
     footer {
       background-color: var(--nav-bg);
@@ -632,6 +706,7 @@
       .main-content { padding: 32px 24px; }
       .module-header h1 { font-size: 30px; }
       .module-nav-buttons { flex-wrap: wrap; gap: 12px; }
+      .three-circles-wrapper iframe { height: 420px; }
       .back-to-top { bottom: 20px; right: 20px; }
     }
   </style>
@@ -668,7 +743,6 @@
 
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-label">Program Modules</div>
-
       <div class="progress-bar-container">
         <div class="progress-bar-track">
           <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
@@ -755,7 +829,7 @@
             <li>Why self-criticism is so common and how compassion offers an alternative</li>
           </ul>
         </div>
-        <div class="video-placeholder">
+        <div class="video-placeholder" onclick="trackVideoPlay(1)" style="cursor:pointer;">
           <div class="play-icon">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </div>
@@ -768,7 +842,7 @@
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
-          <div class="audio-placeholder">
+          <div class="audio-placeholder" data-module="1" data-audio="module_1_guided">
             <div class="audio-icon">
               <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             </div>
@@ -778,10 +852,27 @@
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <!-- THREE CIRCLES -->
+        <div class="three-circles-section">
+          <h2>How are you feeling right now?</h2>
+          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment. There are no right or wrong answers.</p>
+          <div class="three-circles-wrapper">
+            <iframe
+              id="three-circles-1"
+              src="https://lab.psy.uq.edu.au/threecircles/"
+              title="Three Circles Measure — Module 1"
+              allow="fullscreen">
+            </iframe>
+            <div class="three-circles-result" id="three-circles-result-1"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
           <span></span>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(1)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(2)">
+          <button class="btn-module-nav btn-complete" onclick="markComplete(1)" data-action="mark_complete" data-module="1">
+            Mark as complete
+          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(2)" data-action="next_module" data-module="1">
             Next module
             <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
@@ -804,7 +895,7 @@
             <li>Practical ways to activate your soothing system</li>
           </ul>
         </div>
-        <div class="video-placeholder">
+        <div class="video-placeholder" onclick="trackVideoPlay(2)" style="cursor:pointer;">
           <div class="play-icon">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </div>
@@ -817,7 +908,7 @@
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
-          <div class="audio-placeholder">
+          <div class="audio-placeholder" data-module="2" data-audio="module_2_guided">
             <div class="audio-icon">
               <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             </div>
@@ -827,13 +918,29 @@
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <div class="three-circles-section">
+          <h2>How are you feeling right now?</h2>
+          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
+          <div class="three-circles-wrapper">
+            <iframe
+              id="three-circles-2"
+              src="https://lab.psy.uq.edu.au/threecircles/"
+              title="Three Circles Measure — Module 2"
+              allow="fullscreen">
+            </iframe>
+            <div class="three-circles-result" id="three-circles-result-2"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(1)">
+          <button class="btn-module-nav btn-prev" onclick="showModule(1)" data-action="prev_module" data-module="2">
             <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
             Previous
           </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(2)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(3)">
+          <button class="btn-module-nav btn-complete" onclick="markComplete(2)" data-action="mark_complete" data-module="2">
+            Mark as complete
+          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(3)" data-action="next_module" data-module="2">
             Next module
             <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
@@ -856,7 +963,7 @@
             <li>Compassionate responses to difficult self-talk</li>
           </ul>
         </div>
-        <div class="video-placeholder">
+        <div class="video-placeholder" onclick="trackVideoPlay(3)" style="cursor:pointer;">
           <div class="play-icon">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </div>
@@ -869,7 +976,7 @@
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
-          <div class="audio-placeholder">
+          <div class="audio-placeholder" data-module="3" data-audio="module_3_guided">
             <div class="audio-icon">
               <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             </div>
@@ -879,13 +986,29 @@
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <div class="three-circles-section">
+          <h2>How are you feeling right now?</h2>
+          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
+          <div class="three-circles-wrapper">
+            <iframe
+              id="three-circles-3"
+              src="https://lab.psy.uq.edu.au/threecircles/"
+              title="Three Circles Measure — Module 3"
+              allow="fullscreen">
+            </iframe>
+            <div class="three-circles-result" id="three-circles-result-3"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(2)">
+          <button class="btn-module-nav btn-prev" onclick="showModule(2)" data-action="prev_module" data-module="3">
             <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
             Previous
           </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(3)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(4)">
+          <button class="btn-module-nav btn-complete" onclick="markComplete(3)" data-action="mark_complete" data-module="3">
+            Mark as complete
+          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(4)" data-action="next_module" data-module="3">
             Next module
             <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
@@ -908,7 +1031,7 @@
             <li>How to bring the compassionate self into everyday life</li>
           </ul>
         </div>
-        <div class="video-placeholder">
+        <div class="video-placeholder" onclick="trackVideoPlay(4)" style="cursor:pointer;">
           <div class="play-icon">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </div>
@@ -921,7 +1044,7 @@
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
-          <div class="audio-placeholder">
+          <div class="audio-placeholder" data-module="4" data-audio="module_4_guided">
             <div class="audio-icon">
               <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             </div>
@@ -931,13 +1054,29 @@
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <div class="three-circles-section">
+          <h2>How are you feeling right now?</h2>
+          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
+          <div class="three-circles-wrapper">
+            <iframe
+              id="three-circles-4"
+              src="https://lab.psy.uq.edu.au/threecircles/"
+              title="Three Circles Measure — Module 4"
+              allow="fullscreen">
+            </iframe>
+            <div class="three-circles-result" id="three-circles-result-4"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(3)">
+          <button class="btn-module-nav btn-prev" onclick="showModule(3)" data-action="prev_module" data-module="4">
             <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
             Previous
           </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(4)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(5)">
+          <button class="btn-module-nav btn-complete" onclick="markComplete(4)" data-action="mark_complete" data-module="4">
+            Mark as complete
+          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(5)" data-action="next_module" data-module="4">
             Next module
             <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
@@ -960,7 +1099,7 @@
             <li>Specific practices for each emotion</li>
           </ul>
         </div>
-        <div class="video-placeholder">
+        <div class="video-placeholder" onclick="trackVideoPlay(5)" style="cursor:pointer;">
           <div class="play-icon">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </div>
@@ -981,7 +1120,7 @@
             <h2>Working with anger</h2>
             <p>Your written content about working with anger will go here.</p>
           </div>
-          <div class="audio-placeholder">
+          <div class="audio-placeholder" data-module="5" data-audio="module_5_anger">
             <div class="audio-icon">
               <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             </div>
@@ -996,7 +1135,7 @@
             <h2>Working with sadness</h2>
             <p>Your written content about working with sadness will go here.</p>
           </div>
-          <div class="audio-placeholder">
+          <div class="audio-placeholder" data-module="5" data-audio="module_5_sadness">
             <div class="audio-icon">
               <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             </div>
@@ -1011,7 +1150,7 @@
             <h2>Working with anxiety</h2>
             <p>Your written content about working with anxiety will go here.</p>
           </div>
-          <div class="audio-placeholder">
+          <div class="audio-placeholder" data-module="5" data-audio="module_5_anxiety">
             <div class="audio-icon">
               <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             </div>
@@ -1021,13 +1160,29 @@
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <div class="three-circles-section">
+          <h2>How are you feeling right now?</h2>
+          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
+          <div class="three-circles-wrapper">
+            <iframe
+              id="three-circles-5"
+              src="https://lab.psy.uq.edu.au/threecircles/"
+              title="Three Circles Measure — Module 5"
+              allow="fullscreen">
+            </iframe>
+            <div class="three-circles-result" id="three-circles-result-5"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(4)">
+          <button class="btn-module-nav btn-prev" onclick="showModule(4)" data-action="prev_module" data-module="5">
             <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
             Previous
           </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(5)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(6)">
+          <button class="btn-module-nav btn-complete" onclick="markComplete(5)" data-action="mark_complete" data-module="5">
+            Mark as complete
+          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(6)" data-action="next_module" data-module="5">
             Next module
             <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
@@ -1050,7 +1205,7 @@
             <li>Further resources and support options</li>
           </ul>
         </div>
-        <div class="video-placeholder">
+        <div class="video-placeholder" onclick="trackVideoPlay(6)" style="cursor:pointer;">
           <div class="play-icon">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </div>
@@ -1063,7 +1218,7 @@
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
-          <div class="audio-placeholder">
+          <div class="audio-placeholder" data-module="6" data-audio="module_6_guided">
             <div class="audio-icon">
               <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             </div>
@@ -1073,12 +1228,26 @@
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <div class="three-circles-section">
+          <h2>How are you feeling right now?</h2>
+          <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment.</p>
+          <div class="three-circles-wrapper">
+            <iframe
+              id="three-circles-6"
+              src="https://lab.psy.uq.edu.au/threecircles/"
+              title="Three Circles Measure — Module 6"
+              allow="fullscreen">
+            </iframe>
+            <div class="three-circles-result" id="three-circles-result-6"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(5)">
+          <button class="btn-module-nav btn-prev" onclick="showModule(5)" data-action="prev_module" data-module="6">
             <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
             Previous
           </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(6)">
+          <button class="btn-module-nav btn-complete" onclick="markComplete(6)" data-action="mark_complete" data-module="6">
             Mark program complete
           </button>
         </div>
@@ -1086,14 +1255,13 @@
         <div class="post-measures-box" id="postMeasuresBox" style="display:none;">
           <div class="summary-box">
             <h3>You have completed The Green Room program</h3>
-            <p>Thank you for completing all six modules. The final step is to complete a short post-program survey so we can understand how the program has affected your wellbeing.</p>
+            <p>Thank you for completing all six modules. The final step is to complete a short post-program survey.</p>
             <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures">
               Complete post-program survey
             </a>
             <p class="post-measures-note">You will be taken to a secure Qualtrics survey.</p>
           </div>
         </div>
-
       </div>
 
     </main>
@@ -1107,9 +1275,388 @@
     <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
   </button>
 
+  <!-- =====================================================
+       FIREBASE ANALYTICS + MODULE TRACKING
+  ====================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBHsFsPPs0MB9KN5A9rE-59FPk3kI-pF08",
+      authDomain: "thegreenroom-ea1e7.firebaseapp.com",
+      projectId: "thegreenroom-ea1e7",
+      storageBucket: "thegreenroom-ea1e7.firebasestorage.app",
+      messagingSenderId: "785185935884",
+      appId: "1:785185935884:web:0bd81551cb70ecc3669429",
+      measurementId: "G-LN48FS5392"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    // ── Session state ──────────────────────────────────
+    const sessionId = 'session_' + Date.now();
+    let currentModule = 1;
+    let moduleStartTime = Date.now();
+    let sessionDocId = null;
+    const audioTimers = {};
+
+    // ── Start Firestore session ────────────────────────
+    async function startSession() {
+      try {
+        const ref = await addDoc(collection(db, 'sessions'), {
+          sessionId,
+          sessionStart: serverTimestamp(),
+          sessionEnd: null,
+          completedModules: [],
+          droppedAtModule: null,
+          platform: navigator.userAgent,
+        });
+        sessionDocId = ref.id;
+        console.log('Session started:', sessionDocId);
+      } catch (e) {
+        console.error('Session start error:', e);
+      }
+    }
+
+    async function updateSession(data) {
+      if (!sessionDocId) return;
+      try {
+        await updateDoc(doc(db, 'sessions', sessionDocId), data);
+      } catch (e) {
+        console.error('Session update error:', e);
+      }
+    }
+
+    // ── Module tracking ────────────────────────────────
+
+    // Called when a module becomes visible
+    function onModuleEnter(moduleNum) {
+      moduleStartTime = Date.now();
+      currentModule = moduleNum;
+
+      // Firebase Analytics event
+      logEvent(analytics, 'module_view', {
+        module_number: moduleNum,
+        module_name: getModuleName(moduleNum),
+        session_id: sessionId
+      });
+
+      // Firestore record
+      updateSession({
+        [`module_${moduleNum}_entered_at`]: serverTimestamp()
+      });
+
+      console.log(`Analytics: module_view — Module ${moduleNum}`);
+    }
+
+    // Called when leaving a module
+    function onModuleLeave(moduleNum) {
+      const durationSeconds = Math.round((Date.now() - moduleStartTime) / 1000);
+
+      logEvent(analytics, 'module_time_spent', {
+        module_number: moduleNum,
+        module_name: getModuleName(moduleNum),
+        duration_seconds: durationSeconds,
+        session_id: sessionId
+      });
+
+      updateSession({
+        [`module_${moduleNum}_duration_seconds`]: durationSeconds
+      });
+
+      console.log(`Analytics: module_time_spent — Module ${moduleNum} — ${durationSeconds}s`);
+    }
+
+    // ── Video tracking ─────────────────────────────────
+    window.trackVideoPlay = function(moduleNum) {
+      logEvent(analytics, 'video_play', {
+        module_number: moduleNum,
+        module_name: getModuleName(moduleNum),
+        session_id: sessionId
+      });
+      updateSession({
+        [`module_${moduleNum}_video_played`]: serverTimestamp()
+      });
+      console.log(`Analytics: video_play — Module ${moduleNum}`);
+    };
+
+    // ── Audio tracking ─────────────────────────────────
+    // Attaches to real <audio> elements when they exist
+    // Also tracks placeholder clicks for now
+    function setupAudioTracking() {
+      // Track real audio elements
+      document.querySelectorAll('audio').forEach(audioEl => {
+        const moduleNum = audioEl.closest('[data-module]')?.dataset.module || 'unknown';
+        const audioName = audioEl.dataset.audio || audioEl.src;
+        let audioStartTime = null;
+
+        audioEl.addEventListener('play', () => {
+          audioStartTime = Date.now();
+          logEvent(analytics, 'audio_play', {
+            audio_name: audioName,
+            module_number: parseInt(moduleNum),
+            session_id: sessionId
+          });
+          updateSession({
+            [`audio_${audioName}_played_at`]: serverTimestamp()
+          });
+          console.log(`Analytics: audio_play — ${audioName}`);
+        });
+
+        audioEl.addEventListener('pause', () => {
+          if (audioStartTime) {
+            const listenDuration = Math.round((Date.now() - audioStartTime) / 1000);
+            logEvent(analytics, 'audio_pause', {
+              audio_name: audioName,
+              module_number: parseInt(moduleNum),
+              listen_duration_seconds: listenDuration,
+              session_id: sessionId
+            });
+            updateSession({
+              [`audio_${audioName}_listen_seconds`]: listenDuration
+            });
+            console.log(`Analytics: audio_pause — ${audioName} — ${listenDuration}s`);
+            audioStartTime = null;
+          }
+        });
+
+        audioEl.addEventListener('ended', () => {
+          if (audioStartTime) {
+            const listenDuration = Math.round((Date.now() - audioStartTime) / 1000);
+            logEvent(analytics, 'audio_complete', {
+              audio_name: audioName,
+              module_number: parseInt(moduleNum),
+              listen_duration_seconds: listenDuration,
+              session_id: sessionId
+            });
+            updateSession({
+              [`audio_${audioName}_completed`]: true,
+              [`audio_${audioName}_full_duration_seconds`]: listenDuration
+            });
+            console.log(`Analytics: audio_complete — ${audioName}`);
+            audioStartTime = null;
+          }
+        });
+      });
+
+      // Track placeholder clicks (before real audio added)
+      document.querySelectorAll('.audio-placeholder').forEach(placeholder => {
+        placeholder.addEventListener('click', () => {
+          const moduleNum = placeholder.dataset.module;
+          const audioName = placeholder.dataset.audio;
+          logEvent(analytics, 'audio_placeholder_click', {
+            audio_name: audioName,
+            module_number: parseInt(moduleNum),
+            session_id: sessionId
+          });
+          console.log(`Analytics: audio_placeholder_click — ${audioName}`);
+        });
+      });
+    }
+
+    // ── Button tracking ────────────────────────────────
+    function setupButtonTracking() {
+      document.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = btn.dataset.action;
+          const moduleNum = btn.dataset.module;
+          logEvent(analytics, 'button_click', {
+            button_action: action,
+            module_number: parseInt(moduleNum),
+            session_id: sessionId
+          });
+          console.log(`Analytics: button_click — ${action} — Module ${moduleNum}`);
+        });
+      });
+    }
+
+    // ── Emotion tab tracking ───────────────────────────
+    function setupEmotionTabTracking() {
+      document.querySelectorAll('.emotion-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const emotion = btn.textContent.trim().toLowerCase();
+          logEvent(analytics, 'emotion_tab_selected', {
+            emotion,
+            module_number: 5,
+            session_id: sessionId
+          });
+          console.log(`Analytics: emotion_tab_selected — ${emotion}`);
+        });
+      });
+    }
+
+    // ── Three Circles tracking ─────────────────────────
+    // Listens for postMessage data from the iframe
+    // This works if the three circles tool sends window.postMessage
+    window.addEventListener('message', (event) => {
+      // Only accept messages from the UQ lab domain
+      if (!event.origin.includes('lab.psy.uq.edu.au')) return;
+
+      const data = event.data;
+      if (!data || !data.type) return;
+
+      if (data.type === 'three_circles_result') {
+        const moduleNum = currentModule;
+        const { threat, drive, soothing } = data;
+
+        logEvent(analytics, 'three_circles_submitted', {
+          module_number: moduleNum,
+          threat_proportion: threat,
+          drive_proportion: drive,
+          soothing_proportion: soothing,
+          session_id: sessionId
+        });
+
+        updateSession({
+          [`three_circles_module_${moduleNum}`]: {
+            threat,
+            drive,
+            soothing,
+            submittedAt: new Date().toISOString()
+          }
+        });
+
+        // Show result confirmation below the iframe
+        const resultEl = document.getElementById(`three-circles-result-${moduleNum}`);
+        if (resultEl) {
+          resultEl.innerHTML = `
+            Response recorded — Threat: <strong>${Math.round(threat * 100)}%</strong>,
+            Drive: <strong>${Math.round(drive * 100)}%</strong>,
+            Soothing: <strong>${Math.round(soothing * 100)}%</strong>
+          `;
+          resultEl.classList.add('visible');
+        }
+
+        console.log(`Analytics: three_circles_submitted — Module ${moduleNum}`);
+      }
+
+      // Also track any interaction with the iframe
+      if (data.type === 'three_circles_interaction') {
+        logEvent(analytics, 'three_circles_interaction', {
+          module_number: currentModule,
+          interaction_type: data.interactionType || 'resize',
+          session_id: sessionId
+        });
+      }
+    });
+
+    // ── Completion and dropout tracking ───────────────
+    window.trackModuleComplete = function(moduleNum) {
+      logEvent(analytics, 'module_complete', {
+        module_number: moduleNum,
+        module_name: getModuleName(moduleNum),
+        session_id: sessionId
+      });
+      updateSession({
+        [`module_${moduleNum}_completed_at`]: serverTimestamp(),
+        completedModules: window._completedModules || []
+      });
+      console.log(`Analytics: module_complete — Module ${moduleNum}`);
+    };
+
+    window.trackProgramComplete = function() {
+      logEvent(analytics, 'program_complete', {
+        session_id: sessionId,
+        total_modules: 6
+      });
+      updateSession({
+        programCompletedAt: serverTimestamp(),
+        dropout: false
+      });
+      console.log('Analytics: program_complete');
+    };
+
+    // Track dropout — fires when user leaves without completing
+    window.addEventListener('beforeunload', () => {
+      const completedCount = (window._completedModules || []).length;
+      if (completedCount < 6) {
+        logEvent(analytics, 'dropout', {
+          last_module_viewed: currentModule,
+          modules_completed: completedCount,
+          session_id: sessionId
+        });
+        updateSession({
+          sessionEnd: serverTimestamp(),
+          droppedAtModule: currentModule,
+          dropout: completedCount < 6
+        });
+        console.log(`Analytics: dropout — Last module: ${currentModule}`);
+      }
+    });
+
+    // ── VR placeholder tracking ────────────────────────
+    // Ready for when VR content is added
+    // Call window.trackVREvent(sceneName, eventType, durationSeconds)
+    // from your VR component
+    window.trackVREvent = function(sceneName, eventType, durationSeconds) {
+      logEvent(analytics, 'vr_interaction', {
+        scene_name: sceneName,
+        event_type: eventType,
+        duration_seconds: durationSeconds || 0,
+        module_number: currentModule,
+        session_id: sessionId
+      });
+      updateSession({
+        [`vr_${sceneName}_${eventType}`]: serverTimestamp(),
+        [`vr_${sceneName}_duration_seconds`]: durationSeconds || 0
+      });
+      console.log(`Analytics: vr_interaction — ${sceneName} — ${eventType}`);
+    };
+
+    // ── Hook into module navigation ────────────────────
+    // This intercepts showModule so tracking fires automatically
+    window._showModuleOriginal = null;
+    window._completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
+
+    window.hookShowModule = function() {
+      const original = window.showModule;
+      window.showModule = function(num) {
+        onModuleLeave(currentModule);
+        original(num);
+        onModuleEnter(num);
+      };
+    };
+
+    // ── Helper ─────────────────────────────────────────
+    function getModuleName(num) {
+      const names = {
+        1: 'Compassion and our tricky brains',
+        2: 'Our three circles',
+        3: 'Working with your inner critic',
+        4: 'Building your compassionate self',
+        5: 'Working with complex emotions',
+        6: 'Next steps'
+      };
+      return names[num] || `Module ${num}`;
+    }
+
+    // ── Initialise ─────────────────────────────────────
+    await startSession();
+    onModuleEnter(1);
+    setupAudioTracking();
+    setupButtonTracking();
+    setupEmotionTabTracking();
+
+    // Hook into showModule after the main script has defined it
+    setTimeout(() => {
+      if (window.showModule) window.hookShowModule();
+    }, 100);
+
+    console.log('Firebase Analytics initialised for The Green Room');
+  </script>
+
+  <!-- =====================================================
+       MAIN PROGRAM LOGIC
+  ====================================================== -->
   <script>
     const TOTAL_MODULES = 6;
     let completed = JSON.parse(localStorage.getItem('completedModules') || '[]');
+    window._completedModules = completed;
 
     function init() {
       completed.forEach(num => applyCompletion(num));
@@ -1138,9 +1685,15 @@
       if (!completed.includes(num)) {
         completed.push(num);
         localStorage.setItem('completedModules', JSON.stringify(completed));
+        window._completedModules = completed;
         applyCompletion(num);
         updateProgress();
       }
+
+      // Fire analytics
+      if (window.trackModuleComplete) window.trackModuleComplete(num);
+      if (num === TOTAL_MODULES && window.trackProgramComplete) window.trackProgramComplete();
+
       if (num === TOTAL_MODULES) {
         document.getElementById('postMeasuresBox').style.display = 'block';
         document.getElementById('postMeasuresBox').scrollIntoView({ behavior: 'smooth' });
