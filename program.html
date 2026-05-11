@@ -1,560 +1,282 @@
-# COMPLETE SINGLE-FILE VERSION — THE GREEN ROOM
-
-Replace your entire existing HTML file with the code below.
-
-This version:
-
-* uses ONE shared Three Circles iframe,
-* moves it between modules,
-* includes Firebase tracking hooks,
-* avoids loading six separate iframes,
-* and is substantially more stable.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>The Green Room</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg: #f1f4ee;
-  --nav-bg: #3a5241;
-  --nav-text: #e4ece0;
-  --primary: #4a7a57;
-  --light-green: #e4ece0;
-  --white: #fdfffe;
-  --text: #2a3828;
-  --text-muted: #5a6e58;
-  --border: #c4d4be;
-  --summary-bg: #e8f0e4;
-  --active-bg: #d4e4cc;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --bg:#f1f4ee;
+  --nav-bg:#3a5241;
+  --primary:#4a7a57;
+  --text:#2a3828;
+  --muted:#5a6e58;
+  --border:#c4d4be;
+  --card:#ffffff;
 }
 
 body {
-  background: var(--bg);
-  font-family: 'Lato', sans-serif;
-  color: var(--text);
+  margin:0;
+  font-family:Lato,sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 
 nav {
-  background: var(--nav-bg);
-  padding: 18px 40px;
-  color: white;
+  background:var(--nav-bg);
+  color:white;
+  padding:18px 40px;
+  font-family:"Cormorant Garamond",serif;
+  font-size:26px;
 }
 
-nav h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
-  font-weight: 500;
-}
-
-.program-layout {
-  display: flex;
-}
+.layout { display:flex; }
 
 .sidebar {
-  width: 260px;
-  background: white;
-  border-right: 1px solid var(--border);
-  min-height: 100vh;
-  padding: 32px 0;
+  width:260px;
+  background:white;
+  border-right:1px solid var(--border);
+  min-height:100vh;
 }
 
-.sidebar-module {
-  padding: 18px 24px;
-  cursor: pointer;
-  border-left: 3px solid transparent;
+.sidebar div {
+  padding:16px;
+  cursor:pointer;
 }
 
-.sidebar-module.active {
-  background: var(--active-bg);
-  border-left-color: var(--primary);
+.sidebar .active {
+  background:#d4e4cc;
 }
 
-.sidebar-module:hover {
-  background: var(--summary-bg);
+.main {
+  flex:1;
+  padding:40px;
 }
 
-.main-content {
-  flex: 1;
-  padding: 64px;
-  max-width: 900px;
+.module { display:none; }
+.module.active { display:block; }
+
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:20px;
+  border-radius:8px;
+  margin:20px 0;
 }
 
-.module-section {
-  display: none;
-}
-
-.module-section.active {
-  display: block;
-}
-
-.module-header h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 44px;
-  margin-bottom: 24px;
-}
-
-.summary-box {
-  background: var(--summary-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 28px;
-  margin-bottom: 40px;
-}
-
-.content-block {
-  margin-bottom: 40px;
-}
-
-.content-block h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 30px;
-  margin-bottom: 16px;
-}
-
-.content-block p {
-  line-height: 1.9;
-  color: var(--text-muted);
-}
-
-.video-placeholder {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 80px 20px;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.audio-placeholder {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-.three-circles-section {
-  margin-top: 48px;
-  margin-bottom: 48px;
-}
-
-.three-circles-wrapper {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.three-circles-host {
-  width: 100%;
-  height: 620px;
-}
-
-.three-circles-iframe {
-  width: 100%;
-  height: 620px;
-  border: none;
-}
-
-.save-btn {
-  margin-top: 20px;
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 14px 24px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.save-btn:hover {
-  background: #3d6648;
-}
-
-.module-nav-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 60px;
+canvas {
+  border:1px solid var(--border);
+  background:white;
+  border-radius:8px;
 }
 
 .btn {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 14px 24px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background: #3d6648;
-}
-
-@media (max-width: 768px) {
-  .program-layout {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    min-height: auto;
-  }
-
-  .main-content {
-    padding: 32px 24px;
-  }
+  background:var(--primary);
+  color:white;
+  border:none;
+  padding:10px 16px;
+  cursor:pointer;
+  margin-top:10px;
 }
 </style>
 </head>
 
 <body>
 
-<nav>
-  <h1>The Green Room</h1>
-</nav>
+<nav>The Green Room</nav>
 
-<div class="program-layout">
+<div class="layout">
 
-  <aside class="sidebar">
+<div class="sidebar">
+  <div class="active" onclick="show(1)">Module 1</div>
+  <div onclick="show(2)">Module 2</div>
+  <div onclick="show(3)">Module 3</div>
+  <div onclick="show(4)">Module 4</div>
+  <div onclick="show(5)">Module 5</div>
+  <div onclick="show(6)">Module 6</div>
+</div>
 
-    <div class="sidebar-module active" onclick="showModule(1)" id="sidebar-1">
-      Module 1 — Compassion and our tricky brains
-    </div>
+<div class="main">
 
-    <div class="sidebar-module" onclick="showModule(2)" id="sidebar-2">
-      Module 2 — Our three circles
-    </div>
+<!-- MODULE TEMPLATE -->
+<div id="m1" class="module active">
+  <h2>Module 1</h2>
 
-    <div class="sidebar-module" onclick="showModule(3)" id="sidebar-3">
-      Module 3 — Working with your inner critic
-    </div>
+  <div class="card">
+    <p>Resize and move circles to represent internal systems.</p>
 
-    <div class="sidebar-module" onclick="showModule(4)" id="sidebar-4">
-      Module 4 — Building your compassionate self
-    </div>
+    <canvas id="tri1" width="600" height="420"></canvas>
 
-    <div class="sidebar-module" onclick="showModule(5)" id="sidebar-5">
-      Module 5 — Working with complex emotions
-    </div>
-
-    <div class="sidebar-module" onclick="showModule(6)" id="sidebar-6">
-      Module 6 — Next steps
-    </div>
-
-  </aside>
-
-  <main class="main-content">
-
-    <!-- MODULE 1 -->
-    <div class="module-section active" id="module-1">
-
-      <div class="module-header">
-        <h1>Compassion and our tricky brains</h1>
-      </div>
-
-      <div class="summary-box">
-        <p>
-          Why our brains struggle, where self-criticism comes from,
-          and how compassion-focused therapy works.
-        </p>
-      </div>
-
-      <div class="video-placeholder">
-        Video placeholder
-      </div>
-
-      <div class="content-block">
-        <h2>About this module</h2>
-        <p>
-          Add your module content here.
-        </p>
-      </div>
-
-      <div class="audio-placeholder">
-        Guided audio placeholder
-      </div>
-
-      <div class="three-circles-section">
-
-        <h2>
-          How are you feeling right now?
-        </h2>
-
-        <br>
-
-        <p>
-          Resize the circles below to reflect your emotional systems.
-        </p>
-
-        <br>
-
-        <div class="three-circles-wrapper">
-          <div class="three-circles-host" data-module="1"></div>
-        </div>
-
-        <button class="save-btn" onclick="saveThreeCircles(1)">
-          Save response
-        </button>
-
-        <div id="feedback-1"></div>
-
-      </div>
-
-      <div class="module-nav-buttons">
-        <div></div>
-        <button class="btn" onclick="showModule(2)">
-          Next module
-        </button>
-      </div>
-
-    </div>
-
-    <!-- MODULE 2 -->
-    <div class="module-section" id="module-2">
-
-      <div class="module-header">
-        <h1>Our three circles</h1>
-      </div>
-
-      <div class="summary-box">
-        <p>
-          Understanding the threat, drive, and soothing systems.
-        </p>
-      </div>
-
-      <div class="three-circles-section">
-
-        <div class="three-circles-wrapper">
-          <div class="three-circles-host" data-module="2"></div>
-        </div>
-
-        <button class="save-btn" onclick="saveThreeCircles(2)">
-          Save response
-        </button>
-
-        <div id="feedback-2"></div>
-
-      </div>
-
-      <div class="module-nav-buttons">
-        <button class="btn" onclick="showModule(1)">
-          Previous
-        </button>
-
-        <button class="btn" onclick="showModule(3)">
-          Next
-        </button>
-      </div>
-
-    </div>
-
-    <!-- MODULE 3 -->
-      <div class="module-section" id="module-3">
-        <div class="module-header">
-          <div class="module-label">Module 3</div>
-          <h1>Working with your inner critic</h1>
-        </div>
-
-        <div class="summary-box">
-          <h3>What this module covers</h3>
-          <ul>
-            <li>Understanding self-criticism</li>
-            <li>Where inner critics come from</li>
-            <li>Responding compassionately to difficult thoughts</li>
-          </ul>
-        </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"></div>
-          <p>Video placeholder</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Module 3 content goes here.</p>
-        </div>
-
-        <div class="three-circles-section">
-          <h2>Three Circles Reflection</h2>
-          <p>Resize the circles below to represent how active each emotional system feels right now.</p>
-
-          <div class="three-circles-wrapper">
-            <iframe
-              src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Module 3">
-            </iframe>
-          </div>
-        </div>
-
-        <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(2)">Previous</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(4)">Next</button>
-        </div>
-      </div>
-
-      <!-- MODULE 4 -->
-      <div class="module-section" id="module-4">
-        <div class="module-header">
-          <div class="module-label">Module 4</div>
-          <h1>Building your compassionate self</h1>
-        </div>
-
-        <div class="summary-box">
-          <h3>What this module covers</h3>
-          <ul>
-            <li>Developing compassion</li>
-            <li>Compassionate imagery</li>
-            <li>Compassionate motivation</li>
-          </ul>
-        </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"></div>
-          <p>Video placeholder</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Module 4 content goes here.</p>
-        </div>
-
-        <div class="three-circles-section">
-          <h2>Three Circles Reflection</h2>
-          <p>Resize the circles below to represent how active each emotional system feels right now.</p>
-
-          <div class="three-circles-wrapper">
-            <iframe
-              src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Module 4">
-            </iframe>
-          </div>
-        </div>
-
-        <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(3)">Previous</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(5)">Next</button>
-        </div>
-      </div>
-
-      <!-- MODULE 5 -->
-      <div class="module-section" id="module-5">
-        <div class="module-header">
-          <div class="module-label">Module 5</div>
-          <h1>Working with complex emotions</h1>
-        </div>
-
-        <div class="summary-box">
-          <h3>What this module covers</h3>
-          <ul>
-            <li>Understanding difficult emotions</li>
-            <li>Working with anger</li>
-            <li>Working with sadness and anxiety</li>
-          </ul>
-        </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"></div>
-          <p>Video placeholder</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Module 5 content goes here.</p>
-        </div>
-
-        <div class="three-circles-section">
-          <h2>Three Circles Reflection</h2>
-          <p>Resize the circles below to represent how active each emotional system feels right now.</p>
-
-          <div class="three-circles-wrapper">
-            <iframe
-              src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Module 5">
-            </iframe>
-          </div>
-        </div>
-
-        <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(4)">Previous</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(6)">Next</button>
-        </div>
-      </div>
-
-      <!-- MODULE 6 -->
-      <div class="module-section" id="module-6">
-        <div class="module-header">
-          <div class="module-label">Module 6</div>
-          <h1>Next steps</h1>
-        </div>
-
-        <div class="summary-box">
-          <h3>What this module covers</h3>
-          <ul>
-            <li>Reflecting on progress</li>
-            <li>Maintaining compassion practices</li>
-            <li>Planning future support</li>
-          </ul>
-        </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"></div>
-          <p>Video placeholder</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Module 6 content goes here.</p>
-        </div>
-
-        <div class="three-circles-section">
-          <h2>Three Circles Reflection</h2>
-          <p>Resize the circles below to represent how active each emotional system feels right now.</p>
-
-          <div class="three-circles-wrapper">
-            <iframe
-              src="https://lab.psy.uq.edu.au/threecircles/"
-              title="Three Circles Module 6">
-            </iframe>
-          </div>
-        </div>
-
-        <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(5)">Previous</button>
-          <button class="btn-module-nav btn-next" onclick="alert('Program complete!')">Finish</button>
-        </div>
-      </div>
-
-    </main>
+    <button class="btn" onclick="save(1)">Save</button>
   </div>
+</div>
 
-  <script>
-    function showModule(num) {
-      document.querySelectorAll('.module-section').forEach(section => {
-        section.classList.remove('active');
-      });
+<div id="m2" class="module">
+  <h2>Module 2</h2>
+  <div class="card">
+    <canvas id="tri2" width="600" height="420"></canvas>
+    <button class="btn" onclick="save(2)">Save</button>
+  </div>
+</div>
 
-      document.querySelectorAll('.sidebar-module').forEach(sidebar => {
-        sidebar.classList.remove('active');
-      });
+<div id="m3" class="module">
+  <h2>Module 3</h2>
+  <div class="card">
+    <canvas id="tri3" width="600" height="420"></canvas>
+    <button class="btn" onclick="save(3)">Save</button>
+  </div>
+</div>
 
-      document.getElementById(`module-${num}`).classList.add('active');
-      document.getElementById(`sidebar-${num}`).classList.add('active');
+<div id="m4" class="module">
+  <h2>Module 4</h2>
+  <div class="card">
+    <canvas id="tri4" width="600" height="420"></canvas>
+    <button class="btn" onclick="save(4)">Save</button>
+  </div>
+</div>
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+<div id="m5" class="module">
+  <h2>Module 5</h2>
+  <div class="card">
+    <canvas id="tri5" width="600" height="420"></canvas>
+    <button class="btn" onclick="save(5)">Save</button>
+  </div>
+</div>
+
+<div id="m6" class="module">
+  <h2>Module 6</h2>
+  <div class="card">
+    <canvas id="tri6" width="600" height="420"></canvas>
+    <button class="btn" onclick="save(6)">Save</button>
+    <button class="btn" onclick="exportCSV()">Export CSV</button>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+const state = {};
+
+function initCanvas(id){
+  const c = document.getElementById(id);
+  const ctx = c.getContext("2d");
+
+  state[id] = {
+    circles: [
+      {x:150,y:200,r:60,color:"rgba(74,122,87,0.5)",name:"Threat"},
+      {x:300,y:200,r:60,color:"rgba(120,160,120,0.5)",name:"Drive"},
+      {x:450,y:200,r:60,color:"rgba(180,200,180,0.5)",name:"Soothing"}
+    ],
+    drag:null
+  };
+
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    const s = state[id];
+
+    s.circles.forEach((c1,i)=>{
+      ctx.beginPath();
+      ctx.arc(c1.x,c1.y,c1.r,0,Math.PI*2);
+      ctx.fillStyle=c1.color;
+      ctx.fill();
+      ctx.stroke();
+    });
+  }
+
+  function hit(mx,my,c){
+    return Math.hypot(mx-c.x,my-c.y)<c.r;
+  }
+
+  c.onmousedown=(e)=>{
+    const rect=c.getBoundingClientRect();
+    const mx=e.clientX-rect.left;
+    const my=e.clientY-rect.top;
+
+    const s=state[id];
+    s.drag = s.circles.find(c=>hit(mx,my,c));
+  };
+
+  c.onmouseup=()=>state[id].drag=null;
+
+  c.onmousemove=(e)=>{
+    const rect=c.getBoundingClientRect();
+    const mx=e.clientX-rect.left;
+    const my=e.clientY-rect.top;
+
+    const s=state[id];
+
+    if(s.drag){
+      s.drag.x=mx;
+      s.drag.y=my;
+      draw();
     }
-  </script>
+  };
+
+  c.onwheel=(e)=>{
+    const rect=c.getBoundingClientRect();
+    const mx=e.clientX-rect.left;
+    const my=e.clientY-rect.top;
+
+    const s=state[id];
+
+    const target=s.circles.find(c=>hit(mx,my,c));
+    if(target){
+      target.r += e.deltaY*-0.1;
+      target.r=Math.max(10,Math.min(180,target.r));
+      draw();
+    }
+  };
+
+  draw();
+}
+
+function save(module){
+  const id="tri"+module;
+  const data=state[id].circles.map(c=>({
+    x:c.x,y:c.y,r:c.r,
+    area:Math.PI*c.r*c.r
+  }));
+
+  localStorage.setItem(id,JSON.stringify(data));
+
+  // Firebase hook placeholder
+  console.log("Send to Firebase:",module,data);
+}
+
+function exportCSV(){
+  let rows=["module,circle,x,y,r,area"];
+
+  for(let i=1;i<=6;i++){
+    const d=JSON.parse(localStorage.getItem("tri"+i)||"[]");
+    d.forEach((c,idx)=>{
+      rows.push(`${i},${idx},${c.x},${c.y},${c.r},${c.area}`);
+    });
+  }
+
+  const blob=new Blob([rows.join("\n")],{type:"text/csv"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="three_circles_data.csv";
+  a.click();
+}
+
+function show(n){
+  document.querySelectorAll(".module").forEach(m=>m.classList.remove("active"));
+  document.querySelectorAll(".sidebar div").forEach(s=>s.classList.remove("active"));
+
+  document.getElementById("m"+n).classList.add("active");
+  document.querySelectorAll(".sidebar div")[n-1].classList.add("active");
+}
+
+// init all canvases
+for(let i=1;i<=6;i++){
+  initCanvas("tri"+i);
+}
+</script>
 
 </body>
 </html>
