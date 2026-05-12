@@ -527,8 +527,8 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
-        "threat drive"
-        "soothing soothing";
+        "drive soothing"
+        "threat threat";
       align-items: center;
       justify-items: center;
       gap: 36px 60px;
@@ -1174,6 +1174,7 @@
     let completed = JSON.parse(localStorage.getItem('completedModules') || '[]');
 
     const circleValues = {};
+    const circleChanged = {};
 
     function getModuleValues(moduleNum) {
       if (!circleValues[moduleNum]) {
@@ -1184,6 +1185,18 @@
         };
       }
       return circleValues[moduleNum];
+    }
+
+    function hasChangedCircle(moduleNum) {
+      const values = getModuleValues(moduleNum);
+      return values.threat !== 33 || values.drive !== 33 || values.soothing !== 33 || circleChanged[moduleNum] === true;
+    }
+
+    function updateSubmitAvailability(moduleNum) {
+      const btn = document.getElementById(`tc-btn-${moduleNum}`);
+      if (btn && btn.textContent !== 'Submitted') {
+        btn.disabled = !hasChangedCircle(moduleNum);
+      }
     }
 
     function renderThreeCircleTools() {
@@ -1201,15 +1214,15 @@
             </div>
           </div>
           <div class="tc-circle-tool" id="tc-tool-${moduleNum}">
-            <div class="tc-live-circle threat" data-module="${moduleNum}" data-system="threat" style="--size: 33;"><span>Threat</span></div>
             <div class="tc-live-circle drive" data-module="${moduleNum}" data-system="drive" style="--size: 33;"><span>Drive</span></div>
             <div class="tc-live-circle soothing" data-module="${moduleNum}" data-system="soothing" style="--size: 33;"><span>Soothing</span></div>
+            <div class="tc-live-circle threat" data-module="${moduleNum}" data-system="threat" style="--size: 33;"><span>Threat</span></div>
           </div>
           <div class="tc-record-panel">
             <div class="tc-record-label">Record your circle sizes</div>
             <p class="tc-record-intro">When the circles look right, click Submit to save the relative circle sizes.</p>
             <div class="tc-actions">
-              <button class="tc-submit-btn" id="tc-btn-${moduleNum}" onclick="tcSubmit(${moduleNum})">Submit my circle sizes</button>
+              <button class="tc-submit-btn" id="tc-btn-${moduleNum}" onclick="tcSubmit(${moduleNum})" disabled>Submit my circle sizes</button>
               <div class="tc-saved-badge" id="tc-saved-${moduleNum}">
                 <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                 Response saved
@@ -1223,7 +1236,14 @@
 
     function setCircleValue(moduleNum, system, value) {
       const values = getModuleValues(moduleNum);
-      values[system] = Math.max(0, Math.min(100, Math.round(value)));
+      const oldValue = values[system];
+      const newValue = Math.max(0, Math.min(100, Math.round(value)));
+
+      values[system] = newValue;
+
+      if (newValue !== oldValue) {
+        circleChanged[moduleNum] = true;
+      }
 
       const circle = document.querySelector(
         `.tc-live-circle[data-module="${moduleNum}"][data-system="${system}"]`
@@ -1232,6 +1252,8 @@
       if (circle) {
         circle.style.setProperty('--size', values[system]);
       }
+
+      updateSubmitAvailability(moduleNum);
     }
 
     function setupCircleDragging() {
@@ -1376,6 +1398,11 @@
     const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
 
     window.tcSubmit = async function(moduleNum) {
+      if (!hasChangedCircle(moduleNum)) {
+        alert('Please resize at least one circle before submitting.');
+        return;
+      }
+
       const values = getModuleValues(moduleNum);
 
       const threat = values.threat;
