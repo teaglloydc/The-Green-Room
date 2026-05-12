@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Program - The Green Room</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
@@ -313,10 +313,7 @@
       margin-bottom: 16px;
     }
 
-    .summary-box ul {
-      list-style: none;
-      padding: 0;
-    }
+    .summary-box ul { list-style: none; padding: 0; }
 
     .summary-box ul li {
       font-size: 15px;
@@ -526,12 +523,15 @@
     .tc-circle-tool {
       background-color: var(--white);
       min-height: 420px;
-      padding: 32px;
-      display: flex;
+      padding: 40px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "threat drive"
+        "soothing soothing";
       align-items: center;
-      justify-content: center;
-      gap: 28px;
-      flex-wrap: wrap;
+      justify-items: center;
+      gap: 36px 60px;
       touch-action: none;
       user-select: none;
     }
@@ -558,16 +558,19 @@
     }
 
     .tc-live-circle.threat {
+      grid-area: threat;
       background-color: rgba(198, 40, 40, 0.20);
       border: 3px solid var(--threat);
     }
 
     .tc-live-circle.drive {
+      grid-area: drive;
       background-color: rgba(21, 101, 192, 0.20);
       border: 3px solid var(--drive);
     }
 
     .tc-live-circle.soothing {
+      grid-area: soothing;
       background-color: rgba(46, 125, 50, 0.20);
       border: 3px solid var(--soothing);
     }
@@ -835,8 +838,8 @@
 
       .tc-circle-tool {
         min-height: 360px;
-        padding: 24px 16px;
-        gap: 18px;
+        padding: 28px 16px;
+        gap: 28px 24px;
       }
 
       .tc-live-circle span { font-size: 12px; }
@@ -873,7 +876,6 @@
   </div>
 
   <div class="program-layout">
-
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-label">Program Modules</div>
       <div class="progress-bar-container">
@@ -888,9 +890,7 @@
           <div class="sidebar-module-number">Module 1</div>
           <div class="sidebar-module-title">Compassion and our tricky brains</div>
         </div>
-        <div class="completion-tick" id="tick-1">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+        <div class="completion-tick" id="tick-1"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
       </div>
 
       <div class="sidebar-module" onclick="showModule(2)" id="sidebar-2">
@@ -898,9 +898,7 @@
           <div class="sidebar-module-number">Module 2</div>
           <div class="sidebar-module-title">Our three circles</div>
         </div>
-        <div class="completion-tick" id="tick-2">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+        <div class="completion-tick" id="tick-2"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
       </div>
 
       <div class="sidebar-module" onclick="showModule(3)" id="sidebar-3">
@@ -908,9 +906,7 @@
           <div class="sidebar-module-number">Module 3</div>
           <div class="sidebar-module-title">Working with your inner critic</div>
         </div>
-        <div class="completion-tick" id="tick-3">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+        <div class="completion-tick" id="tick-3"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
       </div>
 
       <div class="sidebar-module" onclick="showModule(4)" id="sidebar-4">
@@ -918,9 +914,7 @@
           <div class="sidebar-module-number">Module 4</div>
           <div class="sidebar-module-title">Building your compassionate self</div>
         </div>
-        <div class="completion-tick" id="tick-4">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+        <div class="completion-tick" id="tick-4"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
       </div>
 
       <div class="sidebar-module" onclick="showModule(5)" id="sidebar-5">
@@ -928,9 +922,7 @@
           <div class="sidebar-module-number">Module 5</div>
           <div class="sidebar-module-title">Working with complex emotions</div>
         </div>
-        <div class="completion-tick" id="tick-5">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+        <div class="completion-tick" id="tick-5"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
       </div>
 
       <div class="sidebar-module" onclick="showModule(6)" id="sidebar-6">
@@ -938,9 +930,7 @@
           <div class="sidebar-module-number">Module 6</div>
           <div class="sidebar-module-title">Next steps</div>
         </div>
-        <div class="completion-tick" id="tick-6">
-          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        </div>
+        <div class="completion-tick" id="tick-6"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
       </div>
     </aside>
 
@@ -952,7 +942,6 @@
           <span class="module-progress">Module 1 of 6</span>
           <h1>Compassion and our tricky brains</h1>
         </div>
-
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
@@ -962,43 +951,22 @@
             <li>Why self-criticism is so common and how compassion offers an alternative</li>
           </ul>
         </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-          <p>Video will be added here</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written content for module 1 will go here.</p>
-        </div>
-
+        <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
+        <div class="content-block"><h2>About this module</h2><p>Your written content for module 1 will go here.</p></div>
         <div class="section-divider"></div>
-
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio - Module 1</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio - Module 1</div><div class="audio-duration">Audio will be added here</div></div>
           </div>
         </div>
-
         <div class="section-divider"></div>
-
         <div class="tc-section" data-module="1"></div>
-
         <div class="module-nav-buttons">
           <span></span>
           <button class="btn-module-nav btn-complete" onclick="markComplete(1)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(2)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(2)">Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button>
         </div>
       </div>
 
@@ -1008,7 +976,6 @@
           <span class="module-progress">Module 2 of 6</span>
           <h1>Our three circles</h1>
         </div>
-
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
@@ -1018,46 +985,22 @@
             <li>Practical ways to activate your soothing system</li>
           </ul>
         </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-          <p>Video will be added here</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written content for module 2 will go here.</p>
-        </div>
-
+        <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
+        <div class="content-block"><h2>About this module</h2><p>Your written content for module 2 will go here.</p></div>
         <div class="section-divider"></div>
-
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio - Module 2</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio - Module 2</div><div class="audio-duration">Audio will be added here</div></div>
           </div>
         </div>
-
         <div class="section-divider"></div>
-
         <div class="tc-section" data-module="2"></div>
-
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(1)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
+          <button class="btn-module-nav btn-prev" onclick="showModule(1)"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous</button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(2)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(3)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(3)">Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button>
         </div>
       </div>
 
@@ -1067,7 +1010,6 @@
           <span class="module-progress">Module 3 of 6</span>
           <h1>Working with your inner critic</h1>
         </div>
-
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
@@ -1077,46 +1019,22 @@
             <li>Compassionate responses to difficult self-talk</li>
           </ul>
         </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-          <p>Video will be added here</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written content for module 3 will go here.</p>
-        </div>
-
+        <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
+        <div class="content-block"><h2>About this module</h2><p>Your written content for module 3 will go here.</p></div>
         <div class="section-divider"></div>
-
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio - Module 3</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio - Module 3</div><div class="audio-duration">Audio will be added here</div></div>
           </div>
         </div>
-
         <div class="section-divider"></div>
-
         <div class="tc-section" data-module="3"></div>
-
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(2)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
+          <button class="btn-module-nav btn-prev" onclick="showModule(2)"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous</button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(3)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(4)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(4)">Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button>
         </div>
       </div>
 
@@ -1126,7 +1044,6 @@
           <span class="module-progress">Module 4 of 6</span>
           <h1>Building your compassionate self</h1>
         </div>
-
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
@@ -1136,46 +1053,22 @@
             <li>How to bring the compassionate self into everyday life</li>
           </ul>
         </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-          <p>Video will be added here</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written content for module 4 will go here.</p>
-        </div>
-
+        <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
+        <div class="content-block"><h2>About this module</h2><p>Your written content for module 4 will go here.</p></div>
         <div class="section-divider"></div>
-
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio - Module 4</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio - Module 4</div><div class="audio-duration">Audio will be added here</div></div>
           </div>
         </div>
-
         <div class="section-divider"></div>
-
         <div class="tc-section" data-module="4"></div>
-
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(3)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
+          <button class="btn-module-nav btn-prev" onclick="showModule(3)"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous</button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(4)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(5)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(5)">Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button>
         </div>
       </div>
 
@@ -1185,7 +1078,6 @@
           <span class="module-progress">Module 5 of 6</span>
           <h1>Working with complex emotions</h1>
         </div>
-
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
@@ -1195,87 +1087,32 @@
             <li>Specific practices for each emotion</li>
           </ul>
         </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-          <p>Video will be added here</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written introduction to module 5 will go here.</p>
-        </div>
-
+        <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
+        <div class="content-block"><h2>About this module</h2><p>Your written introduction to module 5 will go here.</p></div>
         <div class="section-divider"></div>
-
         <div class="emotion-tab-buttons">
           <button class="emotion-tab-btn active" onclick="showEmotion(event, 'anger')">Anger</button>
           <button class="emotion-tab-btn" onclick="showEmotion(event, 'sadness')">Sadness</button>
           <button class="emotion-tab-btn" onclick="showEmotion(event, 'anxiety')">Anxiety</button>
         </div>
-
         <div class="emotion-tab-content active" id="emotion-anger">
-          <div class="content-block">
-            <h2>Working with anger</h2>
-            <p>Your written content about working with anger will go here.</p>
-          </div>
-          <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio - Working with anger</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
+          <div class="content-block"><h2>Working with anger</h2><p>Your written content about working with anger will go here.</p></div>
+          <div class="audio-placeholder"><div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div><div><div class="audio-title">Guided audio - Working with anger</div><div class="audio-duration">Audio will be added here</div></div></div>
         </div>
-
         <div class="emotion-tab-content" id="emotion-sadness">
-          <div class="content-block">
-            <h2>Working with sadness</h2>
-            <p>Your written content about working with sadness will go here.</p>
-          </div>
-          <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio - Working with sadness</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
+          <div class="content-block"><h2>Working with sadness</h2><p>Your written content about working with sadness will go here.</p></div>
+          <div class="audio-placeholder"><div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div><div><div class="audio-title">Guided audio - Working with sadness</div><div class="audio-duration">Audio will be added here</div></div></div>
         </div>
-
         <div class="emotion-tab-content" id="emotion-anxiety">
-          <div class="content-block">
-            <h2>Working with anxiety</h2>
-            <p>Your written content about working with anxiety will go here.</p>
-          </div>
-          <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio - Working with anxiety</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
-          </div>
+          <div class="content-block"><h2>Working with anxiety</h2><p>Your written content about working with anxiety will go here.</p></div>
+          <div class="audio-placeholder"><div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div><div><div class="audio-title">Guided audio - Working with anxiety</div><div class="audio-duration">Audio will be added here</div></div></div>
         </div>
-
         <div class="section-divider"></div>
-
         <div class="tc-section" data-module="5"></div>
-
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(4)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
+          <button class="btn-module-nav btn-prev" onclick="showModule(4)"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous</button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(5)">Mark as complete</button>
-          <button class="btn-module-nav btn-next" onclick="showModule(6)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
+          <button class="btn-module-nav btn-next" onclick="showModule(6)">Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button>
         </div>
       </div>
 
@@ -1285,7 +1122,6 @@
           <span class="module-progress">Module 6 of 6</span>
           <h1>Next steps</h1>
         </div>
-
         <div class="summary-box">
           <h3>What this module covers</h3>
           <ul>
@@ -1295,41 +1131,20 @@
             <li>Further resources and support options</li>
           </ul>
         </div>
-
-        <div class="video-placeholder">
-          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-          <p>Video will be added here</p>
-        </div>
-
-        <div class="content-block">
-          <h2>About this module</h2>
-          <p>Your written content for module 6 will go here.</p>
-        </div>
-
+        <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
+        <div class="content-block"><h2>About this module</h2><p>Your written content for module 6 will go here.</p></div>
         <div class="section-divider"></div>
-
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio - Module 6</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio - Module 6</div><div class="audio-duration">Audio will be added here</div></div>
           </div>
         </div>
-
         <div class="section-divider"></div>
-
         <div class="tc-section" data-module="6"></div>
-
         <div class="module-nav-buttons">
-          <button class="btn-module-nav btn-prev" onclick="showModule(5)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
+          <button class="btn-module-nav btn-prev" onclick="showModule(5)"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous</button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(6)">Mark program complete</button>
         </div>
 
@@ -1337,9 +1152,7 @@
           <div class="summary-box">
             <h3>You have completed The Green Room program</h3>
             <p>Thank you for completing all six modules. The final step is to complete a short post-program survey.</p>
-            <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures">
-              Complete post-program survey
-            </a>
+            <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures">Complete post-program survey</a>
             <p class="post-measures-note">You will be taken to a secure Qualtrics survey.</p>
           </div>
         </div>
@@ -1356,25 +1169,10 @@
     <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
   </button>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp }
-      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  <script>
+    const TOTAL_MODULES = 6;
+    let completed = JSON.parse(localStorage.getItem('completedModules') || '[]');
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBHsFsPPs0MB9KN5A9rE-59FPk3kI-pF08",
-      authDomain: "thegreenroom-ea1e7.firebaseapp.com",
-      projectId: "thegreenroom-ea1e7",
-      storageBucket: "thegreenroom-ea1e7.firebasestorage.app",
-      messagingSenderId: "785185935884",
-      appId: "1:785185935884:web:0bd81551cb70ecc3669429",
-      measurementId: "G-LN48FS5392"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
     const circleValues = {};
 
     function getModuleValues(moduleNum) {
@@ -1385,8 +1183,42 @@
           soothing: 33
         };
       }
-
       return circleValues[moduleNum];
+    }
+
+    function renderThreeCircleTools() {
+      document.querySelectorAll('.tc-section[data-module]').forEach(section => {
+        const moduleNum = section.dataset.module;
+
+        section.innerHTML = `
+          <div class="tc-header">
+            <h2>How are you feeling right now?</h2>
+            <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment. Drag each circle left to make it smaller, or right to make it larger, then click Submit.</p>
+            <div class="tc-legend">
+              <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat - protection and anxiety system</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive - motivation and seeking system</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing - contentment and compassion system</span></div>
+            </div>
+          </div>
+          <div class="tc-circle-tool" id="tc-tool-${moduleNum}">
+            <div class="tc-live-circle threat" data-module="${moduleNum}" data-system="threat" style="--size: 33;"><span>Threat</span></div>
+            <div class="tc-live-circle drive" data-module="${moduleNum}" data-system="drive" style="--size: 33;"><span>Drive</span></div>
+            <div class="tc-live-circle soothing" data-module="${moduleNum}" data-system="soothing" style="--size: 33;"><span>Soothing</span></div>
+          </div>
+          <div class="tc-record-panel">
+            <div class="tc-record-label">Record your circle sizes</div>
+            <p class="tc-record-intro">When the circles look right, click Submit to save the relative circle sizes.</p>
+            <div class="tc-actions">
+              <button class="tc-submit-btn" id="tc-btn-${moduleNum}" onclick="tcSubmit(${moduleNum})">Submit my circle sizes</button>
+              <div class="tc-saved-badge" id="tc-saved-${moduleNum}">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Response saved
+              </div>
+            </div>
+            <div class="tc-proportions" id="tc-prop-${moduleNum}"></div>
+          </div>
+        `;
+      });
     }
 
     function setCircleValue(moduleNum, system, value) {
@@ -1400,63 +1232,6 @@
       if (circle) {
         circle.style.setProperty('--size', values[system]);
       }
-    }
-
-    function renderThreeCircleTools() {
-      document.querySelectorAll('.tc-section[data-module]').forEach(section => {
-        const moduleNum = section.dataset.module;
-
-        section.innerHTML = `
-          <div class="tc-header">
-            <h2>How are you feeling right now?</h2>
-            <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment. Drag each circle left to make it smaller, or right to make it larger, then click Submit.</p>
-            <div class="tc-legend">
-              <div class="tc-legend-item">
-                <div class="tc-legend-dot threat"></div>
-                <span>Threat - protection and anxiety system</span>
-              </div>
-              <div class="tc-legend-item">
-                <div class="tc-legend-dot drive"></div>
-                <span>Drive - motivation and seeking system</span>
-              </div>
-              <div class="tc-legend-item">
-                <div class="tc-legend-dot soothing"></div>
-                <span>Soothing - contentment and compassion system</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="tc-circle-tool" id="tc-tool-${moduleNum}">
-            <div class="tc-live-circle threat" data-module="${moduleNum}" data-system="threat" style="--size: 33;">
-              <span>Threat</span>
-            </div>
-            <div class="tc-live-circle drive" data-module="${moduleNum}" data-system="drive" style="--size: 33;">
-              <span>Drive</span>
-            </div>
-            <div class="tc-live-circle soothing" data-module="${moduleNum}" data-system="soothing" style="--size: 33;">
-              <span>Soothing</span>
-            </div>
-          </div>
-
-          <div class="tc-record-panel">
-            <div class="tc-record-label">Record your circle sizes</div>
-            <p class="tc-record-intro">When the circles look right, click Submit to save the relative circle sizes.</p>
-
-            <div class="tc-actions">
-              <button class="tc-submit-btn" id="tc-btn-${moduleNum}" onclick="tcSubmit(${moduleNum})">
-                Submit my circle sizes
-              </button>
-
-              <div class="tc-saved-badge" id="tc-saved-${moduleNum}">
-                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                Response saved
-              </div>
-            </div>
-
-            <div class="tc-proportions" id="tc-prop-${moduleNum}"></div>
-          </div>
-        `;
-      });
     }
 
     function setupCircleDragging() {
@@ -1496,6 +1271,109 @@
         });
       });
     }
+
+    function init() {
+      renderThreeCircleTools();
+      setupCircleDragging();
+
+      completed.forEach(n => applyCompletion(n));
+      updateProgress();
+
+      if (completed.includes(6)) {
+        document.getElementById('postMeasuresBox').style.display = 'block';
+      }
+    }
+
+    function showModule(num) {
+      document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
+      document.getElementById('module-' + num).classList.add('active');
+      document.getElementById('sidebar-' + num).classList.add('active');
+      document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showEmotion(event, emotion) {
+      document.querySelectorAll('.emotion-tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.emotion-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('emotion-' + emotion).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function markComplete(num) {
+      if (!completed.includes(num)) {
+        completed.push(num);
+        localStorage.setItem('completedModules', JSON.stringify(completed));
+        applyCompletion(num);
+        updateProgress();
+      }
+
+      if (num === TOTAL_MODULES) {
+        document.getElementById('postMeasuresBox').style.display = 'block';
+        document.getElementById('postMeasuresBox').scrollIntoView({ behavior: 'smooth' });
+      } else {
+        showModule(num + 1);
+      }
+    }
+
+    function applyCompletion(num) {
+      const tick = document.getElementById('tick-' + num);
+      if (tick) tick.classList.add('done');
+    }
+
+    function updateProgress() {
+      const count = completed.length;
+      const pct = (count / TOTAL_MODULES) * 100;
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressText').textContent =
+        count + ' of ' + TOTAL_MODULES + ' modules completed';
+    }
+
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTop');
+      if (window.scrollY > 300) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+    });
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function getModuleName(n) {
+      return {
+        1: 'Compassion and our tricky brains',
+        2: 'Our three circles',
+        3: 'Working with your inner critic',
+        4: 'Building your compassionate self',
+        5: 'Working with complex emotions',
+        6: 'Next steps'
+      }[n] || `Module ${n}`;
+    }
+
+    window.addEventListener('load', init);
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBHsFsPPs0MB9KN5A9rE-59FPk3kI-pF08",
+      authDomain: "thegreenroom-ea1e7.firebaseapp.com",
+      projectId: "thegreenroom-ea1e7",
+      storageBucket: "thegreenroom-ea1e7.firebasestorage.app",
+      messagingSenderId: "785185935884",
+      appId: "1:785185935884:web:0bd81551cb70ecc3669429",
+      measurementId: "G-LN48FS5392"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
 
     window.tcSubmit = async function(moduleNum) {
       const values = getModuleValues(moduleNum);
@@ -1551,7 +1429,6 @@
             `Dominant: ${dominant}`;
           propEl.classList.add('visible');
         }
-
       } catch (err) {
         console.error('Firebase save error:', err);
         btn.disabled = false;
@@ -1560,106 +1437,7 @@
       }
     };
 
-    function getModuleName(n) {
-      return {
-        1: 'Compassion and our tricky brains',
-        2: 'Our three circles',
-        3: 'Working with your inner critic',
-        4: 'Building your compassionate self',
-        5: 'Working with complex emotions',
-        6: 'Next steps'
-      }[n] || `Module ${n}`;
-    }
-
     window._sessionId = sessionId;
-    window.renderThreeCircleTools = renderThreeCircleTools;
-    window.setupCircleDragging = setupCircleDragging;
-  </script>
-
-  <script>
-    const TOTAL_MODULES = 6;
-    let completed = JSON.parse(localStorage.getItem('completedModules') || '[]');
-
-    function init() {
-      if (window.renderThreeCircleTools) window.renderThreeCircleTools();
-      if (window.setupCircleDragging) window.setupCircleDragging();
-
-      completed.forEach(n => applyCompletion(n));
-      updateProgress();
-
-      if (completed.includes(6)) {
-        document.getElementById('postMeasuresBox').style.display = 'block';
-      }
-    }
-
-    function showModule(num) {
-      document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
-
-      document.getElementById('module-' + num).classList.add('active');
-      document.getElementById('sidebar-' + num).classList.add('active');
-      document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function showEmotion(event, emotion) {
-      document.querySelectorAll('.emotion-tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.emotion-tab-btn').forEach(b => b.classList.remove('active'));
-
-      document.getElementById('emotion-' + emotion).classList.add('active');
-      event.target.classList.add('active');
-    }
-
-    function markComplete(num) {
-      if (!completed.includes(num)) {
-        completed.push(num);
-        localStorage.setItem('completedModules', JSON.stringify(completed));
-        applyCompletion(num);
-        updateProgress();
-      }
-
-      if (num === TOTAL_MODULES) {
-        document.getElementById('postMeasuresBox').style.display = 'block';
-        document.getElementById('postMeasuresBox').scrollIntoView({ behavior: 'smooth' });
-      } else {
-        showModule(num + 1);
-      }
-    }
-
-    function applyCompletion(num) {
-      const tick = document.getElementById('tick-' + num);
-      if (tick) tick.classList.add('done');
-    }
-
-    function updateProgress() {
-      const count = completed.length;
-      const pct = (count / TOTAL_MODULES) * 100;
-
-      document.getElementById('progressFill').style.width = pct + '%';
-      document.getElementById('progressText').textContent =
-        count + ' of ' + TOTAL_MODULES + ' modules completed';
-    }
-
-    function toggleMenu() {
-      document.getElementById('mobileMenu').classList.toggle('open');
-    }
-
-    window.addEventListener('scroll', () => {
-      const btn = document.getElementById('backToTop');
-
-      if (window.scrollY > 300) {
-        btn.classList.add('visible');
-      } else {
-        btn.classList.remove('visible');
-      }
-    });
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    window.addEventListener('load', () => {
-      setTimeout(init, 200);
-    });
   </script>
 
 </body>
