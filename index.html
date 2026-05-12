@@ -41,11 +41,15 @@
     }
 
     .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      color: var(--nav-text);
-      font-size: 24px;
-      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
       text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 48px;
+      width: auto;
+      display: block;
     }
 
     .nav-links {
@@ -340,6 +344,7 @@
 
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
+      .nav-logo img { height: 40px; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .hero { padding: 60px 24px 60px; }
@@ -356,7 +361,9 @@
 <body>
 
   <nav>
-    <a href="index.html" class="nav-logo">The Green Room</a>
+    <a href="index.html" class="nav-logo">
+      <img src="TheGreenRoomLogo.png" alt="The Green Room">
+    </a>
     <ul class="nav-links">
       <li><a href="index.html" class="active-page">Home</a></li>
       <li><a href="program.html">Program</a></li>
@@ -470,10 +477,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
