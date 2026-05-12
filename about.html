@@ -43,15 +43,24 @@
     .nav-logo {
       display: inline-flex;
       align-items: center;
+      gap: 14px;
       text-decoration: none;
     }
 
     .nav-logo img {
-      height: 44px;
+      height: 56px;
       width: auto;
-      max-width: 220px;
       display: block;
       object-fit: contain;
+    }
+
+    .logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--nav-text);
+      letter-spacing: 0.5px;
+      line-height: 1;
     }
 
     .nav-links {
@@ -308,7 +317,15 @@
 
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
-      .nav-logo img { height: 36px; max-width: 180px; }
+
+      .nav-logo img {
+        height: 42px;
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+      }
+
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .page-header { padding: 48px 24px 40px; }
@@ -324,8 +341,10 @@
 
   <nav>
     <a href="index.html" class="nav-logo">
-      <img src="TheGreenRoomLogo4.png" alt="The Green Room">
+      <img src="TheGreenRoomLogo4.png" alt="The Green Room Logo">
+      <span class="logo-text">The Green Room</span>
     </a>
+
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="program.html">Program</a></li>
@@ -337,6 +356,7 @@
         </div>
       </li>
     </ul>
+
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -369,6 +389,7 @@
           <div class="person-role">Role here</div>
           <p>A short bio about this person will go here.</p>
         </div>
+
         <div class="person-card">
           <div class="person-avatar"></div>
           <h3>Name here</h3>
@@ -382,8 +403,10 @@
       <div class="program-about">
         <h2>Why we created The Green Room</h2>
         <p>Your explanation of why this program was created will go here.</p>
+
         <h2>The approach</h2>
         <p>An explanation of compassion focused therapy and why it was chosen will go here.</p>
+
         <h2>Who it is for</h2>
         <p>A description of who this program is designed to help will go here.</p>
       </div>
