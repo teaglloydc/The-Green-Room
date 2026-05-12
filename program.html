@@ -19,6 +19,9 @@
       --summary-bg: #e8f0e4;
       --active-bg: #d4e4cc;
       --shadow: 0 2px 12px rgba(40, 60, 40, 0.08);
+      --threat: #c62828;
+      --drive: #1565c0;
+      --soothing: #2e7d32;
     }
 
     html { scroll-behavior: smooth; }
@@ -31,6 +34,7 @@
       line-height: 1.7;
     }
 
+    /* NAV */
     nav {
       background-color: var(--nav-bg);
       padding: 18px 40px;
@@ -142,11 +146,13 @@
     .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu.open { display: block; }
 
+    /* LAYOUT */
     .program-layout {
       display: flex;
       min-height: calc(100vh - 62px);
     }
 
+    /* SIDEBAR */
     .sidebar {
       width: 280px;
       flex-shrink: 0;
@@ -255,6 +261,7 @@
 
     .completion-tick.done svg { display: block; }
 
+    /* MAIN CONTENT */
     .main-content {
       flex: 1;
       padding: 64px 80px;
@@ -431,6 +438,7 @@
       color: var(--text-muted);
     }
 
+    /* EMOTION TABS */
     .emotion-tab-buttons {
       display: flex;
       border-bottom: 1px solid var(--border);
@@ -461,6 +469,269 @@
     .emotion-tab-content { display: none; }
     .emotion-tab-content.active { display: block; }
 
+    /* THREE CIRCLES MEASURE */
+    .tc-section {
+      margin: 48px 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .tc-header {
+      background-color: var(--summary-bg);
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tc-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .tc-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-weight: 300;
+      margin: 0;
+    }
+
+    .tc-legend {
+      display: flex;
+      gap: 20px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tc-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .tc-legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .tc-legend-dot.threat   { background-color: var(--threat); }
+    .tc-legend-dot.drive    { background-color: var(--drive); }
+    .tc-legend-dot.soothing { background-color: var(--soothing); }
+
+    /* Iframe */
+    .tc-iframe-container {
+      background-color: var(--white);
+      width: 100%;
+    }
+
+    .tc-iframe-container iframe {
+      width: 100%;
+      height: 480px;
+      border: none;
+      display: block;
+    }
+
+    /* Manual recording panel */
+    .tc-record-panel {
+      background-color: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 28px 32px;
+    }
+
+    .tc-record-label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .tc-record-intro {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    /* Sliders */
+    .tc-sliders {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .tc-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .tc-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .tc-dot.threat   { background-color: var(--threat); }
+    .tc-dot.drive    { background-color: var(--drive); }
+    .tc-dot.soothing { background-color: var(--soothing); }
+
+    .tc-slider-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      width: 72px;
+      flex-shrink: 0;
+    }
+
+    .tc-slider-row input[type="range"] {
+      flex: 1;
+      cursor: pointer;
+      height: 4px;
+    }
+
+    .tc-slider-row input[type="range"].threat-slider   { accent-color: var(--threat); }
+    .tc-slider-row input[type="range"].drive-slider    { accent-color: var(--drive); }
+    .tc-slider-row input[type="range"].soothing-slider { accent-color: var(--soothing); }
+
+    .tc-slider-val {
+      font-size: 14px;
+      font-weight: 700;
+      width: 36px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .tc-slider-val.threat   { color: var(--threat); }
+    .tc-slider-val.drive    { color: var(--drive); }
+    .tc-slider-val.soothing { color: var(--soothing); }
+
+    /* Live preview */
+    .tc-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      height: 130px;
+      background-color: var(--summary-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+
+    .tc-preview-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .tc-circle-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tc-preview-circle {
+      border-radius: 50%;
+      transition: width 0.15s, height 0.15s;
+      flex-shrink: 0;
+    }
+
+    .tc-preview-circle.threat {
+      background-color: rgba(198, 40, 40, 0.20);
+      border: 2px solid var(--threat);
+    }
+
+    .tc-preview-circle.drive {
+      background-color: rgba(21, 101, 192, 0.20);
+      border: 2px solid var(--drive);
+    }
+
+    .tc-preview-circle.soothing {
+      background-color: rgba(46, 125, 50, 0.20);
+      border: 2px solid var(--soothing);
+    }
+
+    /* Submit */
+    .tc-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tc-submit-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      letter-spacing: 0.3px;
+    }
+
+    .tc-submit-btn:hover { background-color: #3d6648; }
+
+    .tc-submit-btn:disabled {
+      background-color: var(--border);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    .tc-saved-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--summary-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
+      border-radius: 0 6px 6px 0;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tc-saved-badge.visible { display: flex; }
+
+    .tc-saved-badge svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .tc-proportions {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-weight: 300;
+      display: none;
+    }
+
+    .tc-proportions.visible { display: block; }
+
+    /* MODULE NAV */
     .module-nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -515,6 +786,7 @@
       fill: currentColor;
     }
 
+    /* POST MEASURES */
     .post-measures-box { margin-top: 40px; }
 
     .post-measures-box .summary-box {
@@ -559,6 +831,7 @@
       font-weight: 300;
     }
 
+    /* BACK TO TOP */
     .back-to-top {
       position: fixed;
       bottom: 32px;
@@ -579,12 +852,7 @@
 
     .back-to-top:hover { background-color: #3d6648; }
     .back-to-top.visible { display: flex; }
-
-    .back-to-top svg {
-      width: 18px;
-      height: 18px;
-      fill: white;
-    }
+    .back-to-top svg { width: 18px; height: 18px; fill: white; }
 
     footer {
       background-color: var(--nav-bg);
@@ -595,6 +863,7 @@
       font-weight: 300;
     }
 
+    /* MOBILE */
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
@@ -632,6 +901,7 @@
       .main-content { padding: 32px 24px; }
       .module-header h1 { font-size: 30px; }
       .module-nav-buttons { flex-wrap: wrap; gap: 12px; }
+      .tc-iframe-container iframe { height: 360px; }
       .back-to-top { bottom: 20px; right: 20px; }
     }
   </style>
@@ -668,7 +938,6 @@
 
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-label">Program Modules</div>
-
       <div class="progress-bar-container">
         <div class="progress-bar-track">
           <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
@@ -739,7 +1008,7 @@
 
     <main class="main-content" id="mainContent">
 
-      <!-- MODULE 1 -->
+      <!-- ═══════════════════════════════════════ MODULE 1 -->
       <div class="module-section active" id="module-1">
         <div class="module-header">
           <div class="module-label">Module 1</div>
@@ -778,6 +1047,84 @@
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+
+        <!-- THREE CIRCLES — Module 1 -->
+        <div class="tc-section">
+          <div class="tc-header">
+            <h2>How are you feeling right now?</h2>
+            <p>Use the tool below to resize each circle to reflect how much space each emotional system is taking up for you in this moment. When you are done, record your circle sizes using the sliders and click Submit.</p>
+            <div class="tc-legend">
+              <div class="tc-legend-item">
+                <div class="tc-legend-dot threat"></div>
+                <span>Threat — protection and anxiety system</span>
+              </div>
+              <div class="tc-legend-item">
+                <div class="tc-legend-dot drive"></div>
+                <span>Drive — motivation and seeking system</span>
+              </div>
+              <div class="tc-legend-item">
+                <div class="tc-legend-dot soothing"></div>
+                <span>Soothing — contentment and compassion system</span>
+              </div>
+            </div>
+          </div>
+          <div class="tc-iframe-container">
+            <iframe
+              src="https://three-circles-ema.vercel.app/demo"
+              title="Three Circles Measure"
+              allow="fullscreen"
+              loading="lazy">
+            </iframe>
+          </div>
+          <div class="tc-record-panel">
+            <div class="tc-record-label">Record your circle sizes</div>
+            <p class="tc-record-intro">Move each slider to match the size of each circle in the tool above, then click Submit to save your response.</p>
+            <div class="tc-sliders">
+              <div class="tc-slider-row">
+                <div class="tc-dot threat"></div>
+                <span class="tc-slider-label">Threat</span>
+                <input type="range" min="0" max="100" value="33" class="threat-slider" id="tc-threat-1" oninput="tcUpdate(1)">
+                <span class="tc-slider-val threat" id="tc-threat-val-1">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot drive"></div>
+                <span class="tc-slider-label">Drive</span>
+                <input type="range" min="0" max="100" value="33" class="drive-slider" id="tc-drive-1" oninput="tcUpdate(1)">
+                <span class="tc-slider-val drive" id="tc-drive-val-1">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot soothing"></div>
+                <span class="tc-slider-label">Soothing</span>
+                <input type="range" min="0" max="100" value="33" class="soothing-slider" id="tc-soothing-1" oninput="tcUpdate(1)">
+                <span class="tc-slider-val soothing" id="tc-soothing-val-1">33</span>
+              </div>
+            </div>
+            <div class="tc-preview" id="tc-preview-1">
+              <div class="tc-circle-wrap">
+                <div class="tc-preview-circle threat" id="tc-c-threat-1" style="width:50px;height:50px;"></div>
+                <div class="tc-preview-label">Threat</div>
+              </div>
+              <div class="tc-circle-wrap">
+                <div class="tc-preview-circle drive" id="tc-c-drive-1" style="width:50px;height:50px;"></div>
+                <div class="tc-preview-label">Drive</div>
+              </div>
+              <div class="tc-circle-wrap">
+                <div class="tc-preview-circle soothing" id="tc-c-soothing-1" style="width:50px;height:50px;"></div>
+                <div class="tc-preview-label">Soothing</div>
+              </div>
+            </div>
+            <div class="tc-actions">
+              <button class="tc-submit-btn" id="tc-btn-1" onclick="tcSubmit(1)">Submit my circle sizes</button>
+              <div class="tc-saved-badge" id="tc-saved-1">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Response saved
+              </div>
+            </div>
+            <div class="tc-proportions" id="tc-prop-1"></div>
+          </div>
+        </div>
+
         <div class="module-nav-buttons">
           <span></span>
           <button class="btn-module-nav btn-complete" onclick="markComplete(1)">Mark as complete</button>
@@ -788,7 +1135,7 @@
         </div>
       </div>
 
-      <!-- MODULE 2 -->
+      <!-- ═══════════════════════════════════════ MODULE 2 -->
       <div class="module-section" id="module-2">
         <div class="module-header">
           <div class="module-label">Module 2</div>
@@ -805,9 +1152,7 @@
           </ul>
         </div>
         <div class="video-placeholder">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
           <p>Video will be added here</p>
         </div>
         <div class="content-block">
@@ -818,29 +1163,74 @@
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
             <div>
               <div class="audio-title">Guided audio — Module 2</div>
               <div class="audio-duration">Audio will be added here</div>
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <div class="tc-section">
+          <div class="tc-header">
+            <h2>How are you feeling right now?</h2>
+            <p>Use the tool below to resize each circle, then record your sizes using the sliders and click Submit.</p>
+            <div class="tc-legend">
+              <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing</span></div>
+            </div>
+          </div>
+          <div class="tc-iframe-container">
+            <iframe src="https://three-circles-ema.vercel.app/demo" title="Three Circles Measure" allow="fullscreen" loading="lazy"></iframe>
+          </div>
+          <div class="tc-record-panel">
+            <div class="tc-record-label">Record your circle sizes</div>
+            <p class="tc-record-intro">Move each slider to match the size of each circle above, then click Submit.</p>
+            <div class="tc-sliders">
+              <div class="tc-slider-row">
+                <div class="tc-dot threat"></div>
+                <span class="tc-slider-label">Threat</span>
+                <input type="range" min="0" max="100" value="33" class="threat-slider" id="tc-threat-2" oninput="tcUpdate(2)">
+                <span class="tc-slider-val threat" id="tc-threat-val-2">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot drive"></div>
+                <span class="tc-slider-label">Drive</span>
+                <input type="range" min="0" max="100" value="33" class="drive-slider" id="tc-drive-2" oninput="tcUpdate(2)">
+                <span class="tc-slider-val drive" id="tc-drive-val-2">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot soothing"></div>
+                <span class="tc-slider-label">Soothing</span>
+                <input type="range" min="0" max="100" value="33" class="soothing-slider" id="tc-soothing-2" oninput="tcUpdate(2)">
+                <span class="tc-slider-val soothing" id="tc-soothing-val-2">33</span>
+              </div>
+            </div>
+            <div class="tc-preview" id="tc-preview-2">
+              <div class="tc-circle-wrap"><div class="tc-preview-circle threat" id="tc-c-threat-2" style="width:50px;height:50px;"></div><div class="tc-preview-label">Threat</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle drive" id="tc-c-drive-2" style="width:50px;height:50px;"></div><div class="tc-preview-label">Drive</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle soothing" id="tc-c-soothing-2" style="width:50px;height:50px;"></div><div class="tc-preview-label">Soothing</div></div>
+            </div>
+            <div class="tc-actions">
+              <button class="tc-submit-btn" id="tc-btn-2" onclick="tcSubmit(2)">Submit my circle sizes</button>
+              <div class="tc-saved-badge" id="tc-saved-2"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Response saved</div>
+            </div>
+            <div class="tc-proportions" id="tc-prop-2"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
           <button class="btn-module-nav btn-prev" onclick="showModule(1)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
+            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous
           </button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(2)">Mark as complete</button>
           <button class="btn-module-nav btn-next" onclick="showModule(3)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+            Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
         </div>
       </div>
 
-      <!-- MODULE 3 -->
+      <!-- ═══════════════════════════════════════ MODULE 3 -->
       <div class="module-section" id="module-3">
         <div class="module-header">
           <div class="module-label">Module 3</div>
@@ -857,9 +1247,7 @@
           </ul>
         </div>
         <div class="video-placeholder">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
           <p>Video will be added here</p>
         </div>
         <div class="content-block">
@@ -870,29 +1258,74 @@
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
             <div>
               <div class="audio-title">Guided audio — Module 3</div>
               <div class="audio-duration">Audio will be added here</div>
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <div class="tc-section">
+          <div class="tc-header">
+            <h2>How are you feeling right now?</h2>
+            <p>Use the tool below to resize each circle, then record your sizes using the sliders and click Submit.</p>
+            <div class="tc-legend">
+              <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing</span></div>
+            </div>
+          </div>
+          <div class="tc-iframe-container">
+            <iframe src="https://three-circles-ema.vercel.app/demo" title="Three Circles Measure" allow="fullscreen" loading="lazy"></iframe>
+          </div>
+          <div class="tc-record-panel">
+            <div class="tc-record-label">Record your circle sizes</div>
+            <p class="tc-record-intro">Move each slider to match the size of each circle above, then click Submit.</p>
+            <div class="tc-sliders">
+              <div class="tc-slider-row">
+                <div class="tc-dot threat"></div>
+                <span class="tc-slider-label">Threat</span>
+                <input type="range" min="0" max="100" value="33" class="threat-slider" id="tc-threat-3" oninput="tcUpdate(3)">
+                <span class="tc-slider-val threat" id="tc-threat-val-3">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot drive"></div>
+                <span class="tc-slider-label">Drive</span>
+                <input type="range" min="0" max="100" value="33" class="drive-slider" id="tc-drive-3" oninput="tcUpdate(3)">
+                <span class="tc-slider-val drive" id="tc-drive-val-3">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot soothing"></div>
+                <span class="tc-slider-label">Soothing</span>
+                <input type="range" min="0" max="100" value="33" class="soothing-slider" id="tc-soothing-3" oninput="tcUpdate(3)">
+                <span class="tc-slider-val soothing" id="tc-soothing-val-3">33</span>
+              </div>
+            </div>
+            <div class="tc-preview" id="tc-preview-3">
+              <div class="tc-circle-wrap"><div class="tc-preview-circle threat" id="tc-c-threat-3" style="width:50px;height:50px;"></div><div class="tc-preview-label">Threat</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle drive" id="tc-c-drive-3" style="width:50px;height:50px;"></div><div class="tc-preview-label">Drive</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle soothing" id="tc-c-soothing-3" style="width:50px;height:50px;"></div><div class="tc-preview-label">Soothing</div></div>
+            </div>
+            <div class="tc-actions">
+              <button class="tc-submit-btn" id="tc-btn-3" onclick="tcSubmit(3)">Submit my circle sizes</button>
+              <div class="tc-saved-badge" id="tc-saved-3"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Response saved</div>
+            </div>
+            <div class="tc-proportions" id="tc-prop-3"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
           <button class="btn-module-nav btn-prev" onclick="showModule(2)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
+            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous
           </button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(3)">Mark as complete</button>
           <button class="btn-module-nav btn-next" onclick="showModule(4)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+            Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
         </div>
       </div>
 
-      <!-- MODULE 4 -->
+      <!-- ═══════════════════════════════════════ MODULE 4 -->
       <div class="module-section" id="module-4">
         <div class="module-header">
           <div class="module-label">Module 4</div>
@@ -909,9 +1342,7 @@
           </ul>
         </div>
         <div class="video-placeholder">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
           <p>Video will be added here</p>
         </div>
         <div class="content-block">
@@ -922,29 +1353,74 @@
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
             <div>
               <div class="audio-title">Guided audio — Module 4</div>
               <div class="audio-duration">Audio will be added here</div>
             </div>
           </div>
         </div>
+        <div class="section-divider"></div>
+        <div class="tc-section">
+          <div class="tc-header">
+            <h2>How are you feeling right now?</h2>
+            <p>Use the tool below to resize each circle, then record your sizes using the sliders and click Submit.</p>
+            <div class="tc-legend">
+              <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing</span></div>
+            </div>
+          </div>
+          <div class="tc-iframe-container">
+            <iframe src="https://three-circles-ema.vercel.app/demo" title="Three Circles Measure" allow="fullscreen" loading="lazy"></iframe>
+          </div>
+          <div class="tc-record-panel">
+            <div class="tc-record-label">Record your circle sizes</div>
+            <p class="tc-record-intro">Move each slider to match the size of each circle above, then click Submit.</p>
+            <div class="tc-sliders">
+              <div class="tc-slider-row">
+                <div class="tc-dot threat"></div>
+                <span class="tc-slider-label">Threat</span>
+                <input type="range" min="0" max="100" value="33" class="threat-slider" id="tc-threat-4" oninput="tcUpdate(4)">
+                <span class="tc-slider-val threat" id="tc-threat-val-4">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot drive"></div>
+                <span class="tc-slider-label">Drive</span>
+                <input type="range" min="0" max="100" value="33" class="drive-slider" id="tc-drive-4" oninput="tcUpdate(4)">
+                <span class="tc-slider-val drive" id="tc-drive-val-4">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot soothing"></div>
+                <span class="tc-slider-label">Soothing</span>
+                <input type="range" min="0" max="100" value="33" class="soothing-slider" id="tc-soothing-4" oninput="tcUpdate(4)">
+                <span class="tc-slider-val soothing" id="tc-soothing-val-4">33</span>
+              </div>
+            </div>
+            <div class="tc-preview" id="tc-preview-4">
+              <div class="tc-circle-wrap"><div class="tc-preview-circle threat" id="tc-c-threat-4" style="width:50px;height:50px;"></div><div class="tc-preview-label">Threat</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle drive" id="tc-c-drive-4" style="width:50px;height:50px;"></div><div class="tc-preview-label">Drive</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle soothing" id="tc-c-soothing-4" style="width:50px;height:50px;"></div><div class="tc-preview-label">Soothing</div></div>
+            </div>
+            <div class="tc-actions">
+              <button class="tc-submit-btn" id="tc-btn-4" onclick="tcSubmit(4)">Submit my circle sizes</button>
+              <div class="tc-saved-badge" id="tc-saved-4"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Response saved</div>
+            </div>
+            <div class="tc-proportions" id="tc-prop-4"></div>
+          </div>
+        </div>
         <div class="module-nav-buttons">
           <button class="btn-module-nav btn-prev" onclick="showModule(3)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
+            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous
           </button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(4)">Mark as complete</button>
           <button class="btn-module-nav btn-next" onclick="showModule(5)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+            Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
         </div>
       </div>
 
-      <!-- MODULE 5 -->
+      <!-- ═══════════════════════════════════════ MODULE 5 -->
       <div class="module-section" id="module-5">
         <div class="module-header">
           <div class="module-label">Module 5</div>
@@ -961,9 +1437,7 @@
           </ul>
         </div>
         <div class="video-placeholder">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
           <p>Video will be added here</p>
         </div>
         <div class="content-block">
@@ -982,13 +1456,8 @@
             <p>Your written content about working with anger will go here.</p>
           </div>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Working with anger</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio — Working with anger</div><div class="audio-duration">Audio will be added here</div></div>
           </div>
         </div>
         <div class="emotion-tab-content" id="emotion-sadness">
@@ -997,13 +1466,8 @@
             <p>Your written content about working with sadness will go here.</p>
           </div>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-            </div>
-            <div>
-              <div class="audio-title">Guided audio — Working with sadness</div>
-              <div class="audio-duration">Audio will be added here</div>
-            </div>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio — Working with sadness</div><div class="audio-duration">Audio will be added here</div></div>
           </div>
         </div>
         <div class="emotion-tab-content" id="emotion-anxiety">
@@ -1012,29 +1476,71 @@
             <p>Your written content about working with anxiety will go here.</p>
           </div>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio — Working with anxiety</div><div class="audio-duration">Audio will be added here</div></div>
+          </div>
+        </div>
+        <div class="section-divider"></div>
+        <div class="tc-section">
+          <div class="tc-header">
+            <h2>How are you feeling right now?</h2>
+            <p>Use the tool below to resize each circle, then record your sizes using the sliders and click Submit.</p>
+            <div class="tc-legend">
+              <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing</span></div>
             </div>
-            <div>
-              <div class="audio-title">Guided audio — Working with anxiety</div>
-              <div class="audio-duration">Audio will be added here</div>
+          </div>
+          <div class="tc-iframe-container">
+            <iframe src="https://three-circles-ema.vercel.app/demo" title="Three Circles Measure" allow="fullscreen" loading="lazy"></iframe>
+          </div>
+          <div class="tc-record-panel">
+            <div class="tc-record-label">Record your circle sizes</div>
+            <p class="tc-record-intro">Move each slider to match the size of each circle above, then click Submit.</p>
+            <div class="tc-sliders">
+              <div class="tc-slider-row">
+                <div class="tc-dot threat"></div>
+                <span class="tc-slider-label">Threat</span>
+                <input type="range" min="0" max="100" value="33" class="threat-slider" id="tc-threat-5" oninput="tcUpdate(5)">
+                <span class="tc-slider-val threat" id="tc-threat-val-5">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot drive"></div>
+                <span class="tc-slider-label">Drive</span>
+                <input type="range" min="0" max="100" value="33" class="drive-slider" id="tc-drive-5" oninput="tcUpdate(5)">
+                <span class="tc-slider-val drive" id="tc-drive-val-5">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot soothing"></div>
+                <span class="tc-slider-label">Soothing</span>
+                <input type="range" min="0" max="100" value="33" class="soothing-slider" id="tc-soothing-5" oninput="tcUpdate(5)">
+                <span class="tc-slider-val soothing" id="tc-soothing-val-5">33</span>
+              </div>
             </div>
+            <div class="tc-preview" id="tc-preview-5">
+              <div class="tc-circle-wrap"><div class="tc-preview-circle threat" id="tc-c-threat-5" style="width:50px;height:50px;"></div><div class="tc-preview-label">Threat</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle drive" id="tc-c-drive-5" style="width:50px;height:50px;"></div><div class="tc-preview-label">Drive</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle soothing" id="tc-c-soothing-5" style="width:50px;height:50px;"></div><div class="tc-preview-label">Soothing</div></div>
+            </div>
+            <div class="tc-actions">
+              <button class="tc-submit-btn" id="tc-btn-5" onclick="tcSubmit(5)">Submit my circle sizes</button>
+              <div class="tc-saved-badge" id="tc-saved-5"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Response saved</div>
+            </div>
+            <div class="tc-proportions" id="tc-prop-5"></div>
           </div>
         </div>
         <div class="module-nav-buttons">
           <button class="btn-module-nav btn-prev" onclick="showModule(4)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
+            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous
           </button>
           <button class="btn-module-nav btn-complete" onclick="markComplete(5)">Mark as complete</button>
           <button class="btn-module-nav btn-next" onclick="showModule(6)">
-            Next module
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+            Next module<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
         </div>
       </div>
 
-      <!-- MODULE 6 -->
+      <!-- ═══════════════════════════════════════ MODULE 6 -->
       <div class="module-section" id="module-6">
         <div class="module-header">
           <div class="module-label">Module 6</div>
@@ -1051,9 +1557,7 @@
           </ul>
         </div>
         <div class="video-placeholder">
-          <div class="play-icon">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+          <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
           <p>Video will be added here</p>
         </div>
         <div class="content-block">
@@ -1064,36 +1568,76 @@
         <div class="content-block">
           <h2>Audio practices</h2>
           <div class="audio-placeholder">
-            <div class="audio-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            <div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div>
+            <div><div class="audio-title">Guided audio — Module 6</div><div class="audio-duration">Audio will be added here</div></div>
+          </div>
+        </div>
+        <div class="section-divider"></div>
+        <div class="tc-section">
+          <div class="tc-header">
+            <h2>How are you feeling right now?</h2>
+            <p>Use the tool below to resize each circle, then record your sizes using the sliders and click Submit.</p>
+            <div class="tc-legend">
+              <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive</span></div>
+              <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing</span></div>
             </div>
-            <div>
-              <div class="audio-title">Guided audio — Module 6</div>
-              <div class="audio-duration">Audio will be added here</div>
+          </div>
+          <div class="tc-iframe-container">
+            <iframe src="https://three-circles-ema.vercel.app/demo" title="Three Circles Measure" allow="fullscreen" loading="lazy"></iframe>
+          </div>
+          <div class="tc-record-panel">
+            <div class="tc-record-label">Record your circle sizes</div>
+            <p class="tc-record-intro">Move each slider to match the size of each circle above, then click Submit.</p>
+            <div class="tc-sliders">
+              <div class="tc-slider-row">
+                <div class="tc-dot threat"></div>
+                <span class="tc-slider-label">Threat</span>
+                <input type="range" min="0" max="100" value="33" class="threat-slider" id="tc-threat-6" oninput="tcUpdate(6)">
+                <span class="tc-slider-val threat" id="tc-threat-val-6">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot drive"></div>
+                <span class="tc-slider-label">Drive</span>
+                <input type="range" min="0" max="100" value="33" class="drive-slider" id="tc-drive-6" oninput="tcUpdate(6)">
+                <span class="tc-slider-val drive" id="tc-drive-val-6">33</span>
+              </div>
+              <div class="tc-slider-row">
+                <div class="tc-dot soothing"></div>
+                <span class="tc-slider-label">Soothing</span>
+                <input type="range" min="0" max="100" value="33" class="soothing-slider" id="tc-soothing-6" oninput="tcUpdate(6)">
+                <span class="tc-slider-val soothing" id="tc-soothing-val-6">33</span>
+              </div>
             </div>
+            <div class="tc-preview" id="tc-preview-6">
+              <div class="tc-circle-wrap"><div class="tc-preview-circle threat" id="tc-c-threat-6" style="width:50px;height:50px;"></div><div class="tc-preview-label">Threat</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle drive" id="tc-c-drive-6" style="width:50px;height:50px;"></div><div class="tc-preview-label">Drive</div></div>
+              <div class="tc-circle-wrap"><div class="tc-preview-circle soothing" id="tc-c-soothing-6" style="width:50px;height:50px;"></div><div class="tc-preview-label">Soothing</div></div>
+            </div>
+            <div class="tc-actions">
+              <button class="tc-submit-btn" id="tc-btn-6" onclick="tcSubmit(6)">Submit my circle sizes</button>
+              <div class="tc-saved-badge" id="tc-saved-6"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Response saved</div>
+            </div>
+            <div class="tc-proportions" id="tc-prop-6"></div>
           </div>
         </div>
         <div class="module-nav-buttons">
           <button class="btn-module-nav btn-prev" onclick="showModule(5)">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
+            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>Previous
           </button>
-          <button class="btn-module-nav btn-complete" onclick="markComplete(6)">
-            Mark program complete
-          </button>
+          <button class="btn-module-nav btn-complete" onclick="markComplete(6)">Mark program complete</button>
         </div>
 
         <div class="post-measures-box" id="postMeasuresBox" style="display:none;">
           <div class="summary-box">
             <h3>You have completed The Green Room program</h3>
-            <p>Thank you for completing all six modules. The final step is to complete a short post-program survey so we can understand how the program has affected your wellbeing.</p>
+            <p>Thank you for completing all six modules. The final step is to complete a short post-program survey.</p>
             <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures">
               Complete post-program survey
             </a>
             <p class="post-measures-note">You will be taken to a secure Qualtrics survey.</p>
           </div>
         </div>
-
       </div>
 
     </main>
@@ -1107,15 +1651,160 @@
     <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
   </button>
 
+  <!-- ═══════════════════════════════════════════════════
+       FIREBASE + THREE CIRCLES LOGIC
+  ════════════════════════════════════════════════════ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBHsFsPPs0MB9KN5A9rE-59FPk3kI-pF08",
+      authDomain: "thegreenroom-ea1e7.firebaseapp.com",
+      projectId: "thegreenroom-ea1e7",
+      storageBucket: "thegreenroom-ea1e7.firebasestorage.app",
+      messagingSenderId: "785185935884",
+      appId: "1:785185935884:web:0bd81551cb70ecc3669429",
+      measurementId: "G-LN48FS5392"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // Unique session ID — ties all responses from one visit together
+    const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+
+    // ── Slider preview update ─────────────────────────
+    // Scales a 0-100 value to a circle diameter between 20px and 96px
+    function scale(v) { return Math.round(20 + (v / 100) * 76); }
+
+    window.tcUpdate = function(m) {
+      const threat   = parseInt(document.getElementById(`tc-threat-${m}`).value);
+      const drive    = parseInt(document.getElementById(`tc-drive-${m}`).value);
+      const soothing = parseInt(document.getElementById(`tc-soothing-${m}`).value);
+
+      document.getElementById(`tc-threat-val-${m}`).textContent   = threat;
+      document.getElementById(`tc-drive-val-${m}`).textContent    = drive;
+      document.getElementById(`tc-soothing-val-${m}`).textContent = soothing;
+
+      const s = scale;
+      const set = (id, v) => {
+        const el = document.getElementById(id);
+        if (el) { el.style.width = s(v) + 'px'; el.style.height = s(v) + 'px'; }
+      };
+      set(`tc-c-threat-${m}`,   threat);
+      set(`tc-c-drive-${m}`,    drive);
+      set(`tc-c-soothing-${m}`, soothing);
+    };
+
+    // ── Submit to Firebase ────────────────────────────
+    window.tcSubmit = async function(moduleNum) {
+      const threat   = parseInt(document.getElementById(`tc-threat-${moduleNum}`).value);
+      const drive    = parseInt(document.getElementById(`tc-drive-${moduleNum}`).value);
+      const soothing = parseInt(document.getElementById(`tc-soothing-${moduleNum}`).value);
+      const total    = threat + drive + soothing;
+
+      // Proportions relative to each other, summing to 1.0
+      const tProp = parseFloat((threat   / total).toFixed(4));
+      const dProp = parseFloat((drive    / total).toFixed(4));
+      const sProp = parseFloat((soothing / total).toFixed(4));
+
+      const dominant =
+        threat >= drive && threat >= soothing ? 'threat'
+        : drive >= soothing                   ? 'drive'
+        : 'soothing';
+
+      const btn = document.getElementById(`tc-btn-${moduleNum}`);
+      btn.disabled    = true;
+      btn.textContent = 'Saving...';
+
+      try {
+        await addDoc(collection(db, 'three_circles_responses'), {
+
+          // ── Identifiers ───────────────────────────
+          sessionId,
+          moduleNumber: moduleNum,
+          submittedAt:  serverTimestamp(),
+
+          // ── Raw slider values (0 – 100) ───────────
+          // These represent the relative SIZE the participant
+          // set each circle to in the tool
+          threatRaw:   threat,
+          driveRaw:    drive,
+          soothingRaw: soothing,
+
+          // ── Proportions (sum to 1.0) ─────────────
+          // These are the values to use in analysis
+          threatProportion:   tProp,
+          driveProportion:    dProp,
+          soothingProportion: sProp,
+
+          // ── Derived ───────────────────────────────
+          dominantSystem: dominant,
+
+          // ── Context ───────────────────────────────
+          moduleName: getModuleName(moduleNum),
+          userAgent:  navigator.userAgent.substring(0, 120)
+        });
+
+        // Success state
+        btn.textContent = 'Submitted';
+        const badge = document.getElementById(`tc-saved-${moduleNum}`);
+        if (badge) badge.classList.add('visible');
+
+        // Show proportions summary
+        const propEl = document.getElementById(`tc-prop-${moduleNum}`);
+        if (propEl) {
+          propEl.textContent =
+            `Threat ${Math.round(tProp * 100)}%  ·  ` +
+            `Drive ${Math.round(dProp * 100)}%  ·  ` +
+            `Soothing ${Math.round(sProp * 100)}%  ·  ` +
+            `Dominant: ${dominant}`;
+          propEl.classList.add('visible');
+        }
+
+        console.log(`Three circles saved — Module ${moduleNum}`, { threat: tProp, drive: dProp, soothing: sProp });
+
+      } catch (err) {
+        console.error('Firebase save error:', err);
+        btn.disabled    = false;
+        btn.textContent = 'Submit my circle sizes';
+        alert('Something went wrong saving your response. Please try again. If the problem continues, contact the research team.');
+      }
+    };
+
+    function getModuleName(n) {
+      return {
+        1: 'Compassion and our tricky brains',
+        2: 'Our three circles',
+        3: 'Working with your inner critic',
+        4: 'Building your compassionate self',
+        5: 'Working with complex emotions',
+        6: 'Next steps'
+      }[n] || `Module ${n}`;
+    }
+
+    // Expose sessionId for other scripts if needed
+    window._sessionId = sessionId;
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════
+       MAIN PROGRAM LOGIC
+  ════════════════════════════════════════════════════ -->
   <script>
     const TOTAL_MODULES = 6;
     let completed = JSON.parse(localStorage.getItem('completedModules') || '[]');
 
     function init() {
-      completed.forEach(num => applyCompletion(num));
+      completed.forEach(n => applyCompletion(n));
       updateProgress();
       if (completed.includes(6)) {
         document.getElementById('postMeasuresBox').style.display = 'block';
+      }
+      // Initialise all slider previews
+      for (let m = 1; m <= 6; m++) {
+        if (window.tcUpdate) window.tcUpdate(m);
       }
     }
 
@@ -1156,7 +1845,7 @@
 
     function updateProgress() {
       const count = completed.length;
-      const pct = (count / TOTAL_MODULES) * 100;
+      const pct   = (count / TOTAL_MODULES) * 100;
       document.getElementById('progressFill').style.width = pct + '%';
       document.getElementById('progressText').textContent =
         count + ' of ' + TOTAL_MODULES + ' modules completed';
@@ -1176,7 +1865,10 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    init();
+    // Wait for Firebase module to define tcUpdate before init
+    window.addEventListener('load', () => {
+      setTimeout(init, 200);
+    });
   </script>
 
 </body>
