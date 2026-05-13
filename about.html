@@ -261,6 +261,11 @@
       font-weight: 300;
     }
 
+    /* Full-width card for researchers with longer bios */
+    .person-card.full-width {
+      grid-column: 1 / -1;
+    }
+
     .program-about { max-width: 640px; margin-bottom: 80px; }
 
     .program-about h2 {
@@ -332,6 +337,7 @@
       .page-header h1 { font-size: 36px; }
       .about-tabs { padding: 0 24px 60px; }
       .people-grid { grid-template-columns: 1fr; }
+      .person-card.full-width { grid-column: 1; }
       .tab-btn { padding: 12px 16px; font-size: 14px; }
       .back-to-top { bottom: 20px; right: 20px; }
     }
@@ -383,19 +389,29 @@
 
     <div class="tab-content active" id="tab-people">
       <div class="people-grid">
+
         <div class="person-card">
           <div class="person-avatar"></div>
-          <h3>Name here</h3>
-          <div class="person-role">Role here</div>
-          <p>A short bio about this person will go here.</p>
+          <h3>Teagan Lloyd-Collins</h3>
+          <div class="person-role">PhD Candidate — University of Queensland</div>
+          <p>Teagan Lloyd-Collins is a PhD candidate at the University of Queensland. Her research is focused on developing and evaluating online, compassion-based interventions to support parents after preterm birth.</p>
         </div>
 
         <div class="person-card">
           <div class="person-avatar"></div>
-          <h3>Name here</h3>
-          <div class="person-role">Role here</div>
-          <p>A short bio about this person will go here.</p>
+          <h3>Dr Grace C. Fitzallen</h3>
+          <div class="person-role">Lecturer — University of Tasmania</div>
+          <p>Grace C. Fitzallen is a Lecturer in the School of Psychological Sciences (Health) at the University of Tasmania. Grace's research is focused on the long-term follow-up of high-risk infants adopting an integrative, family systems approach, encompassing child neurodevelopment, parental self-relating, family adaptation, grandparent wellbeing, and global neonatal follow-up.</p>
         </div>
+
+        <div class="person-card full-width">
+          <div class="person-avatar"></div>
+          <h3>Associate Professor James N. Kirby</h3>
+          <div class="person-role">Associate Professor & Clinical Psychologist — University of Queensland</div>
+          <p>James N. Kirby, Ph.D., is an Associate Professor, Clinical Psychologist, Director of the Clinical Programs, and Co-Director of the Compassionate Mind Research Group at the University of Queensland. His research is focused on compassion science and the effectiveness of compassion-based interventions.</p>
+          <p style="margin-top: 12px;">James is also an Honorary Associate Professor of the Center for Compassion and Altruism Research and Education at Stanford University, an Honorary Member of the Compassionate Mind Foundation UK, a Fellow of the Mind and Life Institute, and a founding board member of the Global Compassion Coalition.</p>
+        </div>
+
       </div>
     </div>
 
