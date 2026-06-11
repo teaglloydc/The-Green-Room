@@ -446,13 +446,17 @@ body {
       margin: 0 auto;
     }
 
-    .uq-footer-logo img {
-      height: 34px;
-      width: auto;
-      filter: brightness(0) invert(1);
-      opacity: 0.75;
-    }
+    .footer-logos {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
 
+.footer-logos img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 860px) {
       .page-hero { min-height: 340px; padding-bottom: 40px; }
@@ -575,13 +579,17 @@ body {
   </main>
 
   <footer>
-    <div class="footer-inner">
-      <a href="https://www.uq.edu.au" target="_blank" class="uq-footer-logo" aria-label="University of Queensland">
-        <img src="uq-logo.png" alt="University of Queensland">
-      </a>
-      <p>Copyright &copy; 2026 The Green Room. All rights reserved.</p>
+  <div class="footer-inner">
+
+    <div class="footer-logos">
+      <img src="uq-logo.png" alt="University of Queensland">
+      <img src="CRMGLogo.png" alt="Compassionate Mind Research Group">
     </div>
-  </footer>
+
+    <p>Copyright &copy; 2026 The Green Room. All rights reserved.</p>
+
+  </div>
+</footer>
 
   <!-- Floating controls -->
   <div class="floating-controls">
