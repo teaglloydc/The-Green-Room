@@ -798,34 +798,137 @@
       font-size: 0.92rem;
     }
 
-    @media (max-width: 980px) {
-      .site-nav { padding: 12px 20px; }
-      .nav-links { display: none; }
-      .hamburger { display: inline-flex; }
-      .nav-logo img { width: 44px; height: 44px; }
-      .program-layout {
-        grid-template-columns: 1fr;
-        padding: 22px 20px 78px;
-      }
-      .sidebar {
-        position: relative;
-        top: 0;
-        max-height: none;
-      }
-      .module-header {
-        grid-template-columns: 1fr;
-      }
-      .tc-circle-tool {
-        min-height: 360px;
-        gap: 26px 16px;
-      }
-      .emotion-tab-buttons {
-        display: grid;
-        grid-template-columns: 1fr;
-        width: 100%;
-        border-radius: var(--radius);
-      }
-    }
+   @media (max-width: 980px) {
+
+  .site-nav {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hamburger {
+    display: inline-flex;
+  }
+
+  .nav-logo img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  /* Layout becomes single column */
+  .program-layout {
+    grid-template-columns: 1fr;
+    padding: 16px 14px 80px;
+    gap: 18px;
+  }
+
+  /* Sidebar becomes TOP CARD instead of sticky side panel */
+  .sidebar {
+    position: relative;
+    top: 0;
+    max-height: none;
+    padding: 18px;
+    border-radius: 10px;
+  }
+
+  .sidebar-module {
+    padding: 16px 0;
+  }
+
+  /* Module card spacing reduced */
+  .module-card-shell {
+    padding: 18px;
+  }
+
+  .module-header h2 {
+    font-size: 2rem;
+  }
+
+  .summary-box {
+    padding: 18px;
+  }
+
+  .video-placeholder {
+    min-height: 220px;
+  }
+
+  /* Emotion tabs become full width buttons */
+  .emotion-tab-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .emotion-tab-btn {
+    width: 100%;
+  }
+
+  /* Three-circle tool fixes */
+  .tc-circle-tool {
+    min-height: 320px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "drive"
+      "soothing"
+      "threat";
+    gap: 18px;
+    padding: 24px 12px;
+  }
+
+  .tc-live-circle {
+    width: calc(50px + var(--size) * 1px);
+    height: calc(50px + var(--size) * 1px);
+  }
+
+  .tc-live-circle span {
+    font-size: 0.8rem;
+  }
+
+  /* Buttons become full width for thumbs */
+  .module-nav-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-module-nav {
+    width: 100%;
+  }
+
+  .tc-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tc-submit-btn {
+    width: 100%;
+  }
+
+  /* Better spacing for readability */
+  .content-block p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  footer {
+    font-size: 0.85rem;
+    padding: 24px 16px;
+  }
+}.sidebar {
+  -webkit-overflow-scrolling: touch;
+}
+    button, .btn-module-nav, .emotion-tab-btn {
+  min-height: 44px;
+}
+  html, body {
+  overflow-x: hidden;
+}
   </style>
 </head>
 <body>
