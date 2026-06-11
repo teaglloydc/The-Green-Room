@@ -4,54 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us - The Green Room</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f1f4ee;
-      --nav-bg: #3a5241;
-      --nav-text: #e4ece0;
-      --primary: #4a7a57;
-      --white: #fdfffe;
-      --text: #2a3828;
-      --text-muted: #5a6e58;
-      --border: #c4d4be;
-      --summary-bg: #e8f0e4;
-      --shadow: 0 2px 12px rgba(40, 60, 40, 0.08);
+      --bg: #fbf8f1;
+      --surface: #fffefa;
+      --surface-soft: #f2eadc;
+      --green-900: #234334;
+      --green-800: #2e5542;
+      --green-700: #416b55;
+      --green-600: #527a63;
+      --green-100: #e8efe5;
+      --wood: #b48761;
+      --wood-dark: #8f6748;
+      --text: #26352b;
+      --muted: #71806f;
+      --line: rgba(31, 52, 39, 0.14);
+      --shadow: 0 22px 60px rgba(16, 36, 27, 0.12);
+      --radius: 8px;
     }
 
     body.dark-mode {
-      --bg: #141a13;
-      --nav-bg: #0d130c;
-      --nav-text: #c4d8be;
-      --primary: #5a9a67;
-      --white: #1a231a;
-      --text: #ccdec6;
-      --text-muted: #7a9e74;
-      --border: #243022;
-      --summary-bg: #1a231a;
-      --shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      --bg: #111812;
+      --surface: #172119;
+      --surface-soft: #1f2a20;
+      --green-900: #080f0b;
+      --green-800: #0d1710;
+      --green-700: #dfe8dd;
+      --green-600: #9fb89e;
+      --green-100: #233226;
+      --wood: #c2a07e;
+      --wood-dark: #dfc8aa;
+      --text: #eef3ea;
+      --muted: #aebbaa;
+      --line: rgba(238, 243, 234, 0.14);
+      --shadow: 0 22px 70px rgba(0, 0, 0, 0.38);
     }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background-color: var(--bg);
-      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(155, 112, 79, 0.14), transparent 28%),
+        linear-gradient(180deg, var(--bg), #fbf8f1 48%, var(--bg));
       color: var(--text);
+      font-family: Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.7;
-      transition: background-color 0.3s, color 0.3s;
     }
 
-    nav {
-      background-color: var(--nav-bg);
-      padding: 18px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    body.dark-mode {
+      background:
+        radial-gradient(circle at 8% 0%, rgba(194, 160, 126, 0.09), transparent 28%),
+        linear-gradient(180deg, #0f1711, #141d15 48%, #101711);
+    }
+
+    .site-nav {
       position: sticky;
       top: 0;
       z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 14px clamp(20px, 5vw, 64px);
+      background: rgba(35, 67, 52, 0.92);
+      color: #fff8ea;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
     }
 
     .nav-logo {
@@ -59,195 +82,218 @@
       align-items: center;
       gap: 14px;
       text-decoration: none;
+      min-width: 0;
     }
 
     .nav-logo img {
-      height: 56px;
-      width: auto;
-      display: block;
+      width: 52px;
+      height: 52px;
       object-fit: contain;
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.18));
     }
 
     .logo-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      font-weight: 500;
-      color: var(--nav-text);
-      letter-spacing: 0.5px;
-      line-height: 1;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.45rem, 2.4vw, 2rem);
+      font-weight: 600;
+      white-space: nowrap;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 8px;
       list-style: none;
     }
 
     .nav-links a {
-      color: var(--nav-text);
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      color: rgba(247, 241, 230, 0.82);
       text-decoration: none;
-      font-size: 15px;
-      opacity: 0.9;
-      transition: opacity 0.2s;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: background 0.2s ease, color 0.2s ease;
     }
 
-    .nav-links a:hover { opacity: 1; }
-
+    .nav-links a:hover,
     .nav-links a.active-page {
-      opacity: 1;
-      font-weight: 700;
-      border-bottom: 2px solid var(--nav-text);
-      padding-bottom: 2px;
+      background: rgba(255, 255, 255, 0.09);
+      color: #fffbf3;
     }
 
     .dropdown { position: relative; }
 
     .dropdown-menu {
-      display: none;
       position: absolute;
-      top: calc(100% + 18px);
-      left: 0;
-      background-color: var(--nav-bg);
-      min-width: 180px;
-      border-radius: 0 0 8px 8px;
-      padding: 8px 0;
+      top: calc(100% + 10px);
+      right: 0;
+      display: none;
+      width: 190px;
+      padding: 8px;
+      background: rgba(35, 67, 52, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
 
     .dropdown:hover .dropdown-menu { display: block; }
+    .dropdown-menu a { display: flex; border-radius: 6px; width: 100%; }
 
-    .dropdown-menu a {
-      display: block;
-      padding: 10px 20px;
-      color: var(--nav-text);
-      text-decoration: none;
-      font-size: 14px;
-      opacity: 0.85;
-      transition: opacity 0.2s, background 0.2s;
-    }
-
-    .dropdown-menu a:hover {
-      opacity: 1;
-      background-color: rgba(255,255,255,0.08);
-    }
-
-    /* MODE TOGGLES */
     .nav-controls {
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .mode-btn {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: var(--nav-text);
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
+    .mode-btn,
+    .hamburger {
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff8ea;
       cursor: pointer;
-      font-size: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      flex-shrink: 0;
+      transition: background 0.2s ease;
     }
 
-    .mode-btn:hover { background: rgba(255,255,255,0.22); }
-    .mode-btn.active { background: rgba(255,255,255,0.28); }
+    .mode-btn {
+      min-width: 42px;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
 
     .hamburger {
       display: none;
+      width: 42px;
+      height: 38px;
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
       flex-direction: column;
       gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
     }
 
     .hamburger span {
       display: block;
-      width: 24px;
+      width: 18px;
       height: 2px;
-      background-color: var(--nav-text);
+      background: currentColor;
     }
 
     .mobile-menu {
       display: none;
-      background-color: var(--nav-bg);
-      padding: 16px 24px 24px;
-      border-top: 1px solid rgba(255,255,255,0.1);
+      position: sticky;
+      top: 81px;
+      z-index: 90;
+      padding: 10px 20px 18px;
+      background: var(--green-900);
+      color: #fff8ea;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .mobile-menu a {
       display: block;
-      color: var(--nav-text);
-      text-decoration: none;
-      font-size: 16px;
       padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      opacity: 0.9;
+      color: rgba(247, 241, 230, 0.9);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu.open { display: block; }
 
-    .page-header {
-      padding: 80px 40px 60px;
-      max-width: 800px;
+    .page-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.78fr);
+      gap: clamp(32px, 6vw, 90px);
+      align-items: end;
+      width: min(1180px, calc(100% - 40px));
       margin: 0 auto;
+      padding: clamp(72px, 9vw, 124px) 0 clamp(46px, 7vw, 78px);
     }
 
-    .page-header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 48px;
-      font-weight: 500;
+    .eyebrow {
+      color: var(--wood-dark);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 600;
+      line-height: 1.06;
+      letter-spacing: 0;
       color: var(--text);
-      margin-bottom: 16px;
     }
 
-    .page-header p {
-      font-size: 17px;
-      color: var(--text-muted);
-      max-width: 560px;
-      font-weight: 300;
-      line-height: 1.8;
+    h1 {
+      max-width: 720px;
+      font-size: clamp(3.2rem, 7vw, 6rem);
+      text-wrap: balance;
+    }
+
+    .page-hero p {
+      max-width: 620px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.9;
+    }
+
+    .hero-image {
+      min-height: 430px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(16, 36, 27, 0.02), rgba(16, 36, 27, 0.28)),
+        url("https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=1400&q=82") center/cover;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.48);
     }
 
     .about-tabs {
-      max-width: 800px;
+      width: min(1180px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 0 40px 100px;
+      padding: 0 0 clamp(78px, 9vw, 124px);
     }
 
     .tab-buttons {
-      display: flex;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 56px;
+      display: inline-flex;
+      gap: 6px;
+      padding: 6px;
+      margin-bottom: 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      box-shadow: 0 12px 30px rgba(16, 36, 27, 0.06);
     }
 
     .tab-btn {
-      padding: 14px 32px;
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
+      min-height: 42px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
       cursor: pointer;
-      font-family: 'Lato', sans-serif;
-      font-size: 15px;
-      color: var(--text-muted);
-      transition: all 0.2s;
+      font: inherit;
+      font-weight: 800;
+      transition: background 0.2s ease, color 0.2s ease;
     }
 
-    .tab-btn:hover { color: var(--text); }
-
     .tab-btn.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-      font-weight: 700;
+      background: var(--green-700);
+      color: #fffbf3;
     }
 
     .tab-content { display: none; }
@@ -255,126 +301,171 @@
 
     .people-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      margin-bottom: 80px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
     }
 
     .person-card {
-      background-color: var(--white);
-      border-radius: 8px;
-      padding: 36px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      position: relative;
+      padding: clamp(28px, 4vw, 40px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 18px 50px rgba(16, 36, 27, 0.08);
+      overflow: hidden;
+    }
+
+    .person-card::after {
+      content: "";
+      position: absolute;
+      right: -44px;
+      bottom: -60px;
+      width: 160px;
+      height: 160px;
+      border: 1px solid rgba(155, 112, 79, 0.26);
+      border-radius: 50%;
+    }
+
+    .person-card.full-width {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 30px;
+      align-items: start;
     }
 
     .person-avatar {
-      width: 64px;
-      height: 64px;
+      width: 86px;
+      height: 86px;
       border-radius: 50%;
-      background-color: var(--summary-bg);
-      border: 1px solid var(--border);
-      margin-bottom: 20px;
+      background:
+        linear-gradient(135deg, rgba(155, 112, 79, 0.18), rgba(36, 73, 56, 0.14)),
+        var(--green-100);
+      border: 1px solid var(--line);
+      margin-bottom: 22px;
+    }
+
+    .full-width .person-avatar {
+      width: 150px;
+      height: 150px;
+      margin: 0;
     }
 
     .person-card h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 6px;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
     }
 
     .person-role {
-      font-size: 12px;
-      letter-spacing: 1.5px;
+      color: var(--wood-dark);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.11em;
       text-transform: uppercase;
-      color: var(--primary);
-      font-weight: 700;
       margin-bottom: 16px;
     }
 
     .person-card p {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.8;
-      font-weight: 300;
+      position: relative;
+      z-index: 1;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 12px;
     }
 
-    .person-card.full-width { grid-column: 1 / -1; }
+    .program-about {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: clamp(30px, 6vw, 84px);
+      padding: clamp(34px, 5vw, 56px);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(255, 253, 248, 0.94), rgba(238, 230, 216, 0.86)),
+        url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=82") center/cover;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
 
-    .program-about { max-width: 640px; margin-bottom: 80px; }
+    body.dark-mode .program-about {
+      background:
+        linear-gradient(135deg, rgba(23, 33, 25, 0.94), rgba(31, 42, 32, 0.9)),
+        url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=82") center/cover;
+    }
 
     .program-about h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 16px;
-      margin-top: 40px;
-      line-height: 1.3;
+      font-size: clamp(2.2rem, 4vw, 3.6rem);
+      text-wrap: balance;
     }
 
-    .program-about h2:first-child { margin-top: 0; }
+    .program-copy {
+      display: grid;
+      gap: 24px;
+    }
 
-    .program-about p {
-      font-size: 16px;
-      color: var(--text-muted);
+    .program-copy h3 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .program-copy p {
+      color: var(--muted);
       line-height: 1.9;
-      font-weight: 300;
-      margin-bottom: 16px;
     }
 
     .back-to-top {
       position: fixed;
-      bottom: 32px;
-      right: 32px;
-      width: 44px;
-      height: 44px;
-      background-color: var(--primary);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
+      right: 24px;
+      bottom: 24px;
+      z-index: 80;
       display: none;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(40, 60, 40, 0.2);
-      transition: background-color 0.2s;
-      z-index: 99;
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--green-700);
+      color: #fffbf3;
+      cursor: pointer;
+      box-shadow: var(--shadow);
     }
 
-    .back-to-top:hover { background-color: #3d6648; }
-    .back-to-top.visible { display: flex; }
-    .back-to-top svg { width: 18px; height: 18px; fill: white; }
+    .back-to-top.visible { display: block; }
 
     footer {
-      background-color: var(--nav-bg);
-      color: var(--nav-text);
+      padding: 34px clamp(20px, 5vw, 64px);
+      background: var(--green-900);
+      color: rgba(255, 250, 240, 0.72);
       text-align: center;
-      padding: 32px 40px;
-      font-size: 14px;
-      font-weight: 300;
+      font-size: 0.92rem;
     }
 
-    @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      .nav-logo img { height: 42px; }
-      .logo-text { font-size: 1.5rem; }
+    @media (max-width: 860px) {
+      .site-nav { padding: 12px 20px; }
       .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .page-header { padding: 48px 24px 40px; }
-      .page-header h1 { font-size: 36px; }
-      .about-tabs { padding: 0 24px 60px; }
+      .hamburger { display: inline-flex; }
+      .nav-logo img { width: 44px; height: 44px; }
+      .page-hero,
+      .program-about {
+        grid-template-columns: 1fr;
+      }
+      .hero-image { min-height: 320px; }
       .people-grid { grid-template-columns: 1fr; }
-      .person-card.full-width { grid-column: 1; }
-      .tab-btn { padding: 12px 16px; font-size: 14px; }
-      .back-to-top { bottom: 20px; right: 20px; }
+      .person-card.full-width {
+        grid-template-columns: 1fr;
+      }
+      .full-width .person-avatar {
+        width: 86px;
+        height: 86px;
+      }
+      .tab-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-
-  <nav>
+  <nav class="site-nav">
     <a href="index.html" class="nav-logo">
       <img src="TheGreenRoomLogo4.png" alt="The Green Room Logo">
       <span class="logo-text">The Green Room</span>
@@ -393,7 +484,7 @@
     </ul>
 
     <div class="nav-controls">
-      <button class="mode-btn" id="darkBtn" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+      <button class="mode-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode">Dark</button>
       <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -404,75 +495,88 @@
     <a href="index.html">Home</a>
     <a href="program.html">Program</a>
     <a href="about.html">About Us</a>
-    <a href="about.html#people">— People</a>
-    <a href="about.html#the-program">— The Program</a>
+    <a href="about.html#people">People</a>
+    <a href="about.html#the-program">The Program</a>
   </div>
 
-  <div class="page-header">
-    <h1>About Us</h1>
-    <p>Learn about the people behind The Green Room and the thinking that shaped this program.</p>
-  </div>
+  <header class="page-hero">
+    <div>
+      <p class="eyebrow">About Us</p>
+      <h1>The people and care behind The Green Room.</h1>
+      <p>Learn about the team behind the program and the compassionate approach that shaped this therapeutic space.</p>
+    </div>
+    <div class="hero-image" aria-label="Sunlight through green leaves"></div>
+  </header>
 
-  <div class="about-tabs">
+  <main class="about-tabs">
     <div class="tab-buttons">
       <button class="tab-btn active" onclick="showTab(event, 'people')">People</button>
       <button class="tab-btn" onclick="showTab(event, 'the-program')">The Program</button>
     </div>
 
-    <div class="tab-content active" id="tab-people">
+    <section class="tab-content active" id="tab-people">
       <div class="people-grid">
-
-        <div class="person-card">
+        <article class="person-card">
           <div class="person-avatar"></div>
           <h3>Teagan Lloyd-Collins</h3>
-          <div class="person-role">PhD Candidate — The University of Queensland</div>
+          <div class="person-role">PhD Candidate, The University of Queensland</div>
           <p>Teagan Lloyd-Collins is a PhD candidate at the University of Queensland. Her research is focused on developing and evaluating online, compassion-based interventions to support parents after preterm birth.</p>
-        </div>
+        </article>
 
-        <div class="person-card">
+        <article class="person-card">
           <div class="person-avatar"></div>
           <h3>Dr Grace C. Fitzallen</h3>
-          <div class="person-role">Lecturer — University of Tasmania</div>
+          <div class="person-role">Lecturer, University of Tasmania</div>
           <p>Grace C. Fitzallen is a Lecturer in the School of Psychological Sciences (Health) at the University of Tasmania. Grace's research is focused on the long-term follow-up of high-risk infants adopting an integrative, family systems approach, encompassing child neurodevelopment, parental self-relating, family adaptation, grandparent wellbeing, and global neonatal follow-up.</p>
-        </div>
+        </article>
 
-        <div class="person-card full-width">
+        <article class="person-card full-width">
           <div class="person-avatar"></div>
-          <h3>Associate Professor James N. Kirby</h3>
-          <div class="person-role">Associate Professor & Clinical Psychologist — The University of Queensland</div>
-          <p>James N. Kirby, Ph.D., is an Associate Professor, Clinical Psychologist, Director of the Clinical Programs, and Co-Director of the Compassionate Mind Research Group at the University of Queensland. His research is focused on compassion science and the effectiveness of compassion-based interventions.</p>
-          <p style="margin-top: 12px;">James is also an Honorary Associate Professor of the Center for Compassion and Altruism Research and Education at Stanford University, an Honorary Member of the Compassionate Mind Foundation UK, a Fellow of the Mind and Life Institute, and a founding board member of the Global Compassion Coalition.</p>
-        </div>
-
+          <div>
+            <h3>Associate Professor James N. Kirby</h3>
+            <div class="person-role">Associate Professor and Clinical Psychologist, The University of Queensland</div>
+            <p>James N. Kirby, Ph.D., is an Associate Professor, Clinical Psychologist, Director of the Clinical Programs, and Co-Director of the Compassionate Mind Research Group at the University of Queensland. His research is focused on compassion science and the effectiveness of compassion-based interventions.</p>
+            <p>James is also an Honorary Associate Professor of the Center for Compassion and Altruism Research and Education at Stanford University, an Honorary Member of the Compassionate Mind Foundation UK, a Fellow of the Mind and Life Institute, and a founding board member of the Global Compassion Coalition.</p>
+          </div>
+        </article>
       </div>
-    </div>
+    </section>
 
-    <div class="tab-content" id="tab-the-program">
+    <section class="tab-content" id="tab-the-program">
       <div class="program-about">
-        <h2>Why we created The Green Room</h2>
-        <p>Your explanation of why this program was created will go here.</p>
-        <h2>The approach</h2>
-        <p>An explanation of compassion focused therapy and why it was chosen will go here.</p>
-        <h2>Who it is for</h2>
-        <p>A description of who this program is designed to help will go here.</p>
+        <div>
+          <p class="eyebrow">The Program</p>
+          <h2>Built to feel grounded, human, and easy to return to.</h2>
+        </div>
+        <div class="program-copy">
+          <div>
+            <h3>Why we created The Green Room</h3>
+            <p>Your explanation of why this program was created will go here.</p>
+          </div>
+          <div>
+            <h3>The approach</h3>
+            <p>An explanation of compassion focused therapy and why it was chosen will go here.</p>
+          </div>
+          <div>
+            <h3>Who it is for</h3>
+            <p>A description of who this program is designed to help will go here.</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <footer>
     <p>2026 The Green Room. All rights reserved.</p>
   </footer>
 
-  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">
-    <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
-  </button>
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">Up</button>
 
   <script>
-    // ── Dark mode ──────────────────────────────────────
     function applyDark(on) {
       document.body.classList.toggle('dark-mode', on);
       document.getElementById('darkBtn').classList.toggle('active', on);
-      document.getElementById('darkBtn').textContent = on ? '☀️' : '🌙';
+      document.getElementById('darkBtn').textContent = on ? 'Light' : 'Dark';
     }
 
     function toggleDark() {
@@ -481,12 +585,12 @@
       applyDark(on);
     }
 
-    // ── Tab logic ──────────────────────────────────────
     function showTab(event, tab) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('tab-' + tab).classList.add('active');
       event.target.classList.add('active');
+      history.replaceState(null, '', '#' + tab);
     }
 
     function toggleMenu() {
@@ -494,10 +598,8 @@
     }
 
     window.addEventListener('load', () => {
-      // Restore dark mode
       if (localStorage.getItem('darkMode') === 'true') applyDark(true);
 
-      // Hash-based tab navigation
       const hash = window.location.hash.replace('#', '');
       if (hash === 'people' || hash === 'the-program') {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -509,15 +611,12 @@
 
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('backToTop');
-      if (window.scrollY > 300) btn.classList.add('visible');
-      else btn.classList.remove('visible');
+      btn.classList.toggle('visible', window.scrollY > 420);
     });
 
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
-
 </body>
 </html>
-
