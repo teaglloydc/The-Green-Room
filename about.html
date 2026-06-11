@@ -430,32 +430,32 @@ body {
     .back-to-top.visible { display: flex; }
 
     footer {
-      padding: 28px clamp(16px, 4vw, 48px);
-      background: var(--green-900);
-      color: rgba(255,250,240,0.72);
-      font-size: 0.9rem;
-    }
+  padding: 28px clamp(16px, 4vw, 48px);
+  background: var(--green-900);
+  color: rgba(255,250,240,0.72);
+  font-size: 0.9rem;
+}
 
-    .footer-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-
-    .footer-logos {
+.footer-inner {
   display: flex;
   align-items: center;
-  gap: 24px;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.footer-logos {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .footer-logos img {
-  height: 40px;
+  height: 50px;
   width: auto;
-  object-fit: contain;
+  display: block;
 }
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 860px) {
@@ -578,12 +578,12 @@ body {
     </section>
   </main>
 
-  <footer>
+ <footer>
   <div class="footer-inner">
 
     <div class="footer-logos">
-      <img src="uq-logo.png" alt="University of Queensland">
-      <img src="CRMGLogo.png" alt="Compassionate Mind Research Group">
+      <img src="uq-logo.png" alt="">
+      <img src="CMRGLogo.png" alt="">
     </div>
 
     <p>Copyright &copy; 2026 The Green Room. All rights reserved.</p>
