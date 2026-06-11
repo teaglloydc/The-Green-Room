@@ -24,6 +24,39 @@
       --soothing: #2e7d32;
     }
 
+    body.dark-mode {
+      --bg: #141a13;
+      --nav-bg: #0d130c;
+      --nav-text: #c4d8be;
+      --primary: #5a9a67;
+      --light-green: #1a231a;
+      --white: #1a231a;
+      --text: #ccdec6;
+      --text-muted: #7a9e74;
+      --border: #243022;
+      --summary-bg: #1e2a1c;
+      --active-bg: #1e2e1c;
+      --shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    /* LISTEN-ONLY MODE — hide video and written text, show audio and circles */
+    body.listen-mode .written-block { display: none !important; }
+    body.listen-mode .video-placeholder { display: none !important; }
+    body.listen-mode .summary-box { display: none !important; }
+
+    /* Listen mode banner */
+    .listen-banner {
+      display: none;
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 8px 24px;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    body.listen-mode .listen-banner { display: block; }
+
     html { scroll-behavior: smooth; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -32,6 +65,7 @@
       font-family: 'Lato', sans-serif;
       color: var(--text);
       line-height: 1.7;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     nav {
@@ -122,6 +156,32 @@
       opacity: 1;
       background-color: rgba(255,255,255,0.08);
     }
+
+    /* MODE TOGGLES */
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mode-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--nav-text);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .mode-btn:hover { background: rgba(255,255,255,0.22); }
+    .mode-btn.active { background: rgba(255,255,255,0.28); }
 
     .hamburger {
       display: none;
@@ -810,19 +870,11 @@
 
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
-
-      .nav-logo img {
-        height: 42px;
-      }
-
-      .logo-text {
-        font-size: 1.5rem;
-      }
-
+      .nav-logo img { height: 42px; }
+      .logo-text { font-size: 1.5rem; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .program-layout { flex-direction: column; }
-
       .sidebar {
         width: 100%;
         height: auto;
@@ -835,10 +887,8 @@
         border-bottom: 1px solid var(--border);
         -webkit-overflow-scrolling: touch;
       }
-
       .sidebar-label { display: none; }
       .progress-bar-container { display: none; }
-
       .sidebar-module {
         flex-shrink: 0;
         padding: 10px 16px;
@@ -848,30 +898,25 @@
         align-items: flex-start;
         min-width: 140px;
       }
-
       .sidebar-module.active {
         border-left: none;
         border-bottom-color: var(--primary);
         background-color: var(--active-bg);
       }
-
       .completion-tick { display: none; }
       .main-content { padding: 32px 24px; }
       .module-header h1 { font-size: 30px; }
       .module-nav-buttons { flex-wrap: wrap; gap: 12px; }
-
-      .tc-circle-tool {
-        min-height: 360px;
-        padding: 28px 16px;
-        gap: 28px 24px;
-      }
-
+      .tc-circle-tool { min-height: 360px; padding: 28px 16px; gap: 28px 24px; }
       .tc-live-circle span { font-size: 12px; }
       .back-to-top { bottom: 20px; right: 20px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Listen-only mode banner -->
+  <div class="listen-banner">Listen-only mode — video and written content is hidden</div>
 
   <nav>
     <a href="index.html" class="nav-logo">
@@ -889,9 +934,13 @@
         </div>
       </li>
     </ul>
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-controls">
+      <button class="mode-btn" id="darkBtn" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+      <button class="mode-btn" id="listenBtn" onclick="toggleListen()" title="Toggle listen-only mode" aria-label="Toggle listen-only mode">🎧</button>
+      <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
   <div class="mobile-menu" id="mobileMenu">
@@ -963,6 +1012,7 @@
 
     <main class="main-content" id="mainContent">
 
+      <!-- MODULE 1 -->
       <div class="module-section active" id="module-1">
         <div class="module-header">
           <div class="module-label">Module 1</div>
@@ -979,7 +1029,7 @@
           </ul>
         </div>
         <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
-        <div class="content-block"><h2>About this module</h2><p>Your written content for module 1 will go here.</p></div>
+        <div class="content-block written-block"><h2>About this module</h2><p>Your written content for module 1 will go here.</p></div>
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
@@ -997,6 +1047,7 @@
         </div>
       </div>
 
+      <!-- MODULE 2 -->
       <div class="module-section" id="module-2">
         <div class="module-header">
           <div class="module-label">Module 2</div>
@@ -1013,7 +1064,7 @@
           </ul>
         </div>
         <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
-        <div class="content-block"><h2>About this module</h2><p>Your written content for module 2 will go here.</p></div>
+        <div class="content-block written-block"><h2>About this module</h2><p>Your written content for module 2 will go here.</p></div>
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
@@ -1031,6 +1082,7 @@
         </div>
       </div>
 
+      <!-- MODULE 3 -->
       <div class="module-section" id="module-3">
         <div class="module-header">
           <div class="module-label">Module 3</div>
@@ -1047,7 +1099,7 @@
           </ul>
         </div>
         <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
-        <div class="content-block"><h2>About this module</h2><p>Your written content for module 3 will go here.</p></div>
+        <div class="content-block written-block"><h2>About this module</h2><p>Your written content for module 3 will go here.</p></div>
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
@@ -1065,6 +1117,7 @@
         </div>
       </div>
 
+      <!-- MODULE 4 -->
       <div class="module-section" id="module-4">
         <div class="module-header">
           <div class="module-label">Module 4</div>
@@ -1081,7 +1134,7 @@
           </ul>
         </div>
         <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
-        <div class="content-block"><h2>About this module</h2><p>Your written content for module 4 will go here.</p></div>
+        <div class="content-block written-block"><h2>About this module</h2><p>Your written content for module 4 will go here.</p></div>
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
@@ -1099,6 +1152,7 @@
         </div>
       </div>
 
+      <!-- MODULE 5 -->
       <div class="module-section" id="module-5">
         <div class="module-header">
           <div class="module-label">Module 5</div>
@@ -1115,7 +1169,7 @@
           </ul>
         </div>
         <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
-        <div class="content-block"><h2>About this module</h2><p>Your written introduction to module 5 will go here.</p></div>
+        <div class="content-block written-block"><h2>About this module</h2><p>Your written introduction to module 5 will go here.</p></div>
         <div class="section-divider"></div>
         <div class="emotion-tab-buttons">
           <button class="emotion-tab-btn active" onclick="showEmotion(event, 'anger')">Anger</button>
@@ -1123,15 +1177,15 @@
           <button class="emotion-tab-btn" onclick="showEmotion(event, 'anxiety')">Anxiety</button>
         </div>
         <div class="emotion-tab-content active" id="emotion-anger">
-          <div class="content-block"><h2>Working with anger</h2><p>Your written content about working with anger will go here.</p></div>
+          <div class="content-block written-block"><h2>Working with anger</h2><p>Your written content about working with anger will go here.</p></div>
           <div class="audio-placeholder"><div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div><div><div class="audio-title">Guided audio - Working with anger</div><div class="audio-duration">Audio will be added here</div></div></div>
         </div>
         <div class="emotion-tab-content" id="emotion-sadness">
-          <div class="content-block"><h2>Working with sadness</h2><p>Your written content about working with sadness will go here.</p></div>
+          <div class="content-block written-block"><h2>Working with sadness</h2><p>Your written content about working with sadness will go here.</p></div>
           <div class="audio-placeholder"><div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div><div><div class="audio-title">Guided audio - Working with sadness</div><div class="audio-duration">Audio will be added here</div></div></div>
         </div>
         <div class="emotion-tab-content" id="emotion-anxiety">
-          <div class="content-block"><h2>Working with anxiety</h2><p>Your written content about working with anxiety will go here.</p></div>
+          <div class="content-block written-block"><h2>Working with anxiety</h2><p>Your written content about working with anxiety will go here.</p></div>
           <div class="audio-placeholder"><div class="audio-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></div><div><div class="audio-title">Guided audio - Working with anxiety</div><div class="audio-duration">Audio will be added here</div></div></div>
         </div>
         <div class="section-divider"></div>
@@ -1143,6 +1197,7 @@
         </div>
       </div>
 
+      <!-- MODULE 6 -->
       <div class="module-section" id="module-6">
         <div class="module-header">
           <div class="module-label">Module 6</div>
@@ -1159,7 +1214,7 @@
           </ul>
         </div>
         <div class="video-placeholder"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p>Video will be added here</p></div>
-        <div class="content-block"><h2>About this module</h2><p>Your written content for module 6 will go here.</p></div>
+        <div class="content-block written-block"><h2>About this module</h2><p>Your written content for module 6 will go here.</p></div>
         <div class="section-divider"></div>
         <div class="content-block">
           <h2>Audio practices</h2>
@@ -1203,20 +1258,42 @@
     const circleValues = {};
     const circleChanged = {};
 
+    // ── Dark mode ──────────────────────────────────────
+    function applyDark(on) {
+      document.body.classList.toggle('dark-mode', on);
+      document.getElementById('darkBtn').classList.toggle('active', on);
+      document.getElementById('darkBtn').textContent = on ? '☀️' : '🌙';
+    }
+
+    function toggleDark() {
+      const on = !document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', on);
+      applyDark(on);
+    }
+
+    // ── Listen-only mode ───────────────────────────────
+    function applyListen(on) {
+      document.body.classList.toggle('listen-mode', on);
+      document.getElementById('listenBtn').classList.toggle('active', on);
+    }
+
+    function toggleListen() {
+      const on = !document.body.classList.contains('listen-mode');
+      localStorage.setItem('listenMode', on);
+      applyListen(on);
+    }
+
+    // ── Circle tool ────────────────────────────────────
     function getModuleValues(moduleNum) {
       if (!circleValues[moduleNum]) {
-        circleValues[moduleNum] = {
-          threat: 33,
-          drive: 33,
-          soothing: 33
-        };
+        circleValues[moduleNum] = { threat: 33, drive: 33, soothing: 33 };
       }
       return circleValues[moduleNum];
     }
 
     function hasChangedCircle(moduleNum) {
-      const values = getModuleValues(moduleNum);
-      return values.threat !== 33 || values.drive !== 33 || values.soothing !== 33 || circleChanged[moduleNum] === true;
+      const v = getModuleValues(moduleNum);
+      return v.threat !== 33 || v.drive !== 33 || v.soothing !== 33 || circleChanged[moduleNum] === true;
     }
 
     function updateSubmitAvailability(moduleNum) {
@@ -1229,7 +1306,6 @@
     function renderThreeCircleTools() {
       document.querySelectorAll('.tc-section[data-module]').forEach(section => {
         const moduleNum = section.dataset.module;
-
         section.innerHTML = `
           <div class="tc-header">
             <h2>How are you feeling right now?</h2>
@@ -1265,21 +1341,10 @@
       const values = getModuleValues(moduleNum);
       const oldValue = values[system];
       const newValue = Math.max(0, Math.min(100, Math.round(value)));
-
       values[system] = newValue;
-
-      if (newValue !== oldValue) {
-        circleChanged[moduleNum] = true;
-      }
-
-      const circle = document.querySelector(
-        `.tc-live-circle[data-module="${moduleNum}"][data-system="${system}"]`
-      );
-
-      if (circle) {
-        circle.style.setProperty('--size', values[system]);
-      }
-
+      if (newValue !== oldValue) circleChanged[moduleNum] = true;
+      const circle = document.querySelector(`.tc-live-circle[data-module="${moduleNum}"][data-system="${system}"]`);
+      if (circle) circle.style.setProperty('--size', values[system]);
       updateSubmitAvailability(moduleNum);
     }
 
@@ -1291,23 +1356,15 @@
         circle.addEventListener('pointerdown', event => {
           const moduleNum = circle.dataset.module;
           const system = circle.dataset.system;
-          const values = getModuleValues(moduleNum);
-
           startX = event.clientX;
-          startValue = values[system];
-
+          startValue = getModuleValues(moduleNum)[system];
           circle.classList.add('dragging');
           circle.setPointerCapture(event.pointerId);
         });
 
         circle.addEventListener('pointermove', event => {
           if (!circle.classList.contains('dragging')) return;
-
-          const moduleNum = circle.dataset.module;
-          const system = circle.dataset.system;
-          const delta = event.clientX - startX;
-
-          setCircleValue(moduleNum, system, startValue + delta / 2);
+          setCircleValue(circle.dataset.module, circle.dataset.system, startValue + (event.clientX - startX) / 2);
         });
 
         circle.addEventListener('pointerup', event => {
@@ -1321,18 +1378,60 @@
       });
     }
 
-    function init() {
-      renderThreeCircleTools();
-      setupCircleDragging();
+    // ── Three circles submit (local only — no Firebase) ─
+    // Data is stored in localStorage for the programmer to
+    // replace with server-side collection later
+    function tcSubmit(moduleNum) {
+      if (!hasChangedCircle(moduleNum)) {
+        alert('Please resize at least one circle before submitting.');
+        return;
+      }
 
-      completed.forEach(n => applyCompletion(n));
-      updateProgress();
+      const values = getModuleValues(moduleNum);
+      const total = values.threat + values.drive + values.soothing || 1;
+      const tProp = parseFloat((values.threat / total).toFixed(4));
+      const dProp = parseFloat((values.drive  / total).toFixed(4));
+      const sProp = parseFloat((values.soothing / total).toFixed(4));
+      const dominant =
+        values.threat >= values.drive && values.threat >= values.soothing ? 'threat'
+        : values.drive >= values.soothing ? 'drive'
+        : 'soothing';
 
-      if (completed.includes(6)) {
-        document.getElementById('postMeasuresBox').style.display = 'block';
+      // Store locally — programmer can replace this with server call
+      const existing = JSON.parse(localStorage.getItem('tcResponses') || '[]');
+      existing.push({
+        moduleNumber: moduleNum,
+        moduleName: getModuleName(moduleNum),
+        submittedAt: new Date().toISOString(),
+        threatRaw: values.threat,
+        driveRaw:  values.drive,
+        soothingRaw: values.soothing,
+        threatProportion:   tProp,
+        driveProportion:    dProp,
+        soothingProportion: sProp,
+        dominantSystem: dominant
+      });
+      localStorage.setItem('tcResponses', JSON.stringify(existing));
+
+      const btn = document.getElementById(`tc-btn-${moduleNum}`);
+      btn.disabled    = true;
+      btn.textContent = 'Submitted';
+
+      const badge = document.getElementById(`tc-saved-${moduleNum}`);
+      if (badge) badge.classList.add('visible');
+
+      const propEl = document.getElementById(`tc-prop-${moduleNum}`);
+      if (propEl) {
+        propEl.textContent =
+          `Threat ${Math.round(tProp * 100)}%  ·  ` +
+          `Drive ${Math.round(dProp * 100)}%  ·  ` +
+          `Soothing ${Math.round(sProp * 100)}%  ·  ` +
+          `Dominant: ${dominant}`;
+        propEl.classList.add('visible');
       }
     }
 
+    // ── Module navigation ──────────────────────────────
     function showModule(num) {
       document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
@@ -1355,7 +1454,6 @@
         applyCompletion(num);
         updateProgress();
       }
-
       if (num === TOTAL_MODULES) {
         document.getElementById('postMeasuresBox').style.display = 'block';
         document.getElementById('postMeasuresBox').scrollIntoView({ behavior: 'smooth' });
@@ -1402,97 +1500,21 @@
       }[n] || `Module ${n}`;
     }
 
-    window.addEventListener('load', init);
-  </script>
+    // ── Initialise ─────────────────────────────────────
+    window.addEventListener('load', () => {
+      if (localStorage.getItem('darkMode')   === 'true') applyDark(true);
+      if (localStorage.getItem('listenMode') === 'true') applyListen(true);
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp }
-      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBHsFsPPs0MB9KN5A9rE-59FPk3kI-pF08",
-      authDomain: "thegreenroom-ea1e7.firebaseapp.com",
-      projectId: "thegreenroom-ea1e7",
-      storageBucket: "thegreenroom-ea1e7.firebasestorage.app",
-      messagingSenderId: "785185935884",
-      appId: "1:795185935884:web:0bd81551cb70ecc3669429",
-      measurementId: "G-LN48FS5392"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
-
-    window.tcSubmit = async function(moduleNum) {
-      if (!hasChangedCircle(moduleNum)) {
-        alert('Please resize at least one circle before submitting.');
-        return;
+      renderThreeCircleTools();
+      setupCircleDragging();
+      completed.forEach(n => applyCompletion(n));
+      updateProgress();
+      if (completed.includes(6)) {
+        document.getElementById('postMeasuresBox').style.display = 'block';
       }
-
-      const values = getModuleValues(moduleNum);
-
-      const threat = values.threat;
-      const drive = values.drive;
-      const soothing = values.soothing;
-      const total = threat + drive + soothing || 1;
-
-      const tProp = parseFloat((threat / total).toFixed(4));
-      const dProp = parseFloat((drive / total).toFixed(4));
-      const sProp = parseFloat((soothing / total).toFixed(4));
-
-      const dominant =
-        threat >= drive && threat >= soothing ? 'threat'
-        : drive >= soothing ? 'drive'
-        : 'soothing';
-
-      const btn = document.getElementById(`tc-btn-${moduleNum}`);
-      btn.disabled = true;
-      btn.textContent = 'Saving...';
-
-      try {
-        await addDoc(collection(db, 'three_circles_responses'), {
-          sessionId,
-          moduleNumber: moduleNum,
-          submittedAt: serverTimestamp(),
-
-          threatRaw: threat,
-          driveRaw: drive,
-          soothingRaw: soothing,
-
-          threatProportion: tProp,
-          driveProportion: dProp,
-          soothingProportion: sProp,
-
-          dominantSystem: dominant,
-          moduleName: getModuleName(moduleNum),
-          userAgent: navigator.userAgent.substring(0, 120)
-        });
-
-        btn.textContent = 'Submitted';
-
-        const badge = document.getElementById(`tc-saved-${moduleNum}`);
-        if (badge) badge.classList.add('visible');
-
-        const propEl = document.getElementById(`tc-prop-${moduleNum}`);
-        if (propEl) {
-          propEl.textContent =
-            `Threat ${Math.round(tProp * 100)}%  ·  ` +
-            `Drive ${Math.round(dProp * 100)}%  ·  ` +
-            `Soothing ${Math.round(sProp * 100)}%  ·  ` +
-            `Dominant: ${dominant}`;
-          propEl.classList.add('visible');
-        }
-      } catch (err) {
-        console.error('Firebase save error:', err);
-        btn.disabled = false;
-        btn.textContent = 'Submit my circle sizes';
-        alert('Something went wrong saving your response. Please try again. If the problem continues, contact the research team.');
-      }
-    };
-
-    window._sessionId = sessionId;
+    });
   </script>
 
 </body>
 </html>
+

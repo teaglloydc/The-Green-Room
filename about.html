@@ -19,6 +19,19 @@
       --shadow: 0 2px 12px rgba(40, 60, 40, 0.08);
     }
 
+    body.dark-mode {
+      --bg: #141a13;
+      --nav-bg: #0d130c;
+      --nav-text: #c4d8be;
+      --primary: #5a9a67;
+      --white: #1a231a;
+      --text: #ccdec6;
+      --text-muted: #7a9e74;
+      --border: #243022;
+      --summary-bg: #1a231a;
+      --shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+
     html { scroll-behavior: smooth; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -27,6 +40,7 @@
       font-family: 'Lato', sans-serif;
       color: var(--text);
       line-height: 1.7;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     nav {
@@ -117,6 +131,32 @@
       opacity: 1;
       background-color: rgba(255,255,255,0.08);
     }
+
+    /* MODE TOGGLES */
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mode-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--nav-text);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .mode-btn:hover { background: rgba(255,255,255,0.22); }
+    .mode-btn.active { background: rgba(255,255,255,0.28); }
 
     .hamburger {
       display: none;
@@ -261,10 +301,7 @@
       font-weight: 300;
     }
 
-    /* Full-width card for researchers with longer bios */
-    .person-card.full-width {
-      grid-column: 1 / -1;
-    }
+    .person-card.full-width { grid-column: 1 / -1; }
 
     .program-about { max-width: 640px; margin-bottom: 80px; }
 
@@ -308,7 +345,6 @@
 
     .back-to-top:hover { background-color: #3d6648; }
     .back-to-top.visible { display: flex; }
-
     .back-to-top svg { width: 18px; height: 18px; fill: white; }
 
     footer {
@@ -322,15 +358,8 @@
 
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
-
-      .nav-logo img {
-        height: 42px;
-      }
-
-      .logo-text {
-        font-size: 1.5rem;
-      }
-
+      .nav-logo img { height: 42px; }
+      .logo-text { font-size: 1.5rem; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .page-header { padding: 48px 24px 40px; }
@@ -363,9 +392,12 @@
       </li>
     </ul>
 
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-controls">
+      <button class="mode-btn" id="darkBtn" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+      <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
   <div class="mobile-menu" id="mobileMenu">
@@ -419,10 +451,8 @@
       <div class="program-about">
         <h2>Why we created The Green Room</h2>
         <p>Your explanation of why this program was created will go here.</p>
-
         <h2>The approach</h2>
         <p>An explanation of compassion focused therapy and why it was chosen will go here.</p>
-
         <h2>Who it is for</h2>
         <p>A description of who this program is designed to help will go here.</p>
       </div>
@@ -438,6 +468,20 @@
   </button>
 
   <script>
+    // ── Dark mode ──────────────────────────────────────
+    function applyDark(on) {
+      document.body.classList.toggle('dark-mode', on);
+      document.getElementById('darkBtn').classList.toggle('active', on);
+      document.getElementById('darkBtn').textContent = on ? '☀️' : '🌙';
+    }
+
+    function toggleDark() {
+      const on = !document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', on);
+      applyDark(on);
+    }
+
+    // ── Tab logic ──────────────────────────────────────
     function showTab(event, tab) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -450,6 +494,10 @@
     }
 
     window.addEventListener('load', () => {
+      // Restore dark mode
+      if (localStorage.getItem('darkMode') === 'true') applyDark(true);
+
+      // Hash-based tab navigation
       const hash = window.location.hash.replace('#', '');
       if (hash === 'people' || hash === 'the-program') {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -472,3 +520,4 @@
 
 </body>
 </html>
+
