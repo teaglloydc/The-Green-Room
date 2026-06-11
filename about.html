@@ -61,22 +61,27 @@
         radial-gradient(circle at 8% 0%, rgba(194, 160, 126, 0.09), transparent 28%),
         linear-gradient(180deg, #0f1711, #141d15 48%, #101711);
     }
-
     .site-nav {
-      position: sticky;
+      position: absolute;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
       padding: 14px clamp(20px, 5vw, 64px);
-      background: rgba(35, 67, 52, 0.92);
+      background: transparent;
       color: #fff8ea;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(18px);
     }
-
+    .hero {
+     margin-top: 0;
+    }
+    body {
+  padding-top: 0;
+    }
+    
     .nav-logo {
       display: inline-flex;
       align-items: center;
