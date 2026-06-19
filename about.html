@@ -65,7 +65,7 @@
 
     /* ── FLOATING MODERN NAV ────────────────────── */
     .site-nav {
-  position: absolute; /* or fixed if you want it to stay visible while scrolling */
+  position: absolute;
   top: 20px;
   left: 0;
   right: 0;
@@ -203,7 +203,7 @@
     .about-tabs {
       width: min(1100px, calc(100% - 32px));
       margin: 0 auto;
-      padding: clamp(40px, 6vw, 72px) 0 clamp(64px, 8vw, 104px);
+      padding: clamp(40px, 6vw, 72px) 0 clamp(48px, 7vw, 84px);
     }
 
     .tab-buttons {
@@ -365,15 +365,61 @@
 
     .program-copy p { color: var(--muted); line-height: 1.88; font-size: 0.97rem; }
 
-    /* ── FLOATING CONTROLS — moved to mid-left ──── */
-.floating-controls {
-  position: fixed;
-  right: 76px;
-  bottom: 24px;
-  z-index: 80;
-  display: flex;
-  gap: 10px;
-}
+    /* ── CONTACT US SECTION ─────────────────────── */
+    .contact-section {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 0 0 clamp(64px, 8vw, 104px);
+    }
+
+    .contact-card {
+      padding: clamp(30px, 4.5vw, 48px);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, var(--surface), var(--surface-soft));
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .contact-card .section-label {
+      display: block;
+      text-align: center;
+    }
+
+    .contact-card h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .contact-card p {
+      max-width: 560px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.85;
+    }
+
+    .contact-card p a {
+      color: var(--green-700);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    body.dark-mode .contact-card p a { color: var(--wood); }
+
+    /* ── FLOATING CONTROLS ─────────────────────── */
+    .floating-controls {
+      position: fixed;
+      right: 76px;
+      bottom: 24px;
+      z-index: 80;
+      display: flex;
+      gap: 10px;
+    }
     .float-btn {
       width: 46px;
       height: 46px;
@@ -512,7 +558,7 @@
 
       .person-card h3 { font-size: 1.5rem; }
 
-      .floating-controls { left: 12px; }
+      .floating-controls { right: 14px; bottom: 76px; }
       .back-to-top { right: 14px; bottom: 18px; }
     }
   </style>
@@ -604,6 +650,15 @@
     </section>
   </main>
 
+  <!-- CONTACT US — sits under the About tabs, before the footer -->
+  <section class="contact-section">
+    <div class="contact-card">
+      <span class="section-label">Get in touch</span>
+      <h2>Contact Us</h2>
+      <p>We want to make this experience better for you. If you are experiencing difficulties navigating the website, or have any suggestions, contact our team at <a href="mailto:teagan.collins@uq.edu.au">teagan.collins@uq.edu.au</a>.</p>
+    </div>
+  </section>
+
   <footer>
     <div class="footer-inner">
 
@@ -628,7 +683,7 @@
       <div class="footer-divider"></div>
 
       <div class="footer-contact">
-        <p></a></p>
+        <p>We want to make this experience better for you. If you are experiencing difficulties navigating the website, or have any suggestions, contact our team at <a href="mailto:teagan.collins@uq.edu.au">teagan.collins@uq.edu.au</a>.</p>
       </div>
 
       <div class="footer-divider"></div>
