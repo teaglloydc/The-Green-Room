@@ -191,17 +191,23 @@
     .menu-sub-link { padding-left: 22px !important; font-size: 0.87rem !important; opacity: 0.82; }
 
     /* ── PROGRAM INTRO HEADER ──────────────────── */
-    .program-intro {
-      position: relative;
-      display: grid;
-      align-items: end;
-      min-height: 380px;
-      padding: clamp(88px, 9vw, 110px) clamp(20px, 5vw, 64px) 48px;
-      background:
-        url("IndexBackground.png") center/cover;
-      color: #fffbf3;
-    }
+    /* ── PROGRAM INTRO HEADER ──────────────────── */
+.program-intro {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: 380px;
+  padding: clamp(88px, 9vw, 110px) clamp(20px, 5vw, 64px) 48px;
 
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.35),
+      rgba(0, 0, 0, 0.35)
+    ),
+    url("IndexBackground.png") center/cover;
+
+  color: #fffbf3;
+}
     .program-intro-inner { width: min(1180px, 100%); margin: 0 auto; }
 
     .eyebrow,
