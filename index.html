@@ -729,3 +729,26 @@
   </script>
 </body>
 </html>
+@media (max-width: 860px) {
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 0;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+  }
+}
+@media (max-width: 860px) {
+  .hero p {
+    color: rgba(255, 250, 240, 0.95);
+  }
+
+  .eyebrow {
+    color: rgba(255, 250, 240, 0.95);
+  }
+}
