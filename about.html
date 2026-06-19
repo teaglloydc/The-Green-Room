@@ -63,38 +63,27 @@
         linear-gradient(180deg, #0f1711, #141d15 48%, #101711);
     }
 
-    /* ── NAV ───────────────────────────────────── */
+    /* ── FLOATING MODERN NAV ────────────────────── */
     .site-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 14px clamp(20px, 5vw, 64px);
-  background: transparent;
-  color: #fff8ea;
-}
-.hero {
-  margin-top: 0;
-}
-body {
-  padding-top: 0;
-}
-.site-nav::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.35),
-    rgba(0,0,0,0)
-  );
-  z-index: -1;
-}
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: min(1180px, calc(100% - 28px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 10px 12px 10px 18px;
+      border-radius: 999px;
+      background: rgba(28, 54, 42, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 14px 38px rgba(16,36,27,0.32);
+      color: #fff8ea;
+    }
 
     .nav-logo {
       display: inline-flex;
@@ -104,15 +93,15 @@ body {
     }
 
     .nav-logo img {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
       filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
     }
 
     .logo-text {
       font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(1.2rem, 2.4vw, 1.7rem);
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
       font-weight: 600;
       white-space: nowrap;
       color: #fff8ea;
@@ -128,23 +117,29 @@ body {
       height: 38px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.1);
       color: #fff8ea;
       cursor: pointer;
       transition: background 0.2s;
     }
-    .hamburger:hover { background: rgba(255,255,255,0.18); }
+    .hamburger:hover { background: rgba(255,255,255,0.2); }
     .hamburger span { display: block; width: 18px; height: 2px; background: currentColor; }
 
     /* ── MOBILE MENU ───────────────────────────── */
     .mobile-menu {
       display: none;
-      position: sticky;
-      top: 68px;
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 90;
-      padding: 10px 20px 18px;
-      background: rgba(35, 67, 52, 0.97);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      width: min(1180px, calc(100% - 28px));
+      padding: 14px 22px 18px;
+      background: rgba(28, 54, 42, 0.97);
+      backdrop-filter: blur(16px);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 16px 44px rgba(16,36,27,0.32);
     }
     .mobile-menu.open { display: block; }
 
@@ -167,7 +162,7 @@ body {
       min-height: 420px;
       display: flex;
       align-items: flex-end;
-      padding: clamp(56px, 9vw, 110px) clamp(20px, 5vw, 64px) 52px;
+      padding: clamp(96px, 10vw, 130px) clamp(20px, 5vw, 64px) 52px;
       background:
         linear-gradient(90deg, rgba(35,67,52,0.72), rgba(35,67,52,0.3) 60%, rgba(35,67,52,0.1)),
         url("https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=2200&q=82") center/cover;
@@ -288,11 +283,7 @@ body {
       flex-shrink: 0;
     }
 
-    .full-width .person-avatar {
-      width: 140px;
-      height: 140px;
-      margin: 0;
-    }
+    .full-width .person-avatar { width: 140px; height: 140px; margin: 0; }
 
     .person-card h3 {
       font-family: "Fraunces", Georgia, serif;
@@ -320,7 +311,6 @@ body {
       margin-bottom: 10px;
       font-size: 0.96rem;
     }
-
     .person-card p:last-child { margin-bottom: 0; }
 
     /* ── PROGRAM TAB ────────────────────────────── */
@@ -372,17 +362,14 @@ body {
       color: var(--text);
     }
 
-    .program-copy p {
-      color: var(--muted);
-      line-height: 1.88;
-      font-size: 0.97rem;
-    }
+    .program-copy p { color: var(--muted); line-height: 1.88; font-size: 0.97rem; }
 
-    /* ── FLOATING CONTROLS ─────────────────────── */
+    /* ── FLOATING CONTROLS — moved to mid-left ──── */
     .floating-controls {
       position: fixed;
-      bottom: 80px;
-      left: 20px;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 80;
       display: flex;
       flex-direction: column;
@@ -429,34 +416,75 @@ body {
     .back-to-top:hover { transform: translateY(-2px); }
     .back-to-top.visible { display: flex; }
 
+    /* ── FOOTER ─────────────────────────────────── */
     footer {
-  padding: 28px clamp(16px, 4vw, 48px);
-  background: var(--green-900);
-  color: rgba(255,250,240,0.72);
-  font-size: 0.9rem;
-}
+      padding: clamp(36px, 6vw, 56px) clamp(16px, 4vw, 48px) clamp(28px, 4vw, 40px);
+      background: var(--green-900);
+      color: rgba(255,250,240,0.78);
+    }
 
-.footer-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  max-width: 1280px;
-  margin: 0 auto;
-}
+    .footer-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
 
-.footer-logos {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
+    .footer-flags {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
 
-.footer-logos img {
-  height: 100px;
-  width: auto;
-  display: block;
-}
+    .footer-flags img {
+      height: 28px;
+      width: auto;
+      border-radius: 3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    .footer-acknowledgement { text-align: center; }
+
+    .footer-statement {
+      font-size: 0.86rem;
+      line-height: 1.85;
+      color: rgba(255,250,240,0.7);
+      max-width: 680px;
+      margin: 0 auto 10px;
+    }
+    .footer-statement:last-child { margin-bottom: 0; }
+
+    .footer-divider { height: 1px; background: rgba(255,250,240,0.12); }
+
+    .footer-safety, .footer-contact {
+      text-align: center;
+      font-size: 0.86rem;
+      line-height: 1.85;
+      color: rgba(255,250,240,0.78);
+    }
+    .footer-safety p, .footer-contact p { max-width: 680px; margin: 0 auto 10px; }
+    .footer-safety p:last-child, .footer-contact p:last-child { margin-bottom: 0; }
+    .footer-safety a, .footer-contact a { color: #f8ecd8; text-decoration: underline; }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-logos { display: flex; align-items: center; gap: 18px; }
+    .footer-logos img { height: 38px; width: auto; display: block; opacity: 0.92; }
+    .footer-copyright { font-size: 0.82rem; color: rgba(255,250,240,0.6); }
+
+    @media (max-width: 600px) {
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 860px) {
       .page-hero { min-height: 340px; padding-bottom: 40px; }
@@ -485,7 +513,7 @@ body {
 
       .person-card h3 { font-size: 1.5rem; }
 
-      .floating-controls { bottom: 72px; left: 14px; }
+      .floating-controls { left: 12px; }
       .back-to-top { right: 14px; bottom: 18px; }
     }
   </style>
@@ -509,7 +537,6 @@ body {
     <a href="about.html#the-program" class="menu-sub-link">— The Program</a>
   </div>
 
-  <!-- Full-width banner hero -->
   <header class="page-hero">
     <div class="page-hero-inner">
       <p class="eyebrow">The Green Room</p>
@@ -578,20 +605,46 @@ body {
     </section>
   </main>
 
- <footer>
-  <div class="footer-inner">
+  <footer>
+    <div class="footer-inner">
 
-    <div class="footer-logos">
-      <img src="uqlogo3.png" alt="">
-      <img src="CMRGLogo.png" alt="">
+      <div class="footer-acknowledgement">
+        <div class="footer-flags">
+          <img src="AustralianFlag.png" alt="Australian flag">
+          <img src="AboriginalFlag.png" alt="Aboriginal flag">
+          <img src="TorresStraitFlag.png" alt="Torres Strait Islander flag">
+          <img src="RainbowFlag.png" alt="Pride flag">
+        </div>
+        <p class="footer-statement">The Green Room proudly operates within Australia, supporting mothers across the country with their mental health and wellbeing goals.</p>
+        <p class="footer-statement">The Green Room acknowledges Aboriginal and Torres Strait Islander peoples as the traditional owners of country throughout Australia, and their continuing connection to land, sea and community. We pay our respects to them and their cultures, and to elders both past and present.</p>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-safety">
+        <p>The Green Room is not a replacement for therapy. If you need mental health support, please talk to your doctor.</p>
+        <p><strong>If you or someone else is in immediate danger, call 000 for police and ambulance.</strong> If you are having suicidal thoughts or are feeling disorientated, it is important to get help immediately. For immediate support, call Lifeline on <a href="tel:131114">13 11 14</a> (24 hours, 7 days a week).</p>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-contact">
+        <p>We want to make this experience better for you. If you are experiencing difficulties navigating the website, or have any suggestions, contact our team at <a href="mailto:teagan.collins@uq.edu.au">teagan.collins@uq.edu.au</a>.</p>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <div class="footer-logos">
+          <img src="uqlogo3.png" alt="University of Queensland logo">
+          <img src="CMRGLogo.png" alt="Compassionate Mind Research Group logo">
+        </div>
+        <p class="footer-copyright">Copyright &copy; 2026 The Green Room. All rights reserved.</p>
+      </div>
+
     </div>
+  </footer>
 
-    <p>Copyright &copy; 2026 The Green Room. All rights reserved.</p>
-
-  </div>
-</footer>
-
-  <!-- Floating controls -->
   <div class="floating-controls">
     <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
   </div>
