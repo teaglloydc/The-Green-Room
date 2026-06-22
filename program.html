@@ -91,7 +91,7 @@
 
     /* ── FLOATING MODERN NAV ────────────────────── */
     .site-nav {
-  position: absolute; /* or fixed if you want it to stay visible while scrolling */
+  position: absolute;
   top: 20px;
   left: 0;
   right: 0;
@@ -190,7 +190,6 @@
     .menu-section-link { font-weight: 800; color: #fffbf3 !important; }
     .menu-sub-link { padding-left: 22px !important; font-size: 0.87rem !important; opacity: 0.82; }
 
-    /* ── PROGRAM INTRO HEADER ──────────────────── */
     /* ── PROGRAM INTRO HEADER ──────────────────── */
 .program-intro {
   position: relative;
@@ -503,6 +502,31 @@
 
     .audio-title { color: var(--text); font-weight: 800; font-size: 0.95rem; }
     .audio-duration { color: var(--muted); font-size: 0.88rem; }
+
+    /* ── EXERCISE BLOCK ─────────────────────────── */
+    .exercise-block {
+      margin: 28px 0;
+      padding: 24px 28px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--wood);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+    }
+
+    .exercise-block h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.55rem;
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .exercise-block p {
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 0.97rem;
+    }
 
     /* ── EMOTION TABS ───────────────────────────── */
     .emotion-tab-buttons {
@@ -973,10 +997,10 @@
     const modules = [
       { title: 'Introduction', summary: ['Who is this program for?','How can this program help me?','How do I use this program?'],
         written: 'Motherhood can be a wonderful time – but it can also be a very difficult one. If your baby arrived early, your parenting journey likely started very differently to what you expected. This program has been designed to support mothers after experiencing a preterm birth, who:\n\n are self critical,\n struggle with feelings of guilt, shame, anger, sadness or anxiety, \n struggle to be compassionate to themselves, \n find it hard to accept compassion from others, \n would like to parent with more calmness and compassion \n\n How to use this program \n There are 8 modules in this program, each touching on an important component of compassion. Each module includes an introductory video, written information and exercises. As you complete each module, you will unlock the next. You can move through the modules at your own pace, and revisit any module whenever you like. We recommend setting aside regular time to work through the program, and to practice the exercises each week. \n\n If you have any questions or feedback about the program, please contact via email at teagan.collins@uq.edu.au.',
-        audio: 'Guided audio — Introduction', 
+        audio: 'Guided audio — Introduction',
         audioImage: "Introduction.png" },
       { title: 'Motherhood and the brain', summary: ['How does motherhood change the brain?','How do these changes impact me after preterm birth?','How can these changes impact my mental health?'],
-        written: 'Have you noticed any changes since giving birth? \n\n Many mothers describe experiences such as: \n Increased sensitivy to threat: XYZ \n Increased social awareness: XYZ \n A strong need for a village: XYZ \n\n These changes are not random. During pregnancy and after birth, the brain naturally adapts to support caregiving. It becomes more tuned in to your little ones needs, helping you notice, respond and care for them. \n While these changes help us care for our children, they can also make us more emotionally affected by challenges involving your baby. After preterm birth, these changes often occur alongside a lot of stress and uncertainty. Many mothers find themselves constantly monitoring their baby\'s wellbeing, feeling overwhelmed by information, or struggling to relax even when things are going well. \n\n Research shows that mothers of babies born preterm are at a higher risk of difficulties such as depression, anxiety and stress. These are comon responses to such a traumatic experience, not signs that you are doing anything wrong.', audio: 'Guided audio — Motherhood and the brain', audioImage: "Mindfulness2.png" }, 
+        written: 'Have you noticed any changes since giving birth? \n\n Many mothers describe experiences such as: \n Increased sensitivy to threat: XYZ \n Increased social awareness: XYZ \n A strong need for a village: XYZ \n\n These changes are not random. During pregnancy and after birth, the brain naturally adapts to support caregiving. It becomes more tuned in to your little ones needs, helping you notice, respond and care for them. \n While these changes help us care for our children, they can also make us more emotionally affected by challenges involving your baby. After preterm birth, these changes often occur alongside a lot of stress and uncertainty. Many mothers find themselves constantly monitoring their baby\'s wellbeing, feeling overwhelmed by information, or struggling to relax even when things are going well. \n\n Research shows that mothers of babies born preterm are at a higher risk of difficulties such as depression, anxiety and stress. These are comon responses to such a traumatic experience, not signs that you are doing anything wrong.', audio: 'Guided audio — Motherhood and the brain', audioImage: "Mindfulness2.png" },
       { title: 'Compassion and our tricky brains', summary: ['What is Tricky Brain?','How can my tricky brain impact me after preterm birth?','What is compassion?','How can compassion help?'],
         written: 'Your written content for module 3 will go here.', audio: 'Guided audio — Compassion and our tricky brains', audioImage: "sooth2.png" },
       { title: 'Our three circles', summary: ['What are the three circles?','Add overview here','Add overview here','Add overview here'],
@@ -1025,30 +1049,52 @@
         const num = i + 1;
         const isLast = num === TOTAL_MODULES;
 
-        const audioSection = m.emotions ? `
-          <div class="emotion-tab-buttons">
-            <button class="emotion-tab-btn active" onclick="showEmotion(event,'anger')">Anger</button>
-            <button class="emotion-tab-btn" onclick="showEmotion(event,'sadness')">Sadness</button>
-            <button class="emotion-tab-btn" onclick="showEmotion(event,'anxiety')">Anxiety</button>
-          </div>
-          <div class="emotion-tab-content active" id="emotion-anger">
-            <div class="content-block written-block"><h3>Working with anger</h3><p>Your written content about working with anger will go here.</p></div>
-            <div class="audio-placeholder"><img class="audio-thumb" src="Anger.png" alt=""><div><div class="audio-title">Guided audio — Anger</div><div class="audio-duration">Audio will be added here</div></div></div>
-          </div>
-          <div class="emotion-tab-content" id="emotion-sadness">
-            <div class="content-block written-block"><h3>Working with sadness</h3><p>Your written content about working with sadness will go here.</p></div>
-            <div class="audio-placeholder"><img class="audio-thumb" src="Sadness.png" alt=""><div><div class="audio-title">Guided audio — Sadness</div><div class="audio-duration">Audio will be added here</div></div></div>
-          </div>
-          <div class="emotion-tab-content" id="emotion-anxiety">
-            <div class="content-block written-block"><h3>Working with anxiety</h3><p>Your written content about working with anxiety will go here.</p></div>
-            <div class="audio-placeholder"><img class="audio-thumb" src="Anxiety.png" alt=""><div><div class="audio-title">Guided audio — Anxiety</div><div class="audio-duration">Audio will be added here</div></div></div>
-          </div>
-        ` : `
-          <div class="content-block">
-            <h3>Audio practice</h3>
-            <div class="audio-placeholder"><img class="audio-thumb" src="${m.audioImage}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>
+        /* ── Exercise block — used by every module ── */
+        const exerciseBlock = `
+          <div class="exercise-block">
+            <h3>Try this quick exercise</h3>
+            <p>Your exercise for module ${num} will go here.</p>
           </div>
         `;
+
+        /* ── Build the content section after the divider ── */
+        let audioSection;
+
+        if (m.emotions) {
+          /* Module 7 — emotion tabs + exercise */
+          audioSection = `
+            <div class="emotion-tab-buttons">
+              <button class="emotion-tab-btn active" onclick="showEmotion(event,'anger')">Anger</button>
+              <button class="emotion-tab-btn" onclick="showEmotion(event,'sadness')">Sadness</button>
+              <button class="emotion-tab-btn" onclick="showEmotion(event,'anxiety')">Anxiety</button>
+            </div>
+            <div class="emotion-tab-content active" id="emotion-anger">
+              <div class="content-block written-block"><h3>Working with anger</h3><p>Your written content about working with anger will go here.</p></div>
+              <div class="audio-placeholder"><img class="audio-thumb" src="Anger.png" alt=""><div><div class="audio-title">Guided audio — Anger</div><div class="audio-duration">Audio will be added here</div></div></div>
+            </div>
+            <div class="emotion-tab-content" id="emotion-sadness">
+              <div class="content-block written-block"><h3>Working with sadness</h3><p>Your written content about working with sadness will go here.</p></div>
+              <div class="audio-placeholder"><img class="audio-thumb" src="Sadness.png" alt=""><div><div class="audio-title">Guided audio — Sadness</div><div class="audio-duration">Audio will be added here</div></div></div>
+            </div>
+            <div class="emotion-tab-content" id="emotion-anxiety">
+              <div class="content-block written-block"><h3>Working with anxiety</h3><p>Your written content about working with anxiety will go here.</p></div>
+              <div class="audio-placeholder"><img class="audio-thumb" src="Anxiety.png" alt=""><div><div class="audio-title">Guided audio — Anxiety</div><div class="audio-duration">Audio will be added here</div></div></div>
+            </div>
+            ${exerciseBlock}
+          `;
+        } else if (num <= 2) {
+          /* Modules 1 & 2 — no audio, just exercise */
+          audioSection = exerciseBlock;
+        } else {
+          /* Modules 3–6, 8 — audio practice + exercise */
+          audioSection = `
+            <div class="content-block">
+              <h3>Audio practice</h3>
+              <div class="audio-placeholder"><img class="audio-thumb" src="${m.audioImage}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>
+            </div>
+            ${exerciseBlock}
+          `;
+        }
 
         return `
           <section class="module-section ${i === 0 ? 'active' : ''}" id="module-${num}">
