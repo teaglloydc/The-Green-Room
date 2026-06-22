@@ -1004,7 +1004,7 @@
       { title: 'Compassion and our tricky brains', summary: ['What is Tricky Brain?','How can my tricky brain impact me after preterm birth?','What is compassion?','How can compassion help?'],
         written: 'Your written content for module 3 will go here.', audio: 'Guided audio — Compassion and our tricky brains', audioImage: "sooth2.png" },
       { title: 'Our three circles', summary: ['What are the three circles?','Add overview here','Add overview here','Add overview here'],
-        written: 'Your written content for module 4 will go here.', audio: 'Guided audio — Our three circles', audioImage: "SoothingRythm.png" },
+        written: 'Your written content for module 4 will go here.', audio: 'Guided audio — Our three circles', audioImage: "SoothingRythm.png", exerciseTitle: 'Try this quick exercise',exercise: 'exercise content here' },
       { title: 'Working with your inner critic', summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
         written: 'Your written content for module 5 will go here.', audio: 'Guided audio — Working with your inner critic', audioImage: "TrickyBrains.png" },
       { title: 'Building your compassionate self', summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
@@ -1045,18 +1045,12 @@
         `).join('')}
       `;
 
-      mainContent.innerHTML = modules.map((m, i) => {
-        const num = i + 1;
-        const isLast = num === TOTAL_MODULES;
-
-        /* ── Exercise block — used by every module ── */
-        const exerciseBlock = `
-          <div class="exercise-block">
-            <h3>Try this quick exercise</h3>
-            <p>Your exercise for module ${num} will go here.</p>
-          </div>
-        `;
-
+      const exerciseBlock = `
+  <div class="exercise-block">
+    <h3>${m.exerciseTitle || "Try this quick exercise"}</h3>
+    ${m.exercise || ""}
+  </div>
+`;
         /* ── Build the content section after the divider ── */
         let audioSection;
 
