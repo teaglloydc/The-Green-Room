@@ -1006,7 +1006,7 @@
       { title: 'Our three circles', summary: ['What are the three circles?','Add overview here','Add overview here','Add overview here'],
         written: 'Your written content for module 4 will go here.', audio: 'Guided audio — Our three circles', audioImage: "SoothingRythm.png", exerciseTitle: 'Try this quick exercise',exercise: 'exercise content here' },
       { title: 'Working with your inner critic', summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
-        written: 'Your written content for module 5 will go here.', audio: 'Guided audio — Working with your inner critic', audioImage: "TrickyBrains.png", exerciseTitle: 'Try this quick exercise',exercise: 'exercise content here' },
+        written: 'Your written content for module 5 will go here.', audio: 'Guided audio — Working with your inner critic', audioImage: "TrickyBrains.png" },
       { title: 'Building your compassionate self', summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
         written: 'Your written content for module 6 will go here.', audio: 'Guided audio — Building your compassionate self', audioImage: "CompassionateSelf.png" },
       { title: 'Working with complex emotions', summary: ['Add overview here','Add overview here','Add overview here','Specific practices for each emotion'],
@@ -1045,10 +1045,14 @@
         `).join('')}
       `;
 
-      const exerciseBlock = `
+      mainContent.innerHTML = modules.map((m, i) => {
+        const num = i + 1;
+        const isLast = num === TOTAL_MODULES;
+
+       const exerciseBlock = `
   <div class="exercise-block">
-    <h3>${m.exerciseTitle || "Try this quick exercise"}</h3>
-    ${m.exercise || ""}
+    <h3>Try this quick exercise</h3>
+    ${m.exercise || ''}
   </div>
 `;
         /* ── Build the content section after the divider ── */
