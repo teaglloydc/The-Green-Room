@@ -350,6 +350,22 @@
     .module-section { display: none; }
     .module-section.active { display: block; }
 
+    .written-content p {
+  color: var(--muted);
+  line-height: 1.85;
+  margin-bottom: 12px;
+  font-size: 0.97rem;
+}
+
+.written-content ul {
+  margin: 10px 0 16px 20px;
+  color: var(--muted);
+}
+
+.written-content li {
+  margin-bottom: 6px;
+}
+
     .module-card-shell {
       padding: clamp(22px, 4vw, 48px);
       background: var(--surface);
@@ -1116,7 +1132,7 @@
 
               <div class="content-block written-block">
                 <h3></h3>
-                <p style="white-space: pre-line;">${m.written}</p>
+                <div class="written-content">${m.written}</div>
               </div>
 
               <div class="section-divider"></div>
