@@ -519,30 +519,157 @@
     .audio-title { color: var(--text); font-weight: 800; font-size: 0.95rem; }
     .audio-duration { color: var(--muted); font-size: 0.88rem; }
 
-    /* ── EXERCISE BLOCK ─────────────────────────── */
+    /* ── CHANGE 1: MULTIPLE AUDIO OPTIONS ───────── */
+    .audio-options { display: grid; gap: 10px; }
+
+    .audio-choose-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--wood-dark);
+      margin-bottom: 2px;
+      margin-top: 4px;
+    }
+
+    /* ── CHANGE 2: CIRCLE DEFINITION BUBBLES ────── */
+    .circle-defs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0 28px;
+    }
+
+    .circle-bubble {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      box-shadow: 0 3px 12px rgba(16,36,27,0.1);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+
+    .circle-bubble:hover { box-shadow: 0 5px 20px rgba(16,36,27,0.18); }
+
+    .circle-bubble-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 0.86rem;
+      color: #fffbf3;
+      user-select: none;
+      line-height: 1.3;
+    }
+
+    .bubble-arrow {
+      font-size: 11px;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+      opacity: 0.9;
+      display: inline-block;
+    }
+
+    .circle-bubble.open .bubble-arrow { transform: rotate(180deg); }
+
+    .circle-bubble-body {
+      display: none;
+      padding: 14px 16px 18px;
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .circle-bubble-body p { margin-bottom: 8px; }
+    .circle-bubble-body p:last-child { margin-bottom: 0; }
+
+    .circle-bubble.open .circle-bubble-body { display: block; }
+
+    .circle-bubble.threat { border-color: var(--threat); }
+    .circle-bubble.threat .circle-bubble-header { background: var(--threat); }
+    .circle-bubble.threat .circle-bubble-body { background: rgba(184,93,82,0.06); }
+
+    .circle-bubble.drive { border-color: var(--drive); }
+    .circle-bubble.drive .circle-bubble-header { background: var(--drive); }
+    .circle-bubble.drive .circle-bubble-body { background: rgba(82,121,156,0.06); }
+
+    .circle-bubble.soothing { border-color: var(--soothing); }
+    .circle-bubble.soothing .circle-bubble-header { background: var(--soothing); }
+    .circle-bubble.soothing .circle-bubble-body { background: rgba(79,138,99,0.06); }
+
+    @media (max-width: 680px) {
+      .circle-defs { grid-template-columns: 1fr; }
+    }
+
+    /* ── CHANGE 3: COLLAPSIBLE EXERCISE BLOCK ────── */
     .exercise-block {
       margin: 28px 0;
-      padding: 24px 28px;
       border: 1px solid var(--line);
       border-left: 4px solid var(--wood);
       border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .exercise-toggle {
+      padding: 18px 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+      user-select: none;
+      transition: background 0.2s;
     }
 
-    .exercise-block h3 {
+    .exercise-toggle:hover { background: var(--surface-soft); }
+
+    .exercise-toggle h3 {
       font-family: "Fraunces", Georgia, serif;
-      font-size: 1.55rem;
+      font-size: 1.3rem;
       font-weight: 600;
-      line-height: 1.15;
-      margin-bottom: 12px;
+      line-height: 1.2;
       color: var(--text);
+      margin: 0;
     }
 
-    .exercise-block p {
+    .exercise-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .exercise-chevron {
+      font-size: 11px;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .exercise-block.open .exercise-chevron { transform: rotate(180deg); }
+
+    .exercise-body {
+      display: none;
+      padding: 18px 22px 22px;
+      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+      border-top: 1px solid var(--line);
+    }
+
+    .exercise-block.open .exercise-body { display: block; }
+
+    .exercise-body p {
       color: var(--muted);
       line-height: 1.85;
       font-size: 0.97rem;
+      margin-bottom: 10px;
     }
+    .exercise-body p:last-child { margin-bottom: 0; }
 
     /* ── EMOTION TABS ───────────────────────────── */
     .emotion-tab-buttons {
@@ -1037,6 +1164,7 @@
 `,
         audio: 'Guided audio — Introduction',
         audioImage: "Introduction.png" },
+
       { title: 'Motherhood and the brain', summary: ['How does motherhood change the brain?','How do these changes impact me after preterm birth?','How can these changes impact my mental health?'],
         written:`
 <p>Have you noticed any changes since giving birth?</p>
@@ -1049,7 +1177,7 @@
   <li>A strong need for a village: XYZ</li>
 </ul>
 
-<p>These changes are not random. During pregnancy and after birth, the brain naturally adapts to support caregiving. It becomes more tuned in to your little one’s needs, helping you notice, respond and care for them.</p>
+<p>These changes are not random. During pregnancy and after birth, the brain naturally adapts to support caregiving. It becomes more tuned in to your little one's needs, helping you notice, respond and care for them.</p>
 
 <p>While these changes help us care for our children, they can also make us more emotionally affected by challenges involving your baby.</p>
 
@@ -1060,7 +1188,9 @@
 `, 
     audio: 'Guided audio — Motherhood and the brain', 
     audioImage: "Mindfulness2.png",
-   exerciseTitle: 'Try this quick exercise', exercise: 'exercise content here' },
+    exerciseTitle: 'Try this quick exercise',
+    exercise: '<p>exercise content here</p>' },
+
       { title: 'Compassion and our tricky brains', summary: ['What is Tricky Brain?','How can my tricky brain impact me after preterm birth?','What is compassion?','How can compassion help?'],
         written: `
 <p>Our brains evolved over millions of years to help us survive. Part of our brain is designed to quickly detect danger and protect us from harm. This threat system helped our ancestors survive predators, find food and stay safe.</p>
@@ -1071,15 +1201,15 @@
 
 <p>This is what we call the <strong>tricky brain</strong>. When it gets stuck in these patterns, it can lead to distress such as anxiety, anger and sadness, or self-conscious emotions like guilt or shame. This is not a flaw. It is simply how the mind is designed.</p>
 
-<p>After a preterm birth, your brain has been faced with a very real threat: concerns about your baby’s health, survival and future. It is completely understandable if your mind has stayed on high alert.</p>
+<p>After a preterm birth, your brain has been faced with a very real threat: concerns about your baby's health, survival and future. It is completely understandable if your mind has stayed on high alert.</p>
 
 <p>This might look like:</p>
 
 <ul>
-  <li>Constantly checking your baby’s breathing, feeding or behaviour</li>
+  <li>Constantly checking your baby's breathing, feeding or behaviour</li>
   <li>Finding it hard to switch off from worries, even when things are going well</li>
   <li>Comparing yourself or your baby to other families</li>
-  <li>Self-critical thoughts such as “I should be coping better” or “I’m not doing enough”</li>
+  <li>Self-critical thoughts such as "I should be coping better" or "I'm not doing enough"</li>
 </ul>
 
 <p>These reactions can be exhausting, but they are not signs that you are failing. They are the result of a brain trying its best to protect you and your baby.</p>
@@ -1096,8 +1226,35 @@
 `,
    audio: 'Guided audio — Compassion and our tricky brains', 
    audioImage: "sooth2.png",
-  exerciseTitle: 'Try this quick exercise', exercise: 'exercise content here' },
-      { title: 'Our three circles', summary: ['What are the three circles?','Add overview here','Add overview here','Add overview here'],
+   /* CHANGE 1: three duration options — edit titles and add file paths when ready */
+   audioOptions: [
+     { label: '2 min', title: 'Compassion and our tricky brains — 2 min practice', file: '' },
+     { label: '5 min', title: 'Compassion and our tricky brains — 5 min practice', file: '' },
+     { label: '10 min', title: 'Compassion and our tricky brains — 10 min practice', file: '' }
+   ],
+   exerciseTitle: 'Try this quick exercise',
+   exercise: '<p>exercise content here</p>' },
+
+      { title: 'Our three circles',
+        summary: ['What are the three circles?','Add overview here','Add overview here','Add overview here'],
+        /* CHANGE 2: circle definition bubbles — edit content for each system here */
+        circleDefs: [
+          {
+            system: 'threat',
+            label: 'Threat — Protection',
+            content: '<p>Write your definition of the threat system here. Explain what it does, when it activates, and how it might show up after a preterm birth.</p>'
+          },
+          {
+            system: 'drive',
+            label: 'Drive — Motivation',
+            content: '<p>Write your definition of the drive system here. Explain what it does, when it activates, and how it might show up after a preterm birth.</p>'
+          },
+          {
+            system: 'soothing',
+            label: 'Soothing — Contentment',
+            content: '<p>Write your definition of the soothing system here. Explain what it does, when it activates, and how it might show up after a preterm birth.</p>'
+          }
+        ],
         written: `
 <p><strong>How preterm birth can disrupt our three circles</strong></p>
 
@@ -1107,7 +1264,7 @@
 
 <p>The red circle helps keep us safe by detecting danger and responding quickly to threats.</p>
 
-<p>For many mothers, the NICU can activate this system for long periods of time. Medical equipment, alarms, uncertainty, changing information and concerns about your baby’s health can signal to the brain that it needs to stay on high alert.</p>
+<p>For many mothers, the NICU can activate this system for long periods of time. Medical equipment, alarms, uncertainty, changing information and concerns about your baby's health can signal to the brain that it needs to stay on high alert.</p>
 
 <p>Even after leaving the hospital, many parents describe feeling constantly watchful, easily startled, or finding it difficult to fully relax.</p>
 
@@ -1115,7 +1272,7 @@
 
 <p>The blue circle motivates us to take action, solve problems, achieve goals and move toward things that feel important or rewarding.</p>
 
-<p>After birth, this system is strongly influenced by hormonal changes such as oxytocin, which shifts the brain’s reward system to prioritise caring for and protecting your baby.</p>
+<p>After birth, this system is strongly influenced by hormonal changes such as oxytocin, which shifts the brain's reward system to prioritise caring for and protecting your baby.</p>
 
 <p>After a preterm birth, this can become especially intense and focused on helping your baby grow and thrive.</p>
 
@@ -1133,10 +1290,19 @@
 
 <p>The goal is not to stay in the green circle all the time. Instead, it is about noticing when your red or blue circles have been working hard and gently creating opportunities to return to your green circle.</p>
 `,
-audio: 'Guided audio — Our three circles', 
-audioImage: "SoothingRythm.png", 
-exerciseTitle: 'Try this quick exercise',exercise: 'exercise content here' },
-      { title: 'Working with your inner critic', summary: ['What is self-criticism?','How can it impact me after preterm birth?','Why does the inner critic show up?','How do I shift towards compassion?'],
+        audio: 'Guided audio — Our three circles',
+        audioImage: "SoothingRythm.png",
+        /* CHANGE 1: three duration options */
+        audioOptions: [
+          { label: '2 min', title: 'Our three circles — 2 min practice', file: '' },
+          { label: '5 min', title: 'Our three circles — 5 min practice', file: '' },
+          { label: '10 min', title: 'Our three circles — 10 min practice', file: '' }
+        ],
+        exerciseTitle: 'Try this quick exercise',
+        exercise: '<p>exercise content here</p>' },
+
+      { title: 'Working with your inner critic',
+        summary: ['What is self-criticism?','How can it impact me after preterm birth?','Why does the inner critic show up?','How do I shift towards compassion?'],
         written: `
 <p><strong>What is self-criticism?</strong></p>
 
@@ -1151,10 +1317,10 @@ exerciseTitle: 'Try this quick exercise',exercise: 'exercise content here' },
 <p>After a preterm birth, many mothers notice self-critical thoughts such as:</p>
 
 <ul>
-  <li>“My body failed my baby.”</li>
-  <li>“I should have known what to do.”</li>
-  <li>“I should have done something differently.”</li>
-  <li>“Other families are being discharged before us.”</li>
+  <li>"My body failed my baby."</li>
+  <li>"I should have known what to do."</li>
+  <li>"I should have done something differently."</li>
+  <li>"Other families are being discharged before us."</li>
 </ul>
 
 <p>You might also find yourself criticising your emotions, your parenting decisions, or even the thoughts you have about your baby or your experience.</p>
@@ -1173,11 +1339,19 @@ exerciseTitle: 'Try this quick exercise',exercise: 'exercise content here' },
 
 <p>In the next module, we will begin exploring how to develop this more compassionate way of relating to yourself.</p>
 `,
-audio: 'Guided audio — Working with your inner critic', 
-audioImage: "TrickyBrains.png", 
-exerciseTitle: 'Try this quick exercise',
-exercise: 'exercise content here' },
-      { title: 'Building your compassionate self', summary: ['What is the compassionate self?','Why is it important?','How do I develop my compassionate self after preterm birth?'],
+        audio: 'Guided audio — Working with your inner critic',
+        audioImage: "TrickyBrains.png",
+        /* CHANGE 1: three duration options */
+        audioOptions: [
+          { label: '2 min', title: 'Working with your inner critic — 2 min practice', file: '' },
+          { label: '5 min', title: 'Working with your inner critic — 5 min practice', file: '' },
+          { label: '10 min', title: 'Working with your inner critic — 10 min practice', file: '' }
+        ],
+        exerciseTitle: 'Try this quick exercise',
+        exercise: '<p>exercise content here</p>' },
+
+      { title: 'Building your compassionate self',
+        summary: ['What is the compassionate self?','Why is it important?','How do I develop my compassionate self after preterm birth?'],
         written: `
 <p><strong>What is the compassionate self?</strong></p>
 
@@ -1210,31 +1384,78 @@ exercise: 'exercise content here' },
 
 <p><strong>Then connect with three qualities:</strong></p>
 
-<p><strong>Wisdom:</strong> “This is not my fault, but it is my responsibility.”</p>
+<p><strong>Wisdom:</strong> "This is not my fault, but it is my responsibility."</p>
 
-<p><strong>Strength:</strong> “I can stay steady through this. I can cope with what arises. I have emotional courage.”</p>
+<p><strong>Strength:</strong> "I can stay steady through this. I can cope with what arises. I have emotional courage."</p>
 
-<p><strong>Care:</strong> “What would be most helpful right now for me and my baby?”</p>
+<p><strong>Care:</strong> "What would be most helpful right now for me and my baby?"</p>
 
 <p>Over time, this becomes a way of meeting difficulty with compassion rather than self-criticism or overwhelm.</p>
 `,
+        audio: 'Guided audio — Building your compassionate self',
+        audioImage: "CompassionateSelf.png",
+        /* CHANGE 1: three duration options */
+        audioOptions: [
+          { label: '2 min', title: 'Building your compassionate self — 2 min practice', file: '' },
+          { label: '5 min', title: 'Building your compassionate self — 5 min practice', file: '' },
+          { label: '10 min', title: 'Building your compassionate self — 10 min practice', file: '' }
+        ],
+        exerciseTitle: 'Try this quick exercise',
+        exercise: '<p>exercise content here</p>' },
 
-audio: 'Guided audio — Building your compassionate self', 
-audioImage: "CompassionateSelf.png", 
-exerciseTitle: 'Try this quick exercise',
-exercise: 'exercise content here'},
-      { title: 'Working with complex emotions', summary: ['Add overview here','Add overview here','Add overview here','Specific practices for each emotion'],
-        written:  `
+      { title: 'Working with complex emotions',
+        summary: ['Add overview here','Add overview here','Add overview here','Specific practices for each emotion'],
+        written: `
 <p>It is completely normal to experience a wide range of emotions after preterm birth. You may feel joy at finally meeting your baby, while also experiencing distressing or unexpected emotions at the same time.</p>
 
 <p>Some mothers notice feeling many emotions at once. Others feel emotionally numb or disconnected, especially in the early stages when everything feels overwhelming or fast-moving. Delayed emotional responses are also common.</p>
 
 <p>All of these emotional responses are part of being human in a situation that is emotionally and physically demanding. Over time, learning to notice and respond to your emotions with compassion can help reduce overwhelm and support your wellbeing.</p>
- `,
-  audio: 'Guided audio — Working with complex emotions', 
-  emotions: true },
-      { title: 'Next steps', summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
-        written: 'Your written content for module 8 will go here.', audio: 'Guided audio — Next steps' }
+`,
+        audio: 'Guided audio — Working with complex emotions',
+        emotions: true,
+        /* CHANGE 1: per-emotion three duration options — edit titles and add file paths when ready */
+        emotionOptions: {
+          anger: {
+            image: 'Anger.png',
+            options: [
+              { label: '2 min', title: 'Working with anger — 2 min practice', file: '' },
+              { label: '5 min', title: 'Working with anger — 5 min practice', file: '' },
+              { label: '10 min', title: 'Working with anger — 10 min practice', file: '' }
+            ]
+          },
+          sadness: {
+            image: 'Sadness.png',
+            options: [
+              { label: '2 min', title: 'Working with sadness — 2 min practice', file: '' },
+              { label: '5 min', title: 'Working with sadness — 5 min practice', file: '' },
+              { label: '10 min', title: 'Working with sadness — 10 min practice', file: '' }
+            ]
+          },
+          anxiety: {
+            image: 'Anxiety.png',
+            options: [
+              { label: '2 min', title: 'Working with anxiety — 2 min practice', file: '' },
+              { label: '5 min', title: 'Working with anxiety — 5 min practice', file: '' },
+              { label: '10 min', title: 'Working with anxiety — 10 min practice', file: '' }
+            ]
+          }
+        },
+        exerciseTitle: 'Try this quick exercise',
+        exercise: '<p>exercise content here</p>' },
+
+      { title: 'Next steps',
+        summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
+        written: 'Your written content for module 8 will go here.',
+        audio: 'Guided audio — Next steps',
+        audioImage: '',
+        /* CHANGE 1: three duration options */
+        audioOptions: [
+          { label: '2 min', title: 'Next steps — 2 min practice', file: '' },
+          { label: '5 min', title: 'Next steps — 5 min practice', file: '' },
+          { label: '10 min', title: 'Next steps — 10 min practice', file: '' }
+        ],
+        exercise: '<p>exercise content here</p>' }
     ];
 
     const TOTAL_MODULES = modules.length;
@@ -1271,17 +1492,45 @@ exercise: 'exercise content here'},
         const num = i + 1;
         const isLast = num === TOTAL_MODULES;
 
-       const exerciseBlock = `
-  <div class="exercise-block">
-    <h3>Try this quick exercise</h3>
-    ${m.exercise || ''}
-  </div>
-`;
+        /* CHANGE 3: collapsible exercise block — edit m.exercise per module in the data above */
+        const exerciseBlock = `
+          <div class="exercise-block" id="exercise-mod-${num}">
+            <div class="exercise-toggle" onclick="toggleExercise('exercise-mod-${num}')">
+              <h3>Try this quick exercise</h3>
+              <span class="exercise-hint">Tap to open <span class="exercise-chevron">▾</span></span>
+            </div>
+            <div class="exercise-body">
+              ${m.exercise || '<p>Exercise content will be added here.</p>'}
+            </div>
+          </div>
+        `;
+
+        /* CHANGE 1: helper to render multi-duration audio tiles */
+        const renderAudioOptions = (opts, img) => `
+          <div class="audio-options">
+            <p class="audio-choose-label">Choose a practice length</p>
+            ${opts.map(opt => `
+              <div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);">
+                <img class="audio-thumb" src="${img || ''}" alt="">
+                <div>
+                  <div class="audio-title">${opt.title}</div>
+                  <div class="audio-duration">${opt.label} · Audio will be added here</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+
         /* ── Build the content section after the divider ── */
         let audioSection;
 
         if (m.emotions) {
-          /* Module 7 — emotion tabs + exercise */
+          /* Module 7 — emotion tabs with 3-duration audio each + exercise */
+          const eo = m.emotionOptions || {};
+          const renderEmotionAudio = (key) => eo[key]
+            ? renderAudioOptions(eo[key].options, eo[key].image)
+            : '<div class="audio-placeholder"><div><div class="audio-title">Audio will be added here</div></div></div>';
+
           audioSection = `
             <div class="emotion-tab-buttons">
               <button class="emotion-tab-btn active" onclick="showEmotion(event,'anger')">Anger</button>
@@ -1293,27 +1542,27 @@ exercise: 'exercise content here'},
 
 Anger can show up as frustration, blame, or feeling upset that this experience has happened to you. It may also be directed toward how others respond or how the situation is being managed.
 </p></div>
-              <div class="audio-placeholder"><img class="audio-thumb" src="Anger.png" alt=""><div><div class="audio-title">Guided audio — Anger</div><div class="audio-duration">Audio will be added here</div></div></div>
+              ${renderEmotionAudio('anger')}
             </div>
             <div class="emotion-tab-content" id="emotion-sadness">
-              <div class="content-block written-block"><h3>Sadness</h3><p>
+              <div class="content-block written-block"><h3>Sadness</h3>
 
 <p>Sadness can bring feelings of loss, grief, loneliness, or vulnerability. It often slows us down and can support us in seeking comfort, care, and connection.</p>
 
 <p>After preterm birth, sadness often reflects grief and loss. This may include grieving the birth experience you expected, the end of your pregnancy, or the loss of a typical newborn experience. Many mothers also grieve the gap between what they imagined and what has unfolded.</p>
 
-<p>It is also normal to feel sadness as part of adjusting to an experience that feels overwhelming, uncertain, or unfamiliar.</p></p></div>
-              <div class="audio-placeholder"><img class="audio-thumb" src="Sadness.png" alt=""><div><div class="audio-title">Guided audio — Sadness</div><div class="audio-duration">Audio will be added here</div></div></div>
+<p>It is also normal to feel sadness as part of adjusting to an experience that feels overwhelming, uncertain, or unfamiliar.</p></div>
+              ${renderEmotionAudio('sadness')}
             </div>
             <div class="emotion-tab-content" id="emotion-anxiety">
-              <div class="content-block written-block"><h3>Anxiety</h3><p>
+              <div class="content-block written-block"><h3>Anxiety</h3>
 
-<p>Anxiety often shows up as nervousness, fear, or “what if” thinking. It can create urges to stay alert, seek information, or focus on protecting your baby from possible threat.</p>
+<p>Anxiety often shows up as nervousness, fear, or "what if" thinking. It can create urges to stay alert, seek information, or focus on protecting your baby from possible threat.</p>
 
 <p>After preterm birth, anxiety is often linked to concerns about your baby's health, development, and wellbeing. It may show up as hypervigilance, constantly checking monitors, closely monitoring feeds or behaviours, seeking information, or finding it difficult to relax even when things are going well.</p>
 
-<p>While these reactions can be exhausting, they are often signs of a mind that is working hard to protect a baby it cares deeply about.</p></p></div>
-              <div class="audio-placeholder"><img class="audio-thumb" src="Anxiety.png" alt=""><div><div class="audio-title">Guided audio — Anxiety</div><div class="audio-duration">Audio will be added here</div></div></div>
+<p>While these reactions can be exhausting, they are often signs of a mind that is working hard to protect a baby it cares deeply about.</p></div>
+              ${renderEmotionAudio('anxiety')}
             </div>
             ${exerciseBlock}
           `;
@@ -1321,15 +1570,34 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
           /* Modules 1 & 2 — no audio, just exercise */
           audioSection = exerciseBlock;
         } else {
-          /* Modules 3–6, 8 — audio practice + exercise */
+          /* Modules 3–6, 8 — CHANGE 1: 3-duration audio + exercise */
+          const audioHTML = m.audioOptions
+            ? renderAudioOptions(m.audioOptions, m.audioImage)
+            : `<div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);"><img class="audio-thumb" src="${m.audioImage || ''}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>`;
+
           audioSection = `
             <div class="content-block">
               <h3>Audio practice</h3>
-              <div class="audio-placeholder"><img class="audio-thumb" src="${m.audioImage}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>
+              ${audioHTML}
             </div>
             ${exerciseBlock}
           `;
         }
+
+        /* CHANGE 2: circle definition bubbles for module 4 */
+        const circleBubblesHTML = m.circleDefs ? `
+          <div class="circle-defs">
+            ${m.circleDefs.map(def => `
+              <div class="circle-bubble ${def.system}" onclick="this.classList.toggle('open')">
+                <div class="circle-bubble-header">
+                  ${def.label}
+                  <span class="bubble-arrow">▾</span>
+                </div>
+                <div class="circle-bubble-body">${def.content}</div>
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
 
         return `
           <section class="module-section ${i === 0 ? 'active' : ''}" id="module-${num}">
@@ -1350,6 +1618,8 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               <div class="video-placeholder">
                 <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
               </div>
+
+              ${circleBubblesHTML}
 
               <div class="content-block written-block">
                 <h3></h3>
@@ -1381,6 +1651,11 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
           </section>
         `;
       }).join('');
+    }
+
+    /* CHANGE 3: toggle collapsible exercise block */
+    function toggleExercise(id) {
+      document.getElementById(id).classList.toggle('open');
     }
 
     /* ── DARK MODE ──────────────────────────────── */
