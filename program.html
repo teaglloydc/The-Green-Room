@@ -519,7 +519,7 @@
     .audio-title { color: var(--text); font-weight: 800; font-size: 0.95rem; }
     .audio-duration { color: var(--muted); font-size: 0.88rem; }
 
-    /* ── CHANGE 1: MULTIPLE AUDIO OPTIONS ───────── */
+    /* ── MULTIPLE AUDIO OPTIONS ───────── */
     .audio-options { display: grid; gap: 10px; }
 
     .audio-choose-label {
@@ -532,13 +532,19 @@
       margin-top: 4px;
     }
 
-    /* ── CHANGE 2: CIRCLE DEFINITION BUBBLES ────── */
+    /* ── CIRCLE DEFINITION BUBBLES — CHANGE: now vertical, one per row ── */
     .circle-defs {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
       margin: 20px 0 28px;
     }
+
+    /* Each system block: bubble header + body + preterm text below */
+    .circle-def-group {
+      margin-bottom: 28px;
+    }
+    .circle-def-group:last-child { margin-bottom: 0; }
 
     .circle-bubble {
       border-radius: 14px;
@@ -599,11 +605,20 @@
     .circle-bubble.soothing .circle-bubble-header { background: var(--soothing); }
     .circle-bubble.soothing .circle-bubble-body { background: rgba(79,138,99,0.06); }
 
-    @media (max-width: 680px) {
-      .circle-defs { grid-template-columns: 1fr; }
+    /* Preterm text that sits below each bubble */
+    .circle-preterm {
+      padding: 16px 4px 0;
     }
 
-    /* ── CHANGE 3: COLLAPSIBLE EXERCISE BLOCK ────── */
+    .circle-preterm p {
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 12px;
+      font-size: 0.97rem;
+    }
+    .circle-preterm p:last-child { margin-bottom: 0; }
+
+    /* ── COLLAPSIBLE EXERCISE BLOCK ────── */
     .exercise-block {
       margin: 28px 0;
       border: 1px solid var(--line);
@@ -1226,7 +1241,6 @@
 `,
    audio: 'Guided audio — Compassion and our tricky brains', 
    audioImage: "sooth2.png",
-   /* CHANGE 1: three duration options — edit titles and add file paths when ready */
    audioOptions: [
      { label: '2 min', title: 'Compassion and our tricky brains — 2 min practice', file: '' },
      { label: '5 min', title: 'Compassion and our tricky brains — 5 min practice', file: '' },
@@ -1237,62 +1251,44 @@
 
       { title: 'Our three circles',
         summary: ['What are the three circles?','Add overview here','Add overview here','Add overview here'],
-        /* CHANGE 2: circle definition bubbles — edit content for each system here */
+        /*
+         * CHANGE: circleDefs now has two fields per system:
+         *   content  — the definition shown inside the collapsible bubble
+         *   preterm  — the explanatory text shown below the bubble
+         * Edit both fields freely.
+         */
         circleDefs: [
           {
             system: 'threat',
-            label: 'Threat — Protection',
-            content: '<p>Write your definition of the threat system here. Explain what it does, when it activates, and how it might show up after a preterm birth.</p>'
+            label: 'The Red Circle — Threat and Protection',
+            content: '<p>Write your definition of the threat system here. Explain what it does and when it activates.</p>',
+            preterm: `<p>The red circle helps keep us safe by detecting danger and responding quickly to threats.</p>
+<p>For many mothers, the NICU can activate this system for long periods of time. Medical equipment, alarms, uncertainty, changing information and concerns about your baby's health can signal to the brain that it needs to stay on high alert.</p>
+<p>Even after leaving the hospital, many parents describe feeling constantly watchful, easily startled, or finding it difficult to fully relax.</p>`
           },
           {
             system: 'drive',
-            label: 'Drive — Motivation',
-            content: '<p>Write your definition of the drive system here. Explain what it does, when it activates, and how it might show up after a preterm birth.</p>'
+            label: 'The Blue Circle — Doing, Achieving and Reward',
+            content: '<p>Write your definition of the drive system here. Explain what it does and when it activates.</p>',
+            preterm: `<p>The blue circle motivates us to take action, solve problems, achieve goals and move toward things that feel important or rewarding.</p>
+<p>After birth, this system is strongly influenced by hormonal changes such as oxytocin, which shifts the brain's reward system to prioritise caring for and protecting your baby.</p>
+<p>After a preterm birth, this can become especially intense and focused on helping your baby grow and thrive.</p>
+<p>This might look like researching large amounts of information, closely tracking feeds, milk supply, weight gain, developmental milestones, appointments and medical updates.</p>
+<p>While this system is incredibly important for helping us take action, when it becomes dominant it can leave very little space for rest, recovery or emotional pause.</p>`
           },
           {
             system: 'soothing',
-            label: 'Soothing — Contentment',
-            content: '<p>Write your definition of the soothing system here. Explain what it does, when it activates, and how it might show up after a preterm birth.</p>'
+            label: 'The Green Circle — The Soothing System',
+            content: '<p>Write your definition of the soothing system here. Explain what it does and when it activates.</p>',
+            preterm: `<p>The green circle is linked to feelings of calm, safety and connection. It helps us feel settled in our bodies and allows us to bond with and enjoy our baby.</p>
+<p>For many mothers, the green circle can feel the hardest to access after a preterm birth. Taking time to rest or prioritise self-care may feel less important compared to caring for your baby.</p>
+<p>However, moments of safety and connection are not a luxury. They are essential. They help regulate your nervous system and support your ability to be present with your baby.</p>
+<p>The goal is not to stay in the green circle all the time. Instead, it is about noticing when your red or blue circles have been working hard and gently creating opportunities to return to your green circle.</p>`
           }
         ],
-        written: `
-<p><strong>How preterm birth can disrupt our three circles</strong></p>
-
-<p>Our minds and bodies are organised into three interconnected systems that help us respond to life: threat, drive, and soothing. After a preterm birth, these systems can become highly activated in different ways.</p>
-
-<p><strong>The Red Circle: Threat and Protection</strong></p>
-
-<p>The red circle helps keep us safe by detecting danger and responding quickly to threats.</p>
-
-<p>For many mothers, the NICU can activate this system for long periods of time. Medical equipment, alarms, uncertainty, changing information and concerns about your baby's health can signal to the brain that it needs to stay on high alert.</p>
-
-<p>Even after leaving the hospital, many parents describe feeling constantly watchful, easily startled, or finding it difficult to fully relax.</p>
-
-<p><strong>The Blue Circle: Doing, Achieving and Reward</strong></p>
-
-<p>The blue circle motivates us to take action, solve problems, achieve goals and move toward things that feel important or rewarding.</p>
-
-<p>After birth, this system is strongly influenced by hormonal changes such as oxytocin, which shifts the brain's reward system to prioritise caring for and protecting your baby.</p>
-
-<p>After a preterm birth, this can become especially intense and focused on helping your baby grow and thrive.</p>
-
-<p>This might look like researching large amounts of information, closely tracking feeds, milk supply, weight gain, developmental milestones, appointments and medical updates.</p>
-
-<p>While this system is incredibly important for helping us take action, when it becomes dominant it can leave very little space for rest, recovery or emotional pause.</p>
-
-<p><strong>The Green Circle: The Soothing System</strong></p>
-
-<p>The green circle is linked to feelings of calm, safety and connection. It helps us feel settled in our bodies and allows us to bond with and enjoy our baby.</p>
-
-<p>For many mothers, the green circle can feel the hardest to access after a preterm birth. Taking time to rest or prioritise self-care may feel less important compared to caring for your baby.</p>
-
-<p>However, moments of safety and connection are not a luxury. They are essential. They help regulate your nervous system and support your ability to be present with your baby.</p>
-
-<p>The goal is not to stay in the green circle all the time. Instead, it is about noticing when your red or blue circles have been working hard and gently creating opportunities to return to your green circle.</p>
-`,
+        written: `<p>Our minds and bodies are organised into three interconnected systems that help us respond to life: threat, drive, and soothing. After a preterm birth, these systems can become highly activated in different ways. Click on each circle below to read its definition, then explore how it can show up after a preterm birth.</p>`,
         audio: 'Guided audio — Our three circles',
         audioImage: "SoothingRythm.png",
-        /* CHANGE 1: three duration options */
         audioOptions: [
           { label: '2 min', title: 'Our three circles — 2 min practice', file: '' },
           { label: '5 min', title: 'Our three circles — 5 min practice', file: '' },
@@ -1341,7 +1337,6 @@
 `,
         audio: 'Guided audio — Working with your inner critic',
         audioImage: "TrickyBrains.png",
-        /* CHANGE 1: three duration options */
         audioOptions: [
           { label: '2 min', title: 'Working with your inner critic — 2 min practice', file: '' },
           { label: '5 min', title: 'Working with your inner critic — 5 min practice', file: '' },
@@ -1394,7 +1389,6 @@
 `,
         audio: 'Guided audio — Building your compassionate self',
         audioImage: "CompassionateSelf.png",
-        /* CHANGE 1: three duration options */
         audioOptions: [
           { label: '2 min', title: 'Building your compassionate self — 2 min practice', file: '' },
           { label: '5 min', title: 'Building your compassionate self — 5 min practice', file: '' },
@@ -1414,7 +1408,6 @@
 `,
         audio: 'Guided audio — Working with complex emotions',
         emotions: true,
-        /* CHANGE 1: per-emotion three duration options — edit titles and add file paths when ready */
         emotionOptions: {
           anger: {
             image: 'Anger.png',
@@ -1449,7 +1442,6 @@
         written: 'Your written content for module 8 will go here.',
         audio: 'Guided audio — Next steps',
         audioImage: '',
-        /* CHANGE 1: three duration options */
         audioOptions: [
           { label: '2 min', title: 'Next steps — 2 min practice', file: '' },
           { label: '5 min', title: 'Next steps — 5 min practice', file: '' },
@@ -1492,7 +1484,6 @@
         const num = i + 1;
         const isLast = num === TOTAL_MODULES;
 
-        /* CHANGE 3: collapsible exercise block — edit m.exercise per module in the data above */
         const exerciseBlock = `
           <div class="exercise-block" id="exercise-mod-${num}">
             <div class="exercise-toggle" onclick="toggleExercise('exercise-mod-${num}')">
@@ -1505,7 +1496,6 @@
           </div>
         `;
 
-        /* CHANGE 1: helper to render multi-duration audio tiles */
         const renderAudioOptions = (opts, img) => `
           <div class="audio-options">
             <p class="audio-choose-label">Choose a practice length</p>
@@ -1521,11 +1511,9 @@
           </div>
         `;
 
-        /* ── Build the content section after the divider ── */
         let audioSection;
 
         if (m.emotions) {
-          /* Module 7 — emotion tabs with 3-duration audio each + exercise */
           const eo = m.emotionOptions || {};
           const renderEmotionAudio = (key) => eo[key]
             ? renderAudioOptions(eo[key].options, eo[key].image)
@@ -1567,10 +1555,8 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
             ${exerciseBlock}
           `;
         } else if (num <= 2) {
-          /* Modules 1 & 2 — no audio, just exercise */
           audioSection = exerciseBlock;
         } else {
-          /* Modules 3–6, 8 — CHANGE 1: 3-duration audio + exercise */
           const audioHTML = m.audioOptions
             ? renderAudioOptions(m.audioOptions, m.audioImage)
             : `<div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);"><img class="audio-thumb" src="${m.audioImage || ''}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>`;
@@ -1584,16 +1570,24 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
           `;
         }
 
-        /* CHANGE 2: circle definition bubbles for module 4 */
+        /*
+         * CHANGE: circle bubbles now render vertically — one .circle-def-group per system,
+         * each containing the coloured bubble (with its definition inside) followed by
+         * .circle-preterm (the preterm birth text below).
+         * Edit content and preterm fields in the circleDefs array above.
+         */
         const circleBubblesHTML = m.circleDefs ? `
           <div class="circle-defs">
             ${m.circleDefs.map(def => `
-              <div class="circle-bubble ${def.system}" onclick="this.classList.toggle('open')">
-                <div class="circle-bubble-header">
-                  ${def.label}
-                  <span class="bubble-arrow">▾</span>
+              <div class="circle-def-group">
+                <div class="circle-bubble ${def.system}" onclick="this.classList.toggle('open')">
+                  <div class="circle-bubble-header">
+                    ${def.label}
+                    <span class="bubble-arrow">▾</span>
+                  </div>
+                  <div class="circle-bubble-body">${def.content}</div>
                 </div>
-                <div class="circle-bubble-body">${def.content}</div>
+                <div class="circle-preterm">${def.preterm || ''}</div>
               </div>
             `).join('')}
           </div>
@@ -1619,12 +1613,12 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                 <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
               </div>
 
-              ${circleBubblesHTML}
-
               <div class="content-block written-block">
                 <h3></h3>
                 <div class="written-content">${m.written}</div>
               </div>
+
+              ${circleBubblesHTML}
 
               <div class="section-divider"></div>
               ${audioSection}
@@ -1653,7 +1647,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       }).join('');
     }
 
-    /* CHANGE 3: toggle collapsible exercise block */
     function toggleExercise(id) {
       document.getElementById(id).classList.toggle('open');
     }
@@ -1868,7 +1861,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       });
     }
 
-    /* Direct element reference — no querySelector during drag, no width/height transition fighting the updates */
     function applyCircleSize(el, n, value) {
       const values = getModuleValues(n);
       const system = el.dataset.system;
