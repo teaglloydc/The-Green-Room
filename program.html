@@ -1,56 +1,1075 @@
-    body.dark-mode .audio-flexibility {
-      color: var(--wood);
-      background: var(--green-100);
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Program - The Green Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fbf8f1;
+      --surface: #fffefa;
+      --surface-soft: #f2eadc;
+      --green-900: #234334;
+      --green-800: #2e5542;
+      --green-700: #416b55;
+      --green-600: #527a63;
+      --green-100: #e8efe5;
+      --wood: #b48761;
+      --wood-dark: #8f6748;
+      --text: #26352b;
+      --muted: #71806f;
+      --line: rgba(31, 52, 39, 0.14);
+      --shadow: 0 22px 60px rgba(16, 36, 27, 0.12);
+      --radius: 8px;
+      --threat: #b85d52;
+      --drive: #52799c;
+      --soothing: #4f8a63;
     }
 
-    /* ── NEW: COMPASSION IMAGE PLACEHOLDER (module 3) ── */
-    .compassion-image {
-      width: 100%;
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin: 20px 0;
-      min-height: 220px;
+    body.dark-mode {
+      --bg: #111812;
+      --surface: #172119;
+      --surface-soft: #1f2a20;
+      --green-900: #080f0b;
+      --green-800: #0d1710;
+      --green-700: #dfe8dd;
+      --green-600: #9fb89e;
+      --green-100: #233226;
+      --wood: #c2a07e;
+      --wood-dark: #dfc8aa;
+      --text: #eef3ea;
+      --muted: #aebbaa;
+      --line: rgba(238, 243, 234, 0.14);
+      --shadow: 0 22px 70px rgba(0, 0, 0, 0.38);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    body {
+      min-height: 100vh;
       background:
-        linear-gradient(135deg, rgba(79,138,99,0.18), rgba(180,135,97,0.14)),
-        url("CompassionImage.png") center/cover;
-      border: 1px solid var(--line);
-      display: flex;
-      align-items: flex-end;
+        radial-gradient(circle at 8% 0%, rgba(155, 112, 79, 0.14), transparent 28%),
+        linear-gradient(180deg, var(--bg), #fbf8f1 48%, var(--bg));
+      color: var(--text);
+      font-family: Manrope, system-ui, sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
     }
 
-    /* ── NEW: COMPLETION SCREEN ─────────────────── */
-    .completion-screen {
+    body.dark-mode {
+      background:
+        radial-gradient(circle at 8% 0%, rgba(194, 160, 126, 0.09), transparent 28%),
+        linear-gradient(180deg, #0f1711, #141d15 48%, #101711);
+    }
+
+    /* ── HANDS-FREE BANNER — content stays visible now ── */
+    .listen-banner {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 110;
+      padding: 10px 20px;
+      background: var(--wood-dark);
+      color: #fffbf3;
       text-align: center;
-      padding: clamp(32px, 5vw, 56px) clamp(20px, 4vw, 40px);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+    body.listen-mode .listen-banner { display: block; }
+
+    /* ── WORD-LEVEL TTS HIGHLIGHT ────────────────── */
+    .tts-word { transition: background 0.15s ease, color 0.15s ease; border-radius: 3px; }
+    .tts-word.active {
+      background: var(--wood);
+      color: #fffbf3;
+      padding: 0 1px;
     }
 
-    .completion-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: var(--green-100);
-      color: var(--green-700);
-      font-size: 28px;
+    /* ── FLOATING MODERN NAV ────────────────────── */
+    .site-nav {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 24px;
+  width: 100%;
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  color: #fff8ea;
+}
+
+    body.listen-mode .site-nav { top: 58px; }
+
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    }
+
+    .logo-text {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 600;
+      white-space: nowrap;
+      color: #fff8ea;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    }
+
+    .hamburger {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
+      color: #fff8ea;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .hamburger:hover { background: rgba(255,255,255,0.2); }
+    .hamburger span { display: block; width: 18px; height: 2px; background: currentColor; }
+
+    /* ── MOBILE MENU ───────────────────────────── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 90;
+      width: min(1180px, calc(100% - 28px));
+      padding: 14px 22px 18px;
+      background: rgba(28, 54, 42, 0.97);
+      backdrop-filter: blur(16px);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 16px 44px rgba(16,36,27,0.32);
+      transition: top 0.25s ease;
+    }
+    .mobile-menu.open { display: block; }
+    body.listen-mode .mobile-menu { top: 120px; }
+
+    .mobile-menu a {
+      display: block;
+      padding: 12px 0;
+      color: rgba(247, 241, 230, 0.9);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.95rem;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .menu-section-link { font-weight: 800; color: #fffbf3 !important; }
+    .menu-sub-link { padding-left: 22px !important; font-size: 0.87rem !important; opacity: 0.82; }
+
+    /* ── PROGRAM INTRO HEADER ──────────────────── */
+.program-intro {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: 380px;
+  padding: clamp(88px, 9vw, 110px) clamp(20px, 5vw, 64px) 48px;
+
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.35),
+      rgba(0, 0, 0, 0.35)
+    ),
+    url("IndexBackground.png") center/cover;
+
+  color: #fffbf3;
+}
+    .program-intro-inner { width: min(1180px, 100%); margin: 0 auto; }
+
+    .eyebrow,
+    .module-label,
+    .sidebar-label,
+    .tc-record-label {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .program-intro .eyebrow { color: rgba(255,250,240,0.78); margin-bottom: 14px; }
+
+    .program-intro h1 {
+      max-width: 760px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(2.6rem, 6vw, 5.4rem);
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .program-intro p {
+      max-width: 650px;
+      margin-top: 18px;
+      color: rgba(255,250,240,0.82);
+      font-size: 1rem;
+      line-height: 1.85;
+    }
+
+    /* ── PROGRAM LAYOUT ────────────────────────── */
+    .program-layout {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 40px) clamp(60px, 8vw, 100px);
+      gap: clamp(20px, 3vw, 44px);
+      align-items: start;
+    }
+
+    /* ── SIDEBAR ───────────────────────────────── */
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      align-self: start;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 36px rgba(16,36,27,0.09);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .sidebar-label { color: var(--wood-dark); margin-bottom: 12px; }
+
+    .progress-bar-container {
+      padding-bottom: 18px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .progress-bar-track {
+      height: 8px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--green-700), var(--wood));
+      transition: width 0.35s ease;
+    }
+
+    .progress-text {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .sidebar-module {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .sidebar-module:last-child { border-bottom: 0; }
+    .sidebar-module:hover { opacity: 0.8; }
+
+    .sidebar-module-number {
+      color: var(--wood-dark);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .sidebar-module-title {
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .sidebar-module.active .sidebar-module-title { color: var(--green-600); }
+
+    .completion-tick {
+      width: 22px;
+      height: 22px;
       display: grid;
       place-items: center;
-      margin: 0 auto 22px;
+      border: 2px solid var(--line);
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
-    .completion-screen h3 {
+    .completion-tick::before {
+      content: "";
+      width: 8px;
+      height: 5px;
+      border-left: 2px solid transparent;
+      border-bottom: 2px solid transparent;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+    .completion-tick.done { background: var(--green-700); border-color: var(--green-700); }
+    .completion-tick.done::before { border-color: #fffbf3; }
+
+    /* ── MAIN CONTENT ──────────────────────────── */
+    .main-content { min-width: 0; }
+    .module-section { display: none; }
+    .module-section.active { display: block; }
+
+    .written-content p {
+  color: var(--muted);
+  line-height: 1.85;
+  margin-bottom: 12px;
+  font-size: 0.97rem;
+}
+
+.written-content ul {
+  margin: 10px 0 16px 20px;
+  color: var(--muted);
+}
+
+.written-content li {
+  margin-bottom: 6px;
+}
+
+    .module-card-shell {
+      padding: clamp(22px, 4vw, 48px);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .module-header {
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .module-label { color: var(--wood-dark); margin-bottom: 8px; }
+
+    .module-header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .module-header h2 {
       font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-size: clamp(2rem, 4.5vw, 3.8rem);
       font-weight: 600;
-      color: var(--text);
-      margin-bottom: 14px;
-      line-height: 1.15;
+      line-height: 1.04;
+      flex: 1;
+      min-width: 0;
     }
 
-    .completion-screen p {
+    .module-progress {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--green-100);
+      color: var(--green-600);
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .summary-box,
+    .audio-placeholder,
+    .tc-section {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .summary-box {
+      background: var(--surface-soft);
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+
+    .summary-box h3,
+    .content-block h3,
+    .tc-header h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.55rem;
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .summary-box ul { list-style: none; display: grid; gap: 8px; }
+
+    .summary-box li {
+      position: relative;
+      padding-left: 20px;
       color: var(--muted);
-      font-size: 0.97rem;
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .summary-box li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.68em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--wood);
+    }
+
+    .video-placeholder {
+      display: grid;
+      place-items: center;
+      min-height: 300px;
+      margin-bottom: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(16,36,27,0.62), rgba(16,36,27,0.22)),
+        url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1400&q=80") center/cover;
+      color: #fffbf3;
+      text-align: center;
+    }
+
+    .play-icon {
+      width: 64px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: rgba(255,250,240,0.9);
+      color: var(--green-900);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .content-block { margin: 28px 0; }
+    .content-block h3 { margin-bottom: 8px; }
+
+    .content-block p {
+      color: var(--muted);
       line-height: 1.85;
-      max-width: 500px;
-      margin: 0 auto 28px;
+      margin-bottom: 12px;
+      font-size: 0.97rem;
+    }
+
+    .section-divider { height: 1px; background: var(--line); margin: 28px 0; }
+
+    /* ── AUDIO TILE ─────────────────────────────── */
+    .audio-placeholder {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      margin-top: 12px;
+      background: var(--surface);
+    }
+
+    .audio-thumb {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid var(--line);
+    }
+
+    .audio-title { color: var(--text); font-weight: 800; font-size: 0.95rem; }
+    .audio-duration { color: var(--muted); font-size: 0.88rem; }
+
+    /* ── MULTIPLE AUDIO OPTIONS ───────── */
+    .audio-options { display: grid; gap: 10px; }
+
+    .audio-choose-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--wood-dark);
+      margin-bottom: 2px;
+      margin-top: 4px;
+    }
+
+    /* ── CIRCLE DEFINITION BUBBLES — CHANGE: now vertical, one per row ── */
+    .circle-defs {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 20px 0 28px;
+    }
+
+    /* Each system block: bubble header + body + preterm text below */
+    .circle-def-group {
+      margin-bottom: 28px;
+    }
+    .circle-def-group:last-child { margin-bottom: 0; }
+
+    .circle-bubble {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      box-shadow: 0 3px 12px rgba(16,36,27,0.1);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+
+    .circle-bubble:hover { box-shadow: 0 5px 20px rgba(16,36,27,0.18); }
+
+    .circle-bubble-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 0.86rem;
+      color: #fffbf3;
+      user-select: none;
+      line-height: 1.3;
+    }
+
+    .bubble-arrow {
+      font-size: 11px;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+      opacity: 0.9;
+      display: inline-block;
+    }
+
+    .circle-bubble.open .bubble-arrow { transform: rotate(180deg); }
+
+    .circle-bubble-body {
+      display: none;
+      padding: 14px 16px 18px;
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .circle-bubble-body p { margin-bottom: 8px; }
+    .circle-bubble-body p:last-child { margin-bottom: 0; }
+
+    .circle-bubble.open .circle-bubble-body { display: block; }
+
+    .circle-bubble.threat { border-color: var(--threat); }
+    .circle-bubble.threat .circle-bubble-header { background: var(--threat); }
+    .circle-bubble.threat .circle-bubble-body { background: rgba(184,93,82,0.06); }
+
+    .circle-bubble.drive { border-color: var(--drive); }
+    .circle-bubble.drive .circle-bubble-header { background: var(--drive); }
+    .circle-bubble.drive .circle-bubble-body { background: rgba(82,121,156,0.06); }
+
+    .circle-bubble.soothing { border-color: var(--soothing); }
+    .circle-bubble.soothing .circle-bubble-header { background: var(--soothing); }
+    .circle-bubble.soothing .circle-bubble-body { background: rgba(79,138,99,0.06); }
+
+    /* Preterm text that sits below each bubble */
+    .circle-preterm {
+      padding: 16px 4px 0;
+    }
+
+    .circle-preterm p {
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 12px;
+      font-size: 0.97rem;
+    }
+    .circle-preterm p:last-child { margin-bottom: 0; }
+
+    /* ── COLLAPSIBLE EXERCISE BLOCK ────── */
+    .exercise-block {
+      margin: 28px 0;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--wood);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .exercise-toggle {
+      padding: 18px 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .exercise-toggle:hover { background: var(--surface-soft); }
+
+    .exercise-toggle h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .exercise-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .exercise-chevron {
+      font-size: 11px;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .exercise-block.open .exercise-chevron { transform: rotate(180deg); }
+
+    .exercise-body {
+      display: none;
+      padding: 18px 22px 22px;
+      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+      border-top: 1px solid var(--line);
+    }
+
+    .exercise-block.open .exercise-body { display: block; }
+
+    .exercise-body p {
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 0.97rem;
+      margin-bottom: 10px;
+    }
+    .exercise-body p:last-child { margin-bottom: 0; }
+
+    /* ── EMOTION TABS ───────────────────────────── */
+    .emotion-tab-buttons {
+      display: inline-flex;
+      gap: 6px;
+      padding: 6px;
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-soft);
+      flex-wrap: wrap;
+    }
+
+    .emotion-tab-btn {
+      min-height: 38px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      font-size: 0.9rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .emotion-tab-btn.active { background: var(--green-700); color: #fffbf3; }
+
+    .emotion-tab-content { display: none; }
+    .emotion-tab-content.active { display: block; }
+
+    /* ── THREE CIRCLES ─────────────────────────── */
+    .tc-section {
+      overflow: hidden;
+      margin-top: 28px;
+      background: var(--surface);
+    }
+
+    .tc-header {
+      padding: 22px 24px;
+      background: linear-gradient(135deg, var(--surface-soft), var(--surface));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tc-header p,
+    .tc-record-intro {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 0.93rem;
+      margin-top: 8px;
+    }
+
+    .tc-legend {
+      display: flex;
+      gap: 12px 20px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .tc-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .tc-legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .tc-legend-dot.threat { background: var(--threat); }
+    .tc-legend-dot.drive { background: var(--drive); }
+    .tc-legend-dot.soothing { background: var(--soothing); }
+
+    /* Circle tool — larger + faster (no width/height transition lag) */
+    .tc-circle-tool {
+      min-height: 460px;
+      padding: 48px 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "drive soothing"
+        "threat threat";
+      align-items: center;
+      justify-items: center;
+      gap: 36px;
+      touch-action: none;
+      user-select: none;
+      background: var(--surface-soft);
+    }
+
+    .tc-live-circle {
+      width: calc(58px + var(--size) * 1.55px);
+      height: calc(58px + var(--size) * 1.55px);
+      border-radius: 50%;
+      cursor: grab;
+      will-change: width, height;
+      transition: box-shadow 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .tc-live-circle.dragging { cursor: grabbing; box-shadow: 0 12px 32px rgba(16,36,27,0.22); }
+
+    .tc-live-circle.threat {
+      grid-area: threat;
+      background: var(--threat);
+      box-shadow: 0 4px 18px rgba(184,93,82,0.38);
+    }
+
+    .tc-live-circle.drive {
+      grid-area: drive;
+      background: var(--drive);
+      box-shadow: 0 4px 18px rgba(82,121,156,0.38);
+    }
+
+    .tc-live-circle.soothing {
+      grid-area: soothing;
+      background: var(--soothing);
+      box-shadow: 0 4px 18px rgba(79,138,99,0.38);
+    }
+
+    .tc-record-panel {
+      padding: 22px 24px;
+      border-top: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .tc-record-label { color: var(--wood-dark); margin-bottom: 4px; }
+
+    .tc-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .tc-submit-btn,
+    .btn-module-nav,
+    .btn-post-measures {
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 0;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .tc-submit-btn,
+    .btn-next,
+    .btn-post-measures { background: var(--green-700); color: #fffbf3; }
+
+    .btn-module-nav:hover,
+    .tc-submit-btn:not(:disabled):hover,
+    .btn-post-measures:hover { transform: translateY(-2px); }
+
+    .tc-submit-btn:disabled {
+      background: var(--line);
+      color: var(--muted);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-prev, .btn-complete {
+      background: var(--surface-soft);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .tc-saved-badge {
+      display: none;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--green-100);
+      color: var(--green-600);
+      font-weight: 800;
+      font-size: 0.88rem;
+    }
+    .tc-saved-badge.visible { display: inline-flex; }
+
+    .tc-proportions {
+      display: none;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .tc-proportions.visible { display: block; }
+
+    /* ── MODULE NAV BUTTONS ─────────────────────── */
+    .module-nav-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .post-measures-box { margin-top: 28px; }
+
+    .post-measures-box .summary-box {
+      text-align: center;
+      background: linear-gradient(145deg, var(--green-100), var(--surface));
+    }
+
+    .post-measures-box .summary-box h3 { font-size: 1.6rem; margin-bottom: 12px; }
+
+    .post-measures-box p { max-width: 600px; margin: 0 auto 18px; color: var(--muted); }
+
+    .post-measures-note { margin-top: 12px !important; font-size: 0.88rem; }
+
+    /* ── FLOATING CONTROLS — vertically centred so the UQ logo is never blocked ── */
+    .floating-controls {
+  position: fixed;
+  right: 76px;
+  bottom: 24px;
+  z-index: 80;
+  display: flex;
+  gap: 10px;
+}
+    .float-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      background: var(--green-700);
+      color: #fffbf3;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 16px rgba(16,36,27,0.24);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .float-btn:hover { transform: scale(1.1); }
+    .float-btn.active { background: var(--wood-dark); }
+
+    .float-tts { display: none; }
+    body.listen-mode .float-tts { display: flex; }
+
+    /* ── BACK TO TOP ────────────────────────────── */
+    .back-to-top {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      z-index: 80;
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--green-700);
+      color: #fffbf3;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      font-size: 20px;
+      font-weight: 900;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .back-to-top:hover { transform: translateY(-2px); }
+    .back-to-top.visible { display: flex; }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer {
+      padding: clamp(36px, 6vw, 56px) clamp(16px, 4vw, 48px) clamp(28px, 4vw, 40px);
+      background: var(--green-900);
+      color: rgba(255,250,240,0.78);
+    }
+
+    .footer-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .footer-flags {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .footer-flags img {
+      height: 28px;
+      width: auto;
+      border-radius: 3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    .footer-acknowledgement { text-align: center; }
+
+    .footer-statement {
+      font-size: 0.86rem;
+      line-height: 1.85;
+      color: rgba(255,250,240,0.7);
+      max-width: 680px;
+      margin: 0 auto 10px;
+    }
+    .footer-statement:last-child { margin-bottom: 0; }
+
+    .footer-divider { height: 1px; background: rgba(255,250,240,0.12); }
+
+    .footer-safety, .footer-contact {
+      text-align: center;
+      font-size: 0.86rem;
+      line-height: 1.85;
+      color: rgba(255,250,240,0.78);
+    }
+    .footer-safety p, .footer-contact p { max-width: 680px; margin: 0 auto 10px; }
+    .footer-safety p:last-child, .footer-contact p:last-child { margin-bottom: 0; }
+    .footer-safety a, .footer-contact a { color: #f8ecd8; text-decoration: underline; }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-logos { display: flex; align-items: center; gap: 18px; }
+    .footer-logos img { height: 75px; width: auto; display: block; opacity: 0.92; }
+    .cmrg-logo {height: 200px;width: auto;}
+    .footer-copyright { font-size: 0.82rem; color: rgba(255,250,240,0.6); }
+
+    @media (max-width: 600px) {
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 900px) {
+      .program-layout { grid-template-columns: 1fr; padding: 16px 14px 80px; gap: 16px; }
+      .sidebar { position: relative; top: 0; max-height: none; padding: 18px; }
+      .sidebar-module { padding: 14px 0; }
+      .module-card-shell { padding: 18px 16px; }
+      .module-header-top { flex-direction: column; gap: 10px; }
+      .module-header h2 { font-size: clamp(1.8rem, 6vw, 2.6rem); }
+      .video-placeholder { min-height: 220px; }
+
+      .tc-circle-tool {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "drive soothing"
+          "threat threat";
+        min-height: 340px;
+        padding: 30px 14px;
+        gap: 22px;
+      }
+
+      .tc-live-circle {
+        width: calc(46px + var(--size) * 1.15px);
+        height: calc(46px + var(--size) * 1.15px);
+      }
+
+      .emotion-tab-buttons { display: flex; flex-wrap: wrap; border-radius: var(--radius); width: 100%; }
+      .emotion-tab-btn { flex: 1; min-width: 80px; }
+
+      .module-nav-buttons { flex-direction: row; flex-wrap: wrap; }
+      .btn-module-nav { flex: 1; min-width: 120px; justify-content: center; }
+
+      .tc-actions { flex-direction: column; align-items: stretch; }
+      .tc-submit-btn { width: 100%; }
+
+      .content-block p { font-size: 0.93rem; }
+
+      .floating-controls { left: 12px; }
+      .back-to-top { right: 14px; bottom: 18px; }
     }
   </style>
 </head>
@@ -168,7 +1187,7 @@
 
 <ul>
   <li><strong>Feeling tuned into danger:</strong> The brain becomes more focused on protecting the baby, making us quicker to notice possible risks or problems.</li>
-  <li><strong>Paying closer attention to others:</strong> As we become more attuned to our baby's cues, we may also become more aware of the thoughts and feelings of others around us. </li>
+  <li><strong>Paying closer attention to others:</strong> As we become more attuned to our baby’s cues, we may also become more aware of the thoughts and feelings of others around us. </li>
   <li><strong>Putting baby first:</strong> Our brains reward system shifts to make caring for the baby feel especially important. This can sometimes lead us to put our own needs last.</li>
   <li><strong>A strong need for support or a "village":</strong> Humans are one of the few primates that share the care of their young. We are evolutionarily wired to seek support from others during pregnancy and after birth, even if we now live in a way where we could theoretically look after ourselves and our baby alone.</li>
 </ul>
@@ -195,12 +1214,12 @@
 
 <p>This is what we call the <strong>tricky brain</strong>. When it gets stuck in these patterns, it can cause us to feel anxiety, anger and sadness, or even guilt or shame. This is not a flaw. It is simply how the mind is designed.</p>
 
-<p>After a preterm birth, your brain has been faced with a very real threat: concerns about your baby's health, survival and future. It is completely understandable if your mind has stayed on high alert.</p>
+<p>After a preterm birth, your brain has been faced with a very real threat: concerns about your baby’s health, survival and future. It is completely understandable if your mind has stayed on high alert.</p>
 
 <p>Your tricky brain might look like:</p>
 
 <ul>
-  <li>Constantly monitoring your baby's breathing, feeding or behaviour</li>
+  <li>Constantly monitoring your baby’s breathing, feeding or behaviour</li>
   <li>Finding it hard to switch off from worries, even when things are going well</li>
   <li>Ruminating on past events, or things that could happen in the future</li>
 </ul>
@@ -209,7 +1228,7 @@
 
 <p><strong>What is compassion and how can it help?</strong></p>
 
-<p>Compassion is the ability to notice suffering in ourselves or others, with a motivation to alleviate it. It is more than simply being kind or "nice." Compassion takes courage. It involves being willing to witness pain and suffering and take action to respond, even when it's difficult.</p>
+<p>Compassion is the ability to notice suffering in ourselves or others, with a motivation to alleviate it. It is more than simply being kind or “nice.” Compassion takes courage. It involves being willing to witness pain and suffering and take action to respond, even when it’s difficult.</p>
 
 <p>Many of us find it easier to show compassion to others, such as our baby, but find it harder to receive compassion from others or to be compassionate towards ourselves. Compassion-focused strategies can help you take some of that same care you already give to others and direct some towards yourself.</p>
 
@@ -218,9 +1237,9 @@
    audio: 'Guided audio — Compassion and our tricky brains', 
    audioImage: "sooth2.png",
    audioOptions: [
+     { label: '2 min', title: 'Compassion and our tricky brains — 2 min practice', file: '' },
      { label: '5 min', title: 'Compassion and our tricky brains — 5 min practice', file: '' },
-     { label: '10 min', title: 'Compassion and our tricky brains — 10 min practice', file: '' },
-     { label: '15 min', title: 'Compassion and our tricky brains — 15 min practice', file: '' }
+     { label: '10 min', title: 'Compassion and our tricky brains — 10 min practice', file: '' }
    ],
    exerciseTitle: 'Try this quick exercise',
    exercise:`
@@ -231,6 +1250,12 @@
   },
       { title: 'Our three circles',
         summary: ['What are the three circles?','How does preterm birth disrupt my three circles?'],
+        /*
+         * CHANGE: circleDefs now has two fields per system:
+         *   content  — the definition shown inside the collapsible bubble
+         *   preterm  — the explanatory text shown below the bubble
+         * Edit both fields freely.
+         */
         circleDefs: [
           {
             system: 'threat',
@@ -242,11 +1267,11 @@
 <ul>
   <li>Being on constant alert to anything that might signal danger for the baby (for example breathing, colour, monitors, small behavioural changes)</li>
   <li>Worry that is hard to switch off, even when things seem okay</li>
-  <li>The mind replaying events or imagining "what if" scenarios about the past, present, or future</li>
+  <li>The mind replaying events or imagining “what if” scenarios about the past, present, or future</li>
   <li>Strong emotional responses such as anxiety, fear, or panic that come on quickly and repeatedly</li>
   <li>Feeling unsafe in your own thoughts, body, or environment, as though something could change at any moment</li>
   <li>Heightened sensitivity to uncertainty, alarms, medical updates, or changes in routine</li>
-  <li>Feeling mentally "stuck on watch mode," even when exhausted</li>
+  <li>Feeling mentally “stuck on watch mode,” even when exhausted</li>
 </ul>
 `,
           },
@@ -262,10 +1287,10 @@
   <li>Constant planning, problem-solving, information seeking, or Googling</li>
   <li>Pushing through exhaustion in order to stay on top of everything</li>
   <li>Feeling responsible for coordinating care, information, and decisions</li>
-  <li>A sense that rest is only possible once everything is "handled" (which rarely happens)</li>
+  <li>A sense that rest is only possible once everything is “handled” (which rarely happens)</li>
   <li>Feeling pulled into action even when there is nothing more that can be done</li>
   <li>Managing multiple roles at once (parenting, hospital, home, other children, work) without pause</li>
-  <li>A sense of urgency or pressure that keeps the body and mind "switched on"</li>
+  <li>A sense of urgency or pressure that keeps the body and mind “switched on”</li>
 </ul>
 `,
           },
@@ -277,10 +1302,10 @@
 <p>After preterm birth, the soothing system can feel harder to access, even when support is available. This may look like:</p>
 
 <ul>
-  <li>Difficulty feeling calm, settled, or "at ease," even in safe moments</li>
+  <li>Difficulty feeling calm, settled, or “at ease,” even in safe moments</li>
   <li>Rest not fully registering as rest (feeling tired but unable to switch off)</li>
   <li>Comfort or reassurance not lasting long, with worry returning quickly</li>
-  <li>Feeling emotionally "disconnected" from calm moments or support</li>
+  <li>Feeling emotionally “disconnected” from calm moments or support</li>
   <li>Grief and loss sitting alongside caregiving, making it hard to feel grounded</li>
   <li>Reduced sense of being cared for or held by others, even when support is present</li>
   <li>Feeling like there is no space to slow down or emotionally process what has happened</li>
@@ -295,9 +1320,9 @@
         audio: 'Guided audio — Our three circles',
         audioImage: "SoothingRythm.png",
         audioOptions: [
+          { label: '2 min', title: 'Our three circles — 2 min practice', file: '' },
           { label: '5 min', title: 'Our three circles — 5 min practice', file: '' },
-          { label: '10 min', title: 'Our three circles — 10 min practice', file: '' },
-          { label: '15 min', title: 'Our three circles — 15 min practice', file: '' }
+          { label: '10 min', title: 'Our three circles — 10 min practice', file: '' }
         ],
         exerciseTitle: 'Try this quick exercise',
         exercise: '<p>What circle did you spend the most time in this week as a mother of a premature baby? What did time in each circle look like for you?</p>' },
@@ -343,9 +1368,9 @@
         audio: 'Guided audio — Working with your inner critic',
         audioImage: "TrickyBrains.png",
         audioOptions: [
+          { label: '2 min', title: 'Working with your inner critic — 2 min practice', file: '' },
           { label: '5 min', title: 'Working with your inner critic — 5 min practice', file: '' },
-          { label: '10 min', title: 'Working with your inner critic — 10 min practice', file: '' },
-          { label: '15 min', title: 'Working with your inner critic — 15 min practice', file: '' }
+          { label: '10 min', title: 'Working with your inner critic — 10 min practice', file: '' }
         ],
         exerciseTitle: 'Try this quick exercise',
         exercise: `
@@ -399,9 +1424,9 @@
         audio: 'Guided audio — Building your compassionate self',
         audioImage: "CompassionateSelf.png",
         audioOptions: [
+          { label: '2 min', title: 'Building your compassionate self — 2 min practice', file: '' },
           { label: '5 min', title: 'Building your compassionate self — 5 min practice', file: '' },
-          { label: '10 min', title: 'Building your compassionate self — 10 min practice', file: '' },
-          { label: '15 min', title: 'Building your compassionate self — 15 min practice', file: '' }
+          { label: '10 min', title: 'Building your compassionate self — 10 min practice', file: '' }
         ],
         exerciseTitle: 'Try this quick exercise',
         exercise: `
@@ -427,25 +1452,25 @@
           anger: {
             image: 'Anger.png',
             options: [
+              { label: '2 min', title: 'Working with anger — 2 min practice', file: '' },
               { label: '5 min', title: 'Working with anger — 5 min practice', file: '' },
-              { label: '10 min', title: 'Working with anger — 10 min practice', file: '' },
-              { label: '15 min', title: 'Working with anger — 15 min practice', file: '' }
+              { label: '10 min', title: 'Working with anger — 10 min practice', file: '' }
             ]
           },
           sadness: {
             image: 'Sadness.png',
             options: [
+              { label: '2 min', title: 'Working with sadness — 2 min practice', file: '' },
               { label: '5 min', title: 'Working with sadness — 5 min practice', file: '' },
-              { label: '10 min', title: 'Working with sadness — 10 min practice', file: '' },
-              { label: '15 min', title: 'Working with sadness — 15 min practice', file: '' }
+              { label: '10 min', title: 'Working with sadness — 10 min practice', file: '' }
             ]
           },
           anxiety: {
             image: 'Anxiety.png',
             options: [
+              { label: '2 min', title: 'Working with anxiety — 2 min practice', file: '' },
               { label: '5 min', title: 'Working with anxiety — 5 min practice', file: '' },
-              { label: '10 min', title: 'Working with anxiety — 10 min practice', file: '' },
-              { label: '15 min', title: 'Working with anxiety — 15 min practice', file: '' }
+              { label: '10 min', title: 'Working with anxiety — 10 min practice', file: '' }
             ]
           }
         },
@@ -458,30 +1483,18 @@
         audio: 'Guided audio — Next steps',
         audioImage: '',
         audioOptions: [
+          { label: '2 min', title: 'Next steps — 2 min practice', file: '' },
           { label: '5 min', title: 'Next steps — 5 min practice', file: '' },
-          { label: '10 min', title: 'Next steps — 10 min practice', file: '' },
-          { label: '15 min', title: 'Next steps — 15 min practice', file: '' }
+          { label: '10 min', title: 'Next steps — 10 min practice', file: '' }
         ],
         exercise: '<p>exercise content here</p>' }
     ];
 
     const TOTAL_MODULES = modules.length;
-    /* moduleStep[n] tracks the current step (1-based) for module n */
-    const moduleStep = {};
     let completed = JSON.parse(localStorage.getItem('completedModulesV2') || '[]');
     const circleValues = {};
     const circleChanged = {};
     const dragState = {};
-
-    /* Each module has 6 steps:
-       1 — opening TC + 1-min landing audio
-       2 — video + written content (page A)
-       3 — video + written content (page B)  [same video block, shown again]
-       4 — video + written content (page C)
-       5 — self-reflection + audio practice choice
-       6 — closing TC + completion
-    */
-    const STEPS_PER_MODULE = 6;
 
     /* ── RENDER ─────────────────────────────────── */
     function renderProgramModules() {
@@ -511,10 +1524,21 @@
         const num = i + 1;
         const isLast = num === TOTAL_MODULES;
 
-        /* ── Audio options helper ── */
+        const exerciseBlock = `
+          <div class="exercise-block" id="exercise-mod-${num}">
+            <div class="exercise-toggle" onclick="toggleExercise('exercise-mod-${num}')">
+              <h3>Try this quick exercise</h3>
+              <span class="exercise-hint">Tap to open <span class="exercise-chevron">▾</span></span>
+            </div>
+            <div class="exercise-body">
+              ${m.exercise || '<p>Exercise content will be added here.</p>'}
+            </div>
+          </div>
+        `;
+
         const renderAudioOptions = (opts, img) => `
-          <span class="audio-flexibility">There is no "right" length — choose what fits your day.</span>
           <div class="audio-options">
+            <p class="audio-choose-label">Choose a practice length</p>
             ${opts.map(opt => `
               <div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);">
                 <img class="audio-thumb" src="${img || ''}" alt="">
@@ -527,7 +1551,71 @@
           </div>
         `;
 
-        /* ── Circle definition bubbles (module 4) ── */
+        let audioSection;
+
+        if (m.emotions) {
+          const eo = m.emotionOptions || {};
+          const renderEmotionAudio = (key) => eo[key]
+            ? renderAudioOptions(eo[key].options, eo[key].image)
+            : '<div class="audio-placeholder"><div><div class="audio-title">Audio will be added here</div></div></div>';
+
+          audioSection = `
+            <div class="emotion-tab-buttons">
+              <button class="emotion-tab-btn active" onclick="showEmotion(event,'anger')">Anger</button>
+              <button class="emotion-tab-btn" onclick="showEmotion(event,'sadness')">Sadness</button>
+              <button class="emotion-tab-btn" onclick="showEmotion(event,'anxiety')">Anxiety</button>
+            </div>
+            <div class="emotion-tab-content active" id="emotion-anger">
+              <div class="content-block written-block"><h3>Anger</h3><p>Anger may feel like irritation, blame, or frustration. It can arise when something feels unfair or overwhelming and can signal a need for boundaries or change.
+
+Anger can show up as frustration, blame, or feeling upset that this experience has happened to you. It may also be directed toward how others respond or how the situation is being managed.
+</p></div>
+              ${renderEmotionAudio('anger')}
+            </div>
+            <div class="emotion-tab-content" id="emotion-sadness">
+              <div class="content-block written-block"><h3>Sadness</h3>
+
+<p>Sadness can bring feelings of loss, grief, loneliness, or vulnerability. It often slows us down and can support us in seeking comfort, care, and connection.</p>
+
+<p>After preterm birth, sadness often reflects grief and loss. This may include grieving the birth experience you expected, the end of your pregnancy, or the loss of a typical newborn experience. Many mothers also grieve the gap between what they imagined and what has unfolded.</p>
+
+<p>It is also normal to feel sadness as part of adjusting to an experience that feels overwhelming, uncertain, or unfamiliar.</p></div>
+              ${renderEmotionAudio('sadness')}
+            </div>
+            <div class="emotion-tab-content" id="emotion-anxiety">
+              <div class="content-block written-block"><h3>Anxiety</h3>
+
+<p>Anxiety often shows up as nervousness, fear, or "what if" thinking. It can create urges to stay alert, seek information, or focus on protecting your baby from possible threat.</p>
+
+<p>After preterm birth, anxiety is often linked to concerns about your baby's health, development, and wellbeing. It may show up as hypervigilance, constantly checking monitors, closely monitoring feeds or behaviours, seeking information, or finding it difficult to relax even when things are going well.</p>
+
+<p>While these reactions can be exhausting, they are often signs of a mind that is working hard to protect a baby it cares deeply about.</p></div>
+              ${renderEmotionAudio('anxiety')}
+            </div>
+            ${exerciseBlock}
+          `;
+        } else if (num <= 2) {
+          audioSection = exerciseBlock;
+        } else {
+          const audioHTML = m.audioOptions
+            ? renderAudioOptions(m.audioOptions, m.audioImage)
+            : `<div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);"><img class="audio-thumb" src="${m.audioImage || ''}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>`;
+
+          audioSection = `
+            <div class="content-block">
+              <h3>Audio practice</h3>
+              ${audioHTML}
+            </div>
+            ${exerciseBlock}
+          `;
+        }
+
+        /*
+         * CHANGE: circle bubbles now render vertically — one .circle-def-group per system,
+         * each containing the coloured bubble (with its definition inside) followed by
+         * .circle-preterm (the preterm birth text below).
+         * Edit content and preterm fields in the circleDefs array above.
+         */
         const circleBubblesHTML = m.circleDefs ? `
           <div class="circle-defs">
             ${m.circleDefs.map(def => `
@@ -545,89 +1633,9 @@
           </div>
         ` : '';
 
-        /* ── Exercise block ── */
-        const exerciseBlock = m.exercise ? `
-          <div class="exercise-block" id="exercise-mod-${num}">
-            <div class="exercise-toggle" onclick="toggleExercise('exercise-mod-${num}')">
-              <h3>Try this quick exercise</h3>
-              <span class="exercise-hint">Tap to open <span class="exercise-chevron">▾</span></span>
-            </div>
-            <div class="exercise-body">
-              ${m.exercise}
-            </div>
-          </div>
-        ` : '';
-
-        /* ── Step 5 audio section ── */
-        let step5Audio;
-        if (m.emotions) {
-          const eo = m.emotionOptions || {};
-          const renderEmotionAudio = (key) => eo[key]
-            ? renderAudioOptions(eo[key].options, eo[key].image)
-            : '';
-          step5Audio = `
-            <div class="emotion-tab-buttons">
-              <button class="emotion-tab-btn active" onclick="showEmotion(event,'anger')">Anger</button>
-              <button class="emotion-tab-btn" onclick="showEmotion(event,'sadness')">Sadness</button>
-              <button class="emotion-tab-btn" onclick="showEmotion(event,'anxiety')">Anxiety</button>
-            </div>
-            <div class="emotion-tab-content active" id="emotion-anger">
-              <div class="content-block written-block"><h3>Anger</h3><p>Anger may feel like irritation, blame, or frustration. It can arise when something feels unfair or overwhelming and can signal a need for boundaries or change. Anger can show up as frustration, blame, or feeling upset that this experience has happened to you. It may also be directed toward how others respond or how the situation is being managed.</p></div>
-              ${renderEmotionAudio('anger')}
-            </div>
-            <div class="emotion-tab-content" id="emotion-sadness">
-              <div class="content-block written-block"><h3>Sadness</h3>
-<p>Sadness can bring feelings of loss, grief, loneliness, or vulnerability. It often slows us down and can support us in seeking comfort, care, and connection.</p>
-<p>After preterm birth, sadness often reflects grief and loss. This may include grieving the birth experience you expected, the end of your pregnancy, or the loss of a typical newborn experience.</p>
-<p>It is also normal to feel sadness as part of adjusting to an experience that feels overwhelming, uncertain, or unfamiliar.</p></div>
-              ${renderEmotionAudio('sadness')}
-            </div>
-            <div class="emotion-tab-content" id="emotion-anxiety">
-              <div class="content-block written-block"><h3>Anxiety</h3>
-<p>Anxiety often shows up as nervousness, fear, or "what if" thinking. It can create urges to stay alert, seek information, or focus on protecting your baby from possible threat.</p>
-<p>After preterm birth, anxiety is often linked to concerns about your baby's health, development, and wellbeing. It may show up as hypervigilance, constantly checking monitors, closely monitoring feeds or behaviours, seeking information, or finding it difficult to relax even when things are going well.</p>
-<p>While these reactions can be exhausting, they are often signs of a mind that is working hard to protect a baby it cares deeply about.</p></div>
-              ${renderEmotionAudio('anxiety')}
-            </div>
-          `;
-        } else if (m.audioOptions) {
-          step5Audio = renderAudioOptions(m.audioOptions, m.audioImage);
-        } else {
-          step5Audio = `<div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);">
-            <img class="audio-thumb" src="${m.audioImage || ''}" alt="">
-            <div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div>
-          </div>`;
-        }
-
-        /* ── Compassion image (module 3 only) ── */
-        const compassionImageHTML = (num === 3) ? `
-          <div class="compassion-image" aria-label="A warm, calming image representing compassion and courage" style="min-height:220px;"></div>
-        ` : '';
-
-        /* ── TC tool ID helpers ── */
-        const tcOpenId  = `tc-open-${num}`;
-        const tcCloseId = `tc-close-${num}`;
-
-        /* ── Step indicator helper (rendered inside each step) ── */
-        const stepIndicator = (currentStep) => `
-          <div class="step-indicator" aria-label="Step ${currentStep} of ${STEPS_PER_MODULE}">
-            ${Array.from({length: STEPS_PER_MODULE}, (_, k) => {
-              const s = k + 1;
-              const cls = s < currentStep ? 'completed' : s === currentStep ? 'active' : '';
-              return `<div class="step-dot ${cls}" title="Step ${s}"></div>`;
-            }).join('')}
-          </div>
-        `;
-
-        /* ── Step nav helpers ── */
-        const backBtn  = (step) => `<button class="btn-page-nav btn-page-back" onclick="goStep(${num}, ${step - 1})">← Back</button>`;
-        const nextBtn  = (step) => `<button class="btn-page-nav btn-page-next" onclick="goStep(${num}, ${step + 1})">Next →</button>`;
-        const noBack   = `<span></span>`;
-
         return `
           <section class="module-section ${i === 0 ? 'active' : ''}" id="module-${num}">
             <div class="module-card-shell">
-
               <div class="module-header">
                 <div class="module-label">Module ${num}</div>
                 <div class="module-header-top">
@@ -636,157 +1644,49 @@
                 </div>
               </div>
 
-              <!-- ── STEP 1: Opening TC + 1-min landing audio ── -->
-              <div class="module-page ${i === 0 ? 'active' : ''}" id="step-${num}-1">
-                ${stepIndicator(1)}
-                <p class="page-microcopy">Let's begin by taking one minute to arrive.</p>
-                <div class="landing-audio-section">
-                  <p style="color:var(--muted);font-size:0.93rem;margin-bottom:12px;">Before we begin, take a moment to settle. Use the short practice below to arrive in the present moment.</p>
-                  <div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);">
-                    <img class="audio-thumb" src="${m.audioImage || ''}" alt="">
-                    <div>
-                      <div class="audio-title">1-minute landing practice</div>
-                      <div class="audio-duration">1 min · Audio will be added here</div>
-                    </div>
+              <div class="summary-box">
+                <h3>What this module covers</h3>
+                <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
+              </div>
+
+              <div class="video-placeholder">
+                <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
+              </div>
+
+              <div class="content-block written-block">
+                <h3></h3>
+                <div class="written-content">${m.written}</div>
+              </div>
+
+              ${circleBubblesHTML}
+
+              <div class="section-divider"></div>
+              ${audioSection}
+
+              <div class="tc-section" data-module="${num}"></div>
+
+              <div class="module-nav-buttons">
+                ${num > 1 ? `<button class="btn-module-nav btn-prev" onclick="showModule(${num-1})">← Previous</button>` : '<span></span>'}
+                <button class="btn-module-nav btn-complete" onclick="markComplete(${num})">${isLast ? 'Mark program complete' : 'Mark as complete'}</button>
+                ${!isLast ? `<button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1})" style="display:none;">Next module →</button>` : ''}
+              </div>
+
+              ${isLast ? `
+                <div class="post-measures-box" id="postMeasuresBox" style="display:none;">
+                  <div class="summary-box">
+                    <h3>You have completed The Green Room</h3>
+                    <p>Thank you for completing all eight modules. The final step is to complete a short post-program survey.</p>
+                    <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures">Complete post-program survey</a>
+                    <p class="post-measures-note">You will be taken to a secure Qualtrics survey.</p>
                   </div>
                 </div>
-                <p style="margin-top:20px;color:var(--wood-dark);font-size:0.82rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;">How are you feeling right now?</p>
-                <div class="tc-section" id="${tcOpenId}" data-module="${num}-open"></div>
-                <div class="page-nav-buttons">
-                  ${noBack}
-                  ${nextBtn(1)}
-                </div>
-              </div>
-
-              <!-- ── STEP 2: Video + written content A ── -->
-              <div class="module-page" id="step-${num}-2">
-                ${stepIndicator(2)}
-                <p class="page-microcopy">Take a moment to explore this idea.</p>
-                <div class="summary-box">
-                  <h3>What this module covers</h3>
-                  <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
-                </div>
-                <div class="video-placeholder">
-                  <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
-                </div>
-                <div class="page-nav-buttons">
-                  ${backBtn(2)}
-                  ${nextBtn(2)}
-                </div>
-              </div>
-
-              <!-- ── STEP 3: Written content ── -->
-              <div class="module-page" id="step-${num}-3">
-                ${stepIndicator(3)}
-                <div class="content-block written-block">
-                  <div class="written-content">${m.written}</div>
-                </div>
-                ${compassionImageHTML}
-                ${circleBubblesHTML}
-                <div class="page-nav-buttons">
-                  ${backBtn(3)}
-                  ${nextBtn(3)}
-                </div>
-              </div>
-
-              <!-- ── STEP 4: Additional content / continuation ── -->
-              <div class="module-page" id="step-${num}-4">
-                ${stepIndicator(4)}
-                <p class="page-microcopy">Keep going — you're making progress.</p>
-                <div class="video-placeholder">
-                  <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
-                </div>
-                <div class="page-nav-buttons">
-                  ${backBtn(4)}
-                  ${nextBtn(4)}
-                </div>
-              </div>
-
-              <!-- ── STEP 5: Self-reflection + audio practice ── -->
-              <div class="module-page" id="step-${num}-5">
-                ${stepIndicator(5)}
-                <p class="page-microcopy">Now, let's pause and reflect.</p>
-                ${exerciseBlock}
-                <div class="section-divider"></div>
-                <p class="page-microcopy" style="margin-top:0;">Choose the practice that fits your day.</p>
-                ${step5Audio}
-                <div class="page-nav-buttons">
-                  ${backBtn(5)}
-                  ${nextBtn(5)}
-                </div>
-              </div>
-
-              <!-- ── STEP 6: Closing TC + completion ── -->
-              <div class="module-page" id="step-${num}-6">
-                ${stepIndicator(6)}
-                <p class="page-microcopy">How are you feeling now?</p>
-                <div class="tc-section" id="${tcCloseId}" data-module="${num}-close"></div>
-
-                <!-- Completion message — shown after TC submit -->
-                <div id="completion-${num}" style="display:none;">
-                  <div class="section-divider"></div>
-                  <div class="completion-screen">
-                    <div class="completion-icon">✓</div>
-                    <h3>You've completed this module.</h3>
-                    <p>Take a moment to recognise the time and care you've given yourself today.</p>
-                    ${isLast ? `
-                      <div id="postMeasuresBox" style="display:none;margin-top:8px;">
-                        <p>Thank you for completing all eight modules. The final step is to complete a short post-program survey.</p>
-                        <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures" style="margin-top:4px;">Complete post-program survey</a>
-                        <p class="post-measures-note">You will be taken to a secure Qualtrics survey.</p>
-                      </div>
-                    ` : `
-                      <button class="btn-page-nav btn-page-next" onclick="showModule(${num + 1})" style="margin-top:4px;">Continue to next module →</button>
-                    `}
-                  </div>
-                </div>
-
-                <div class="page-nav-buttons" id="step6-nav-${num}">
-                  ${backBtn(6)}
-                  <span></span>
-                </div>
-              </div>
-
+              ` : ''}
             </div>
           </section>
         `;
       }).join('');
     }
 
-    /* ── STEP NAVIGATION ────────────────────────── */
-    function goStep(moduleNum, step) {
-      if (step < 1 || step > STEPS_PER_MODULE) return;
-      const currentStep = moduleStep[moduleNum] || 1;
-
-      /* Hide current step */
-      const currentEl = document.getElementById(`step-${moduleNum}-${currentStep}`);
-      if (currentEl) currentEl.classList.remove('active');
-
-      /* Show new step */
-      moduleStep[moduleNum] = step;
-      const newEl = document.getElementById(`step-${moduleNum}-${step}`);
-      if (newEl) newEl.classList.add('active');
-
-      /* Rebuild step indicators on newly shown page */
-      updateStepIndicator(moduleNum, step);
-
-      /* Scroll to top of card */
-      document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function updateStepIndicator(moduleNum, currentStep) {
-      const stepEl = document.getElementById(`step-${moduleNum}-${currentStep}`);
-      if (!stepEl) return;
-      const dots = stepEl.querySelectorAll('.step-dot');
-      dots.forEach((dot, k) => {
-        const s = k + 1;
-        dot.className = 'step-dot';
-        if (s < currentStep) dot.classList.add('completed');
-        else if (s === currentStep) dot.classList.add('active');
-      });
-    }
-
-    /* ── EXERCISE TOGGLE ────────────────────────── */
     function toggleExercise(id) {
       document.getElementById(id).classList.toggle('open');
     }
@@ -818,6 +1718,11 @@
       applyListen(on);
     }
 
+    /* ── HANDS-FREE READING ENGINE ─────────────────
+       Reads the overview, the written content, and a
+       short mention of audio/video — without hiding any
+       text — and highlights each word as it is spoken.
+    ────────────────────────────────────────────── */
     const ttsState = { queue: [], index: 0, playing: false, builtFor: null };
 
     function wrapWordsOnce(el) {
@@ -967,12 +1872,7 @@
 
     function renderThreeCircleTools() {
       document.querySelectorAll('.tc-section[data-module]').forEach(section => {
-        const rawKey = section.dataset.module; /* e.g. "1-open" or "1-close" */
-        const n = rawKey;
-        const isClose = rawKey.endsWith('-close');
-        /* For storage we use the numeric module number */
-        const numStr = rawKey.split('-')[0];
-
+        const n = section.dataset.module;
         section.innerHTML = `
           <div class="tc-header">
             <h3>How are you feeling right now?</h3>
@@ -992,7 +1892,7 @@
             <div class="tc-record-label">Record your circle sizes</div>
             <p class="tc-record-intro">When the circles reflect how you feel, click Submit to save.</p>
             <div class="tc-actions">
-              <button class="tc-submit-btn" id="tc-btn-${n}" onclick="tcSubmit('${n}', ${isClose})" disabled>Submit</button>
+              <button class="tc-submit-btn" id="tc-btn-${n}" onclick="tcSubmit(${n})" disabled>Submit</button>
               <div class="tc-saved-badge" id="tc-saved-${n}">Saved ✓</div>
             </div>
             <div class="tc-proportions" id="tc-prop-${n}"></div>
@@ -1059,7 +1959,7 @@
       });
     }
 
-    function tcSubmit(n, isClose) {
+    function tcSubmit(n) {
       if (!hasChangedCircle(n)) { alert('Please resize at least one circle before submitting.'); return; }
       const v = getModuleValues(n);
       const total = v.threat + v.drive + v.soothing || 1;
@@ -1069,12 +1969,9 @@
       const dom = v.threat >= v.drive && v.threat >= v.soothing ? 'threat'
                 : v.drive >= v.soothing ? 'drive' : 'soothing';
 
-      const numStr = n.split('-')[0];
       const existing = JSON.parse(localStorage.getItem('tcResponses') || '[]');
       existing.push({
-        moduleNumber: numStr,
-        measureType: isClose ? 'closing' : 'opening',
-        moduleName: getModuleName(parseInt(numStr)),
+        moduleNumber: n, moduleName: getModuleName(n),
         submittedAt: new Date().toISOString(),
         threatRaw: v.threat, driveRaw: v.drive, soothingRaw: v.soothing,
         threatProportion: tP, driveProportion: dP, soothingProportion: sP,
@@ -1091,20 +1988,6 @@
         propEl.textContent = `Threat ${Math.round(tP*100)}% | Drive ${Math.round(dP*100)}% | Soothing ${Math.round(sP*100)}% | Dominant: ${dom}`;
         propEl.classList.add('visible');
       }
-
-      /* If this is the closing TC, reveal completion screen and mark module complete */
-      if (isClose) {
-        const moduleNum = parseInt(numStr);
-        const completionEl = document.getElementById(`completion-${moduleNum}`);
-        if (completionEl) completionEl.style.display = 'block';
-        const navEl = document.getElementById(`step6-nav-${moduleNum}`);
-        if (navEl) navEl.style.display = 'none';
-        markComplete(moduleNum);
-        if (moduleNum === TOTAL_MODULES) {
-          const pmBox = document.getElementById('postMeasuresBox');
-          if (pmBox) pmBox.style.display = 'block';
-        }
-      }
     }
 
     /* ── MODULE NAVIGATION ──────────────────────── */
@@ -1114,15 +1997,6 @@
       document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
       document.getElementById('module-' + num).classList.add('active');
       document.getElementById('sidebar-' + num).classList.add('active');
-
-      /* Return to step 1 when switching modules */
-      const currentStep = moduleStep[num] || 1;
-      for (let s = 1; s <= STEPS_PER_MODULE; s++) {
-        const el = document.getElementById(`step-${num}-${s}`);
-        if (el) el.classList.toggle('active', s === currentStep);
-      }
-      updateStepIndicator(num, currentStep);
-
       document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -1133,6 +2007,7 @@
       event.target.classList.add('active');
     }
 
+    /* ── MARK COMPLETE — unlocks Next but does NOT auto-navigate ── */
     function markComplete(num) {
       if (!completed.includes(num)) {
         completed.push(num);
@@ -1140,11 +2015,17 @@
         applyCompletion(num);
         updateProgress();
       }
+      if (num === TOTAL_MODULES) {
+        const pmBox = document.getElementById('postMeasuresBox');
+        if (pmBox) { pmBox.style.display = 'block'; pmBox.scrollIntoView({ behavior: 'smooth' }); }
+      }
     }
 
     function applyCompletion(num) {
       const tick = document.getElementById('tick-' + num);
       if (tick) tick.classList.add('done');
+      const nextBtn = document.getElementById(`next-btn-${num}`);
+      if (nextBtn) nextBtn.style.display = '';
     }
 
     function updateProgress() {
@@ -1171,10 +2052,6 @@
       renderProgramModules();
       renderThreeCircleTools();
       setupCircleDragging();
-
-      /* Initialise all modules to step 1 */
-      modules.forEach((_, i) => { moduleStep[i + 1] = 1; });
-
       completed.forEach(n => applyCompletion(n));
       updateProgress();
       if (completed.includes(TOTAL_MODULES)) {
