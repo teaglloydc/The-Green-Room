@@ -1436,7 +1436,6 @@
       </div>
       <h3 id="celebrationTitle">Congratulations!</h3>
       <p id="celebrationMessage"></p>
-      <div class="celebration-audio-recap" id="celebrationAudioRecap"></div>
       <div class="celebration-actions" id="celebrationActions"></div>
     </div>
   </div>
@@ -1491,9 +1490,14 @@
 
 <p>These changes are not random. During pregnancy and after birth, hormones help reshape our brains for caregiving. These changes can help us notice, respond to and care for our little ones, but they can also make challenges involving our baby feel more emotionally intense.</p>
 `, 
-    audio: 'Guided audio — Motherhood and the brain', 
+    audio: 'Guided audio — Motherhood and the brain',
     audioImage: "Mindfulness2.png",
-    exerciseTitle: 'Try this quick exercise',
+    audioOptions: [
+      { label: '2 min', title: 'Motherhood and the brain — 2 min practice', file: '' },
+      { label: '5 min', title: 'Motherhood and the brain — 5 min practice', file: '' },
+      { label: '10 min', title: 'Motherhood and the brain — 10 min practice', file: '' }
+    ],
+    exerciseTitle: 'Reflection activity',
     exercise: `
     <p>Take a moment to reflect</p>
     <p>Have you noticed any change in how you think, feel or behave since giving birth?</p>
@@ -1538,7 +1542,7 @@
      { label: '5 min', title: 'Compassion and our tricky brains — 5 min practice', file: '' },
      { label: '10 min', title: 'Compassion and our tricky brains — 10 min practice', file: '' }
    ],
-   exerciseTitle: 'Try this quick exercise',
+   exerciseTitle: 'Reflection activity',
    exercise:`
    <p>What are some examples of times when somebody showing compassion toward you?</p>
    <p>What are some examples of times when you have beeen compassionate towards someone else?</p>
@@ -1621,7 +1625,7 @@
           { label: '5 min', title: 'Our three circles — 5 min practice', file: '' },
           { label: '10 min', title: 'Our three circles — 10 min practice', file: '' }
         ],
-        exerciseTitle: 'Try this quick exercise',
+        exerciseTitle: 'Reflection activity',
         exercise: '<p>What circle did you spend the most time in this week as a mother of a premature baby? What did time in each circle look like for you?</p>' },
 
       { title: 'Working with your inner critic',
@@ -1669,7 +1673,7 @@
           { label: '5 min', title: 'Working with your inner critic — 5 min practice', file: '' },
           { label: '10 min', title: 'Working with your inner critic — 10 min practice', file: '' }
         ],
-        exerciseTitle: 'Try this quick exercise',
+        exerciseTitle: 'Reflection activity',
         exercise: `
         <p>What happens when you focus on a difficult aspect of your baby and parenting? How do you feel inside? What kinds of thoughts come to mind?</p>
         <p>What happens when you focus on aspect of your baby and parenting that bring you joy?How do you feel inside? What kinds of thoughts come to mind?</p>
@@ -1725,7 +1729,7 @@
           { label: '5 min', title: 'Building your compassionate self — 5 min practice', file: '' },
           { label: '10 min', title: 'Building your compassionate self — 10 min practice', file: '' }
         ],
-        exerciseTitle: 'Try this quick exercise',
+        exerciseTitle: 'Reflection activity',
         exercise: `
         <p>What does your compassionate self look like?</p>
         <p>How do they stand?</p>
@@ -1771,7 +1775,7 @@
             ]
           }
         },
-        exerciseTitle: 'Try this quick exercise',
+        exerciseTitle: 'Reflection activity',
         exercise: '<p>exercise content here</p>' },
 
       { title: 'Next steps',
@@ -1862,7 +1866,7 @@
         const exerciseBlock = `
           <div class="exercise-block" id="exercise-mod-${num}">
             <div class="exercise-toggle" onclick="toggleExercise('exercise-mod-${num}')">
-              <h3>Try this quick exercise</h3>
+              <h3>Reflection activity</h3>
               <span class="exercise-hint">Tap to open <span class="exercise-chevron">▾</span></span>
             </div>
             <div class="exercise-body">
@@ -2557,32 +2561,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         : `<button class="btn-module-nav btn-complete" onclick="closeCelebration()">Stay here</button>
            <button class="btn-module-nav btn-next" onclick="closeCelebration(); showModule(${num + 1})">Continue to Module ${num + 1} →</button>`;
 
-      const recap = document.getElementById('celebrationAudioRecap');
-      if (recap) recap.innerHTML = buildAudioRecap();
-
       document.getElementById('celebrationOverlay').classList.add('visible');
-    }
-
-    function buildAudioRecap() {
-      if (!completed.length) return '';
-      const dotColors = ['var(--threat)', 'var(--drive)', 'var(--soothing)', 'var(--wood)'];
-      const rows = completed.slice().sort((a, b) => a - b).map((n, i) => {
-        const mod = modules[n - 1];
-        if (!mod) return '';
-        return `
-          <li>
-            <span class="recap-dot" style="background:${dotColors[i % dotColors.length]}"></span>
-            <div>
-              <div class="recap-mod">Module ${n} · ${mod.title}</div>
-              <div class="recap-audio">${mod.audio || ''}</div>
-            </div>
-          </li>
-        `;
-      }).join('');
-      return `
-        <p class="celebration-recap-label">Your practice so far</p>
-        <ul class="celebration-recap-list">${rows}</ul>
-      `;
     }
 
     function closeCelebration() {
