@@ -185,6 +185,24 @@
       z-index: 0;
     }
 
+    /* Phone-only: source footage frames her on the right third of a wide
+       shot, so on a narrow/tall viewport "center" crops part of her out.
+       Slowly pan the crop window instead. Desktop stays as it was. */
+    @media (max-width: 640px) {
+      .hero-video {
+        object-position: 65% center;
+        animation: hero-video-pan 18s ease-in-out infinite;
+      }
+      @keyframes hero-video-pan {
+        0%   { object-position: 28% center; }
+        50%  { object-position: 80% center; }
+        100% { object-position: 28% center; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hero-video { animation: none; object-position: 65% center; }
+      }
+    }
+
     .hero::before {
       content: "";
       position: absolute;

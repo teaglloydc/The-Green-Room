@@ -423,26 +423,77 @@
       flex-shrink: 0;
     }
 
-    .module-quicknav {
+    /* ── CLICK-THROUGH SUBPAGES — before-measure / page 1 / 2 / 3 / after-measure ── */
+    .subpage { display: none; }
+    .subpage.active { display: block; }
+
+    .subpage-nav-dots {
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
       gap: 8px;
-      margin: 20px 0 4px;
+      margin: 18px 0 24px;
     }
 
-    .quicknav-btn {
-      padding: 8px 16px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--surface-soft);
-      color: var(--text);
-      font: inherit;
-      font-weight: 700;
-      font-size: 0.82rem;
-      cursor: pointer;
+    .subpage-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--line);
       transition: background 0.2s ease, transform 0.2s ease;
     }
-    .quicknav-btn:hover { background: var(--green-100); transform: translateY(-1px); }
+    .subpage-dot.active { background: var(--wood); transform: scale(1.25); }
+
+    .subpage-nav-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .subpage-label {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--wood-dark);
+      margin-bottom: 10px;
+    }
+
+    /* ── SOFT LANDING (Introduction module only) ── */
+    .soft-landing-card {
+      margin-bottom: 28px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--wood);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+    }
+
+    .soft-landing-label {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--wood-dark);
+      margin-bottom: 6px;
+    }
+
+    .soft-landing-card h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .soft-landing-card > p {
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 16px;
+      font-size: 0.97rem;
+    }
 
     .module-card-shell [id^="sec-"] { scroll-margin-top: 70px; }
 
@@ -1171,6 +1222,8 @@
     .celebration-overlay.visible { display: flex; }
 
     .celebration-card {
+      position: relative;
+      overflow: hidden;
       width: 100%;
       max-width: 420px;
       padding: clamp(28px, 5vw, 40px) clamp(24px, 5vw, 32px);
@@ -1182,22 +1235,49 @@
       animation: celebrate-in 0.3s ease;
     }
 
+    .celebration-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 7px;
+      background: linear-gradient(90deg, var(--threat), var(--wood), var(--soothing), var(--drive));
+    }
+
     @keyframes celebrate-in {
       from { opacity: 0; transform: translateY(14px) scale(0.97); }
       to { opacity: 1; transform: none; }
     }
 
     .celebration-icon {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 18px;
+      position: relative;
+      width: 64px;
+      height: 64px;
+      margin: 8px auto 18px;
       display: grid;
       place-items: center;
       border-radius: 50%;
-      background: var(--green-100);
-      color: var(--green-700);
-      font-size: 26px;
+      background: linear-gradient(135deg, var(--wood), var(--green-700));
+      color: #fffbf3;
+      font-size: 28px;
       font-weight: 900;
+      box-shadow: 0 10px 26px rgba(180,135,97,0.4);
+    }
+
+    .celebration-confetti-dot {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.9;
+      animation: confetti-pop 0.55s ease backwards;
+    }
+    .celebration-confetti-dot.cd1 { width: 11px; height: 11px; top: -6px;  left: -12px; background: var(--threat);   animation-delay: 0.05s; }
+    .celebration-confetti-dot.cd2 { width: 8px;  height: 8px;  top: -10px; right: -10px; background: var(--drive);   animation-delay: 0.16s; }
+    .celebration-confetti-dot.cd3 { width: 9px;  height: 9px;  bottom: -8px; left: -14px; background: var(--soothing); animation-delay: 0.27s; }
+    .celebration-confetti-dot.cd4 { width: 10px; height: 10px; bottom: -12px; right: -8px; background: var(--wood);   animation-delay: 0.38s; }
+
+    @keyframes confetti-pop {
+      0%   { transform: scale(0) rotate(0deg);   opacity: 0; }
+      65%  { transform: scale(1.25) rotate(200deg); opacity: 1; }
+      100% { transform: scale(1) rotate(360deg); opacity: 0.9; }
     }
 
     .celebration-card h3 {
@@ -1213,7 +1293,7 @@
       color: var(--muted);
       font-size: 0.95rem;
       line-height: 1.75;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .celebration-actions {
@@ -1347,9 +1427,16 @@
 
   <div class="celebration-overlay" id="celebrationOverlay" onclick="if(event.target===this) closeCelebration()">
     <div class="celebration-card">
-      <div class="celebration-icon">✓</div>
+      <div class="celebration-icon">
+        <span class="celebration-confetti-dot cd1"></span>
+        <span class="celebration-confetti-dot cd2"></span>
+        <span class="celebration-confetti-dot cd3"></span>
+        <span class="celebration-confetti-dot cd4"></span>
+        ✓
+      </div>
       <h3 id="celebrationTitle">Congratulations!</h3>
       <p id="celebrationMessage"></p>
+      <div class="celebration-audio-recap" id="celebrationAudioRecap"></div>
       <div class="celebration-actions" id="celebrationActions"></div>
     </div>
   </div>
@@ -1382,7 +1469,12 @@
 <p>If you have any questions or feedback about the program, please contact: <a href="mailto:teagan.collins@uq.edu.au">teagan.collins@uq.edu.au</a></p>
 `,
         audio: 'Guided audio — Introduction',
-        audioImage: "Introduction.png" },
+        audioImage: "Introduction.png",
+        softLanding: {
+          title: 'Soft landing — guided practice',
+          description: 'Before you start reading, take a few minutes just to arrive. There is no right or wrong way to do this — simply notice what feels supportive to you right now.',
+          audioImage: 'Introduction.png'
+        } },
 
       { title: 'Motherhood and the brain', summary: ['How does motherhood change the brain?','How do these changes impact me after preterm birth?','How can these changes impact my mental health?'],
         written:`
@@ -1707,9 +1799,19 @@
       return Math.max(1, Math.round(words / 200)) + ' min read';
     }
 
-    function jumpToSection(id) {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    /* Splits a module's written HTML roughly in half by top-level block
+       (<p>, <ul>, ...) so it can be spread across two click-through pages
+       as "a small amount of writing" each, without hand-editing every
+       module's content. */
+    function splitWrittenContent(html) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = html || '';
+      const blocks = Array.from(wrapper.children);
+      if (blocks.length <= 1) return [html || '', ''];
+      const mid = Math.ceil(blocks.length / 2);
+      const first = blocks.slice(0, mid).map(el => el.outerHTML).join('');
+      const second = blocks.slice(mid).map(el => el.outerHTML).join('');
+      return [first, second];
     }
 
     function setupScrollReveal() {
@@ -1785,23 +1887,119 @@
             </div>
             <div class="audio-player-track"><div class="audio-player-track-fill"></div></div>
             <p class="audio-player-note">Audio will be added here</p>
-            <div class="audio-length-tabs">
-              ${opts.map((opt, oi) => `
-                <button type="button" class="audio-length-btn ${oi === 0 ? 'active' : ''}" data-title="${opt.title}" onclick="setAudioLength(event)">${opt.label}</button>
-              `).join('')}
+            ${opts.length > 1 ? `
+              <div class="audio-length-tabs">
+                ${opts.map((opt, oi) => `
+                  <button type="button" class="audio-length-btn ${oi === 0 ? 'active' : ''}" data-title="${opt.title}" onclick="setAudioLength(event)">${opt.label}</button>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        /*
+         * Circle tabs: one tab per system, coloured to match its name.
+         * Nothing is shown until a tab is clicked — no tab/content starts active.
+         * Edit content and preterm fields in the circleDefs array above.
+         */
+        const circleBubblesHTML = m.circleDefs ? `
+          <div class="circle-tab-buttons">
+            ${m.circleDefs.map(def => `
+              <button type="button" class="circle-tab-btn ${def.system}" onclick="showCircleTab(event, ${num}, '${def.system}')">${def.label.split(' — ')[0]}</button>
+            `).join('')}
+          </div>
+          <p class="circle-tab-hint" id="circle-hint-${num}">Select a circle above to read about it.</p>
+          ${m.circleDefs.map(def => `
+            <div class="circle-tab-content ${def.system}" id="circle-${num}-${def.system}">
+              <h3>${def.label}</h3>
+              ${def.content}
+              ${def.preterm || ''}
+            </div>
+          `).join('')}
+        ` : '';
+
+        const moduleHeaderHTML = `
+          <div class="module-header">
+            <div class="module-label">Module ${num}</div>
+            <div class="module-header-top">
+              <h2>${m.title}</h2>
+              <div class="module-badges">
+                <span class="module-progress">Module ${num} of ${TOTAL_MODULES}</span>
+                <span class="module-progress module-readtime">${estimateReadMinutes(m)}</span>
+              </div>
             </div>
           </div>
         `;
 
-        let audioSection;
+        const postMeasuresBoxHTML = isLast ? `
+          <div class="post-measures-box" id="postMeasuresBox" style="display:none;">
+            <div class="summary-box">
+              <h3>You have completed The Green Room</h3>
+              <p>Thank you for completing all eight modules. The final step is to complete a short post-program survey.</p>
+              <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures">Complete post-program survey</a>
+              <p class="post-measures-note">You will be taken to a secure Qualtrics survey.</p>
+            </div>
+          </div>
+        ` : '';
 
+        /* ── MODULE 1 (INTRODUCTION) — kept as a single scrolling page,
+           with a Soft Landing practice added at the very start ── */
+        if (num === 1) {
+          const softLandingHTML = m.softLanding ? `
+            <div class="soft-landing-card">
+              <div class="soft-landing-label">Before you begin</div>
+              <h3>Soft landing</h3>
+              <p>${m.softLanding.description}</p>
+              ${renderAudioOptions([{ title: m.softLanding.title }], m.softLanding.audioImage, 'Guided audio — Soft landing')}
+            </div>
+          ` : '';
+
+          return `
+            <section class="module-section active" id="module-${num}">
+              <div class="module-card-shell">
+                ${moduleHeaderHTML}
+                ${softLandingHTML}
+
+                <div class="summary-box">
+                  <h3>What this module covers</h3>
+                  <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
+                </div>
+
+                <div class="video-placeholder">
+                  <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
+                </div>
+
+                <div class="content-block written-block">
+                  <div class="written-content">${m.written}</div>
+                </div>
+
+                <div class="section-divider"></div>
+                ${exerciseBlock}
+
+                <div class="tc-section" data-module="${num}"></div>
+
+                <div class="module-nav-buttons">
+                  <span></span>
+                  <button class="btn-module-nav btn-complete" onclick="markComplete(${num})">Mark as complete</button>
+                  <button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1})" style="display:none;">Next module →</button>
+                </div>
+              </div>
+            </section>
+          `;
+        }
+
+        /* ── MODULES 2–8 — click through 5 pages instead of scrolling:
+           before-measure → video+writing → video+writing → reflect+audio → after-measure ── */
+        const [page1Written, page2Written] = splitWrittenContent(m.written);
+
+        let page3ExtraHTML;
         if (m.emotions) {
           const eo = m.emotionOptions || {};
           const renderEmotionAudio = (key) => eo[key]
             ? renderAudioOptions(eo[key].options, eo[key].image, m.audio)
             : '<div class="audio-placeholder"><div><div class="audio-title">Audio will be added here</div></div></div>';
 
-          audioSection = `
+          page3ExtraHTML = `
             <div class="emotion-tab-buttons">
               <button class="emotion-tab-btn active" onclick="showEmotion(event,'anger')">Anger</button>
               <button class="emotion-tab-btn" onclick="showEmotion(event,'sadness')">Sadness</button>
@@ -1834,103 +2032,96 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 <p>While these reactions can be exhausting, they are often signs of a mind that is working hard to protect a baby it cares deeply about.</p></div>
               ${renderEmotionAudio('anxiety')}
             </div>
-            ${exerciseBlock}
           `;
-        } else if (num <= 2) {
-          audioSection = exerciseBlock;
         } else {
           const audioHTML = m.audioOptions
             ? renderAudioOptions(m.audioOptions, m.audioImage, m.audio)
             : `<div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);"><img class="audio-thumb" src="${m.audioImage || ''}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>`;
 
-          audioSection = `
+          page3ExtraHTML = `
             <div class="content-block">
               <h3>Audio practice</h3>
               ${audioHTML}
             </div>
-            ${exerciseBlock}
           `;
         }
 
-        /*
-         * Circle tabs: one tab per system, coloured to match its name.
-         * Nothing is shown until a tab is clicked — no tab/content starts active.
-         * Edit content and preterm fields in the circleDefs array above.
-         */
-        const circleBubblesHTML = m.circleDefs ? `
-          <div class="circle-tab-buttons">
-            ${m.circleDefs.map(def => `
-              <button type="button" class="circle-tab-btn ${def.system}" onclick="showCircleTab(event, ${num}, '${def.system}')">${def.label.split(' — ')[0]}</button>
-            `).join('')}
-          </div>
-          <p class="circle-tab-hint" id="circle-hint-${num}">Select a circle above to read about it.</p>
-          ${m.circleDefs.map(def => `
-            <div class="circle-tab-content ${def.system}" id="circle-${num}-${def.system}">
-              <h3>${def.label}</h3>
-              ${def.content}
-              ${def.preterm || ''}
-            </div>
-          `).join('')}
-        ` : '';
-
         return `
-          <section class="module-section ${i === 0 ? 'active' : ''}" id="module-${num}">
+          <section class="module-section" id="module-${num}">
             <div class="module-card-shell">
-              <div class="module-header">
-                <div class="module-label">Module ${num}</div>
-                <div class="module-header-top">
-                  <h2>${m.title}</h2>
-                  <div class="module-badges">
-                    <span class="module-progress">Module ${num} of ${TOTAL_MODULES}</span>
-                    <span class="module-progress module-readtime">${estimateReadMinutes(m)}</span>
-                  </div>
+              ${moduleHeaderHTML}
+
+              <div class="subpage-nav-dots">
+                <span class="subpage-dot active" data-page="1"></span>
+                <span class="subpage-dot" data-page="2"></span>
+                <span class="subpage-dot" data-page="3"></span>
+                <span class="subpage-dot" data-page="4"></span>
+                <span class="subpage-dot" data-page="5"></span>
+              </div>
+
+              <div class="subpage active" id="subpage-${num}-1">
+                <p class="subpage-label">Before you begin</p>
+                <div class="tc-section" data-module="${num}" data-phase="before"></div>
+                <div class="subpage-nav-buttons">
+                  <span></span>
+                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},2)">Continue →</button>
                 </div>
               </div>
 
-              <div class="module-quicknav" aria-label="Jump to a section of this module">
-                <button type="button" class="quicknav-btn" onclick="jumpToSection('sec-overview-${num}')">Overview</button>
-                <button type="button" class="quicknav-btn" onclick="jumpToSection('sec-video-${num}')">Video</button>
-                <button type="button" class="quicknav-btn" onclick="jumpToSection('sec-read-${num}')">Read</button>
-                <button type="button" class="quicknav-btn" onclick="jumpToSection('sec-practice-${num}')">Practice</button>
-              </div>
-
-              <div class="summary-box" id="sec-overview-${num}">
-                <h3>What this module covers</h3>
-                <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
-              </div>
-
-              <div class="video-placeholder" id="sec-video-${num}">
-                <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
-              </div>
-
-              <div class="content-block written-block" id="sec-read-${num}">
-                <h3></h3>
-                <div class="written-content">${m.written}</div>
-              </div>
-
-              ${circleBubblesHTML}
-
-              <div class="section-divider" id="sec-practice-${num}"></div>
-              ${audioSection}
-
-              <div class="tc-section" data-module="${num}"></div>
-
-              <div class="module-nav-buttons">
-                ${num > 1 ? `<button class="btn-module-nav btn-prev" onclick="showModule(${num-1})">← Previous</button>` : '<span></span>'}
-                <button class="btn-module-nav btn-complete" onclick="markComplete(${num})">${isLast ? 'Mark program complete' : 'Mark as complete'}</button>
-                ${!isLast ? `<button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1})" style="display:none;">Next module →</button>` : ''}
-              </div>
-
-              ${isLast ? `
-                <div class="post-measures-box" id="postMeasuresBox" style="display:none;">
-                  <div class="summary-box">
-                    <h3>You have completed The Green Room</h3>
-                    <p>Thank you for completing all eight modules. The final step is to complete a short post-program survey.</p>
-                    <a href="YOUR-QUALTRICS-POST-MEASURES-LINK-HERE" target="_blank" class="btn-post-measures">Complete post-program survey</a>
-                    <p class="post-measures-note">You will be taken to a secure Qualtrics survey.</p>
-                  </div>
+              <div class="subpage" id="subpage-${num}-2">
+                <div class="summary-box">
+                  <h3>What this module covers</h3>
+                  <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
                 </div>
-              ` : ''}
+                <div class="video-placeholder">
+                  <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
+                </div>
+                <div class="content-block written-block">
+                  <div class="written-content">${page1Written}</div>
+                </div>
+                <div class="subpage-nav-buttons">
+                  <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},1)">← Back</button>
+                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},3)">Continue →</button>
+                </div>
+              </div>
+
+              <div class="subpage" id="subpage-${num}-3">
+                <div class="video-placeholder">
+                  <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
+                </div>
+                <div class="content-block written-block">
+                  <div class="written-content">${page2Written}</div>
+                </div>
+                ${circleBubblesHTML}
+                <div class="subpage-nav-buttons">
+                  <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},2)">← Back</button>
+                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},4)">Continue →</button>
+                </div>
+              </div>
+
+              <div class="subpage" id="subpage-${num}-4">
+                <p class="subpage-label">Reflect and practise</p>
+                ${exerciseBlock}
+                ${page3ExtraHTML}
+                <div class="subpage-nav-buttons">
+                  <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},3)">← Back</button>
+                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},5)">Continue →</button>
+                </div>
+              </div>
+
+              <div class="subpage" id="subpage-${num}-5">
+                <p class="subpage-label">After this module</p>
+                <button type="button" class="btn-module-nav btn-prev" onclick="showSubpage(${num},4)" style="margin-bottom:20px;">← Back</button>
+                <div class="tc-section" data-module="${num}" data-phase="after"></div>
+
+                <div class="module-nav-buttons">
+                  <button class="btn-module-nav btn-prev" onclick="showModule(${num-1})">← Previous module</button>
+                  <button class="btn-module-nav btn-complete" onclick="markComplete(${num})">${isLast ? 'Mark program complete' : 'Mark as complete'}</button>
+                  ${!isLast ? `<button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1})" style="display:none;">Next module →</button>` : ''}
+                </div>
+
+                ${postMeasuresBoxHTML}
+              </div>
             </div>
           </section>
         `;
@@ -2009,12 +2200,26 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       return queue;
     }
 
+    /* If a paragraph about to be read/highlighted lives on a subpage that
+       isn't currently showing, flip to that subpage first so the reader
+       can actually see the highlight animate. */
+    function revealElementPage(el) {
+      const subpage = el.closest && el.closest('.subpage');
+      if (!subpage || subpage.classList.contains('active')) return;
+      const section = subpage.closest('.module-section');
+      if (!section) return;
+      const num = section.id.split('-')[1];
+      const page = subpage.id.split('-').pop();
+      if (num && page) showSubpage(Number(num), Number(page));
+    }
+
     function speakSegment(seg, onDone) {
       if (!('speechSynthesis' in window)) { onDone(); return; }
 
       let text, words = null, el = null, offsets = null;
 
       if (seg.type === 'highlight') {
+        revealElementPage(seg.el);
         wrapWordsOnce(seg.el);
         el = seg.el;
         text = el.textContent;
@@ -2104,28 +2309,37 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       btn.title = ttsState.playing ? 'Pause reading' : 'Play / pause reading';
     }
 
-    /* ── THREE CIRCLES ──────────────────────────── */
-    function getModuleValues(n) {
-      if (!circleValues[n]) circleValues[n] = { threat: 33, drive: 33, soothing: 33 };
-      return circleValues[n];
+    /* ── THREE CIRCLES — now measured before AND after each module, so
+       every state is keyed by "module-phase" rather than just module ── */
+    function tcKey(n, phase) { return n + '-' + phase; }
+
+    function getModuleValues(n, phase) {
+      const key = tcKey(n, phase);
+      if (!circleValues[key]) circleValues[key] = { threat: 33, drive: 33, soothing: 33 };
+      return circleValues[key];
     }
 
-    function hasChangedCircle(n) {
-      const v = getModuleValues(n);
-      return v.threat !== 33 || v.drive !== 33 || v.soothing !== 33 || circleChanged[n] === true;
+    function hasChangedCircle(n, phase) {
+      const v = getModuleValues(n, phase);
+      return v.threat !== 33 || v.drive !== 33 || v.soothing !== 33 || circleChanged[tcKey(n, phase)] === true;
     }
 
-    function updateSubmitAvailability(n) {
-      const btn = document.getElementById(`tc-btn-${n}`);
-      if (btn && btn.textContent !== 'Submitted') btn.disabled = !hasChangedCircle(n);
+    function updateSubmitAvailability(n, phase) {
+      const btn = document.getElementById(`tc-btn-${tcKey(n, phase)}`);
+      if (btn && btn.textContent !== 'Submitted') btn.disabled = !hasChangedCircle(n, phase);
     }
 
     function renderThreeCircleTools() {
       document.querySelectorAll('.tc-section[data-module]').forEach(section => {
         const n = section.dataset.module;
+        const phase = section.dataset.phase || 'only';
+        const key = tcKey(n, phase);
+        const heading = phase === 'before' ? 'How are you feeling right now, before starting this module?'
+                      : phase === 'after'  ? 'How are you feeling now, after this module?'
+                      : 'How are you feeling right now?';
         section.innerHTML = `
           <div class="tc-header">
-            <h3>How are you feeling right now?</h3>
+            <h3>${heading}</h3>
             <p>Drag the edge of any circle to resize it — pull outward to grow, push inward to shrink. The legend below shows which colour is which system.</p>
             <div class="tc-legend">
               <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive (blue) — motivation</span></div>
@@ -2133,33 +2347,33 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat (red) — protection</span></div>
             </div>
           </div>
-          <div class="tc-circle-tool" id="tc-tool-${n}">
-            <div class="tc-live-circle drive"    data-module="${n}" data-system="drive"    style="--size:33;" title="Drive"></div>
-            <div class="tc-live-circle soothing" data-module="${n}" data-system="soothing" style="--size:33;" title="Soothing"></div>
-            <div class="tc-live-circle threat"   data-module="${n}" data-system="threat"   style="--size:33;" title="Threat"></div>
+          <div class="tc-circle-tool" id="tc-tool-${key}">
+            <div class="tc-live-circle drive"    data-module="${n}" data-phase="${phase}" data-system="drive"    style="--size:33;" title="Drive"></div>
+            <div class="tc-live-circle soothing" data-module="${n}" data-phase="${phase}" data-system="soothing" style="--size:33;" title="Soothing"></div>
+            <div class="tc-live-circle threat"   data-module="${n}" data-phase="${phase}" data-system="threat"   style="--size:33;" title="Threat"></div>
           </div>
           <div class="tc-record-panel">
             <div class="tc-record-label">Record your circle sizes</div>
             <p class="tc-record-intro">When the circles reflect how you feel, click Submit to save.</p>
             <div class="tc-actions">
-              <button class="tc-submit-btn" id="tc-btn-${n}" onclick="tcSubmit(${n})" disabled>Submit</button>
-              <div class="tc-saved-badge" id="tc-saved-${n}">Saved ✓</div>
+              <button class="tc-submit-btn" id="tc-btn-${key}" onclick="tcSubmit('${n}','${phase}')" disabled>Submit</button>
+              <div class="tc-saved-badge" id="tc-saved-${key}">Saved ✓</div>
             </div>
-            <div class="tc-proportions" id="tc-prop-${n}"></div>
+            <div class="tc-proportions" id="tc-prop-${key}"></div>
           </div>
         `;
       });
     }
 
-    function applyCircleSize(el, n, value) {
-      const values = getModuleValues(n);
+    function applyCircleSize(el, n, phase, value) {
+      const values = getModuleValues(n, phase);
       const system = el.dataset.system;
       const oldVal = values[system];
       const newVal = Math.max(2, Math.min(100, Math.round(value)));
       values[system] = newVal;
-      if (newVal !== oldVal) circleChanged[n] = true;
+      if (newVal !== oldVal) circleChanged[tcKey(n, phase)] = true;
       el.style.setProperty('--size', newVal);
-      updateSubmitAvailability(n);
+      updateSubmitAvailability(n, phase);
     }
 
     let rafPending = false;
@@ -2167,21 +2381,22 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
     function flushPendingMoves() {
       rafPending = false;
-      Object.values(pendingMoves).forEach(({ el, n, value }) => applyCircleSize(el, n, value));
+      Object.values(pendingMoves).forEach(({ el, n, phase, value }) => applyCircleSize(el, n, phase, value));
     }
 
     function setupCircleDragging() {
       document.querySelectorAll('.tc-live-circle').forEach(circle => {
         circle.addEventListener('pointerdown', event => {
           const n = circle.dataset.module;
+          const phase = circle.dataset.phase || 'only';
           const sys = circle.dataset.system;
           const rect = circle.getBoundingClientRect();
           const cx = rect.left + rect.width / 2;
           const cy = rect.top + rect.height / 2;
-          dragState[`${n}-${sys}`] = {
+          dragState[`${n}-${phase}-${sys}`] = {
             cx, cy,
             startDist: Math.hypot(event.clientX - cx, event.clientY - cy),
-            startVal: getModuleValues(n)[sys]
+            startVal: getModuleValues(n, phase)[sys]
           };
           circle.classList.add('dragging');
           circle.setPointerCapture(event.pointerId);
@@ -2191,12 +2406,13 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         circle.addEventListener('pointermove', event => {
           if (!circle.classList.contains('dragging')) return;
           const n = circle.dataset.module;
+          const phase = circle.dataset.phase || 'only';
           const sys = circle.dataset.system;
-          const key = `${n}-${sys}`;
+          const key = `${n}-${phase}-${sys}`;
           const s = dragState[key];
           if (!s) return;
           const dist = Math.hypot(event.clientX - s.cx, event.clientY - s.cy);
-          pendingMoves[key] = { el: circle, n, value: s.startVal + (dist - s.startDist) * 0.68 };
+          pendingMoves[key] = { el: circle, n, phase, value: s.startVal + (dist - s.startDist) * 0.68 };
           if (!rafPending) { rafPending = true; requestAnimationFrame(flushPendingMoves); }
         }, { passive: true });
 
@@ -2209,9 +2425,10 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       });
     }
 
-    function tcSubmit(n) {
-      if (!hasChangedCircle(n)) { alert('Please resize at least one circle before submitting.'); return; }
-      const v = getModuleValues(n);
+    function tcSubmit(n, phase) {
+      const key = tcKey(n, phase);
+      if (!hasChangedCircle(n, phase)) { alert('Please resize at least one circle before submitting.'); return; }
+      const v = getModuleValues(n, phase);
       const total = v.threat + v.drive + v.soothing || 1;
       const tP = parseFloat((v.threat / total).toFixed(4));
       const dP = parseFloat((v.drive  / total).toFixed(4));
@@ -2221,7 +2438,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
       const existing = JSON.parse(localStorage.getItem('tcResponses') || '[]');
       existing.push({
-        moduleNumber: n, moduleName: getModuleName(n),
+        moduleNumber: Number(n), phase, moduleName: getModuleName(n),
         submittedAt: new Date().toISOString(),
         threatRaw: v.threat, driveRaw: v.drive, soothingRaw: v.soothing,
         threatProportion: tP, driveProportion: dP, soothingProportion: sP,
@@ -2229,11 +2446,11 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       });
       localStorage.setItem('tcResponses', JSON.stringify(existing));
 
-      const btn = document.getElementById(`tc-btn-${n}`);
+      const btn = document.getElementById(`tc-btn-${key}`);
       btn.disabled = true; btn.textContent = 'Submitted';
-      const badge = document.getElementById(`tc-saved-${n}`);
+      const badge = document.getElementById(`tc-saved-${key}`);
       if (badge) badge.classList.add('visible');
-      const propEl = document.getElementById(`tc-prop-${n}`);
+      const propEl = document.getElementById(`tc-prop-${key}`);
       if (propEl) {
         propEl.textContent = `Threat ${Math.round(tP*100)}% | Drive ${Math.round(dP*100)}% | Soothing ${Math.round(sP*100)}% | Dominant: ${dom}`;
         propEl.classList.add('visible');
@@ -2245,8 +2462,32 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       stopReading();
       document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
-      document.getElementById('module-' + num).classList.add('active');
+      const section = document.getElementById('module-' + num);
+      section.classList.add('active');
       document.getElementById('sidebar-' + num).classList.add('active');
+      resetSubpages(section);
+      document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function resetSubpages(section) {
+      const pages = section.querySelectorAll('.subpage');
+      if (!pages.length) return;
+      pages.forEach(p => p.classList.remove('active'));
+      pages[0].classList.add('active');
+      const dots = section.querySelectorAll('.subpage-dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+    }
+
+    /* Click-through pages within a module (before-measure / page 1 / page 2 / page 3 / after-measure) */
+    function showSubpage(num, page) {
+      const scope = document.getElementById('module-' + num);
+      if (!scope) return;
+      scope.querySelectorAll('.subpage').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(`subpage-${num}-${page}`);
+      if (target) target.classList.add('active');
+      scope.querySelectorAll('.subpage-dot').forEach(d => {
+        d.classList.toggle('active', Number(d.dataset.page) === page);
+      });
       document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -2316,7 +2557,32 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         : `<button class="btn-module-nav btn-complete" onclick="closeCelebration()">Stay here</button>
            <button class="btn-module-nav btn-next" onclick="closeCelebration(); showModule(${num + 1})">Continue to Module ${num + 1} →</button>`;
 
+      const recap = document.getElementById('celebrationAudioRecap');
+      if (recap) recap.innerHTML = buildAudioRecap();
+
       document.getElementById('celebrationOverlay').classList.add('visible');
+    }
+
+    function buildAudioRecap() {
+      if (!completed.length) return '';
+      const dotColors = ['var(--threat)', 'var(--drive)', 'var(--soothing)', 'var(--wood)'];
+      const rows = completed.slice().sort((a, b) => a - b).map((n, i) => {
+        const mod = modules[n - 1];
+        if (!mod) return '';
+        return `
+          <li>
+            <span class="recap-dot" style="background:${dotColors[i % dotColors.length]}"></span>
+            <div>
+              <div class="recap-mod">Module ${n} · ${mod.title}</div>
+              <div class="recap-audio">${mod.audio || ''}</div>
+            </div>
+          </li>
+        `;
+      }).join('');
+      return `
+        <p class="celebration-recap-label">Your practice so far</p>
+        <ul class="celebration-recap-list">${rows}</ul>
+      `;
     }
 
     function closeCelebration() {
