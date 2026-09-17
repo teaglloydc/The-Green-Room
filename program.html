@@ -430,27 +430,42 @@
     .subpage-nav-dots {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
       margin: 18px 0 24px;
     }
 
+    /* A larger transparent tap target with the visible dot drawn as a
+       centred ::after — avoids relying on padding to grow the hit area,
+       which collapses to nothing under this page's global border-box. */
     .subpage-dot {
-      width: 9px;
-      height: 9px;
-      padding: 7px;
-      margin: -7px;
+      position: relative;
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      margin: 0;
       border: 0;
       border-radius: 50%;
-      background-color: var(--line);
-      background-clip: content-box;
+      background: transparent;
       appearance: none;
       -webkit-appearance: none;
       cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.2s ease;
     }
-    .subpage-dot:hover { background-color: var(--wood-dark); }
-    .subpage-dot:focus-visible { outline: 2px solid var(--wood); outline-offset: 3px; }
-    .subpage-dot.active { background-color: var(--wood); transform: scale(1.25); }
+    .subpage-dot::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background-color: var(--muted);
+      opacity: 0.55;
+      transform: translate(-50%, -50%);
+      transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+    }
+    .subpage-dot:hover::after { background-color: var(--wood-dark); opacity: 0.85; }
+    .subpage-dot:focus-visible { outline: 2px solid var(--wood); outline-offset: 2px; }
+    .subpage-dot.active::after { background-color: var(--wood); opacity: 1; transform: translate(-50%, -50%) scale(1.25); }
 
     .carry-forward-note {
       margin-bottom: 16px;
