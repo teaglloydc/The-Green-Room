@@ -176,18 +176,20 @@
       background: #14241b;
     }
 
+    /* Two stacked players so the incoming clip is already playing
+       underneath before the outgoing one fades away — a real crossfade,
+       not a fade-to-black-then-in. */
     .hero-video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: 0;
-      opacity: 1;
-      transition: opacity 0.4s ease;
+      opacity: 0;
+      transition: opacity 1.1s ease;
     }
 
-    .hero-video.hero-video-fading { opacity: 0; }
+    .hero-video.active { opacity: 1; }
 
     @media (prefers-reduced-motion: reduce) {
       .hero-video { transition: none; }
@@ -721,7 +723,8 @@
   </div>
 
   <header class="hero">
-    <video class="hero-video" id="heroVideo" muted playsinline preload="none" poster="IndexCover10.png" aria-hidden="true"></video>
+    <video class="hero-video" id="heroVideoA" muted playsinline preload="none" poster="IndexCover10.png" aria-hidden="true"></video>
+    <video class="hero-video" id="heroVideoB" muted playsinline preload="none" aria-hidden="true"></video>
     <div class="hero-inner">
       <div class="eyebrow"></div>
       <h1>Welcome in.</h1>
@@ -933,53 +936,56 @@
     }
 
     /* Hero alternates between two clips — the woman at the window, then a
-       matching close-up of green leaves — each playing through once before
-       swapping, with a quick fade so the cut isn't jarring. Only one clip
-       is ever loaded at a time (lighter than looping both at once). */
+       matching close-up of green leaves. Two stacked <video> elements take
+       turns: the next clip is started (muted, hidden) underneath the
+       current one, and only once it's actually playing do we crossfade —
+       so there's never a gap/black frame between them. */
     const HERO_CLIPS = ['IndexVideo1.mp4', 'IndexVideo2.mp4'];
     let heroClipIndex = 0;
-    let heroFallbackTried = false;
 
     function initHeroVideo() {
-      const video = document.getElementById('heroVideo');
-      if (!video) return;
+      let current = document.getElementById('heroVideoA');
+      let next = document.getElementById('heroVideoB');
+      if (!current || !next) return;
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const saveData = navigator.connection && navigator.connection.saveData;
       if (reduceMotion || saveData) return; // poster image stays put
 
-      video.addEventListener('ended', () => {
-        heroClipIndex = (heroClipIndex + 1) % HERO_CLIPS.length;
-        playHeroClip(video, HERO_CLIPS[heroClipIndex]);
-      });
+      function crossfadeToNext() {
+        const upcoming = (heroClipIndex + 1) % HERO_CLIPS.length;
+        next.src = HERO_CLIPS[upcoming];
+        next.load();
 
-      // A clip that's missing or fails to load (e.g. not yet added to the
-      // project folder) should never leave a black box — fall back to the
-      // other clip once, and to the poster image if that fails too.
-      video.addEventListener('playing', () => { heroFallbackTried = false; });
-      video.addEventListener('error', () => {
-        if (heroFallbackTried) {
-          video.removeAttribute('src');
-          video.load(); // resets playback state so the poster shows again
-          video.classList.remove('hero-video-fading');
-          return;
-        }
-        heroFallbackTried = true;
-        heroClipIndex = (heroClipIndex + 1) % HERO_CLIPS.length;
-        playHeroClip(video, HERO_CLIPS[heroClipIndex]);
-      });
+        const cleanup = () => {
+          next.removeEventListener('playing', onPlaying);
+          next.removeEventListener('error', onError);
+        };
+        const onPlaying = () => {
+          cleanup();
+          heroClipIndex = upcoming;
+          next.classList.add('active');
+          current.classList.remove('active');
+          const swap = current; current = next; next = swap;
+          current.addEventListener('ended', crossfadeToNext, { once: true });
+        };
+        const onError = () => {
+          cleanup();
+          // The next clip is missing/broken — keep looping the current one
+          // (which is still playing) rather than showing anything broken.
+          current.addEventListener('ended', crossfadeToNext, { once: true });
+        };
 
-      playHeroClip(video, HERO_CLIPS[heroClipIndex]);
-    }
+        next.addEventListener('playing', onPlaying);
+        next.addEventListener('error', onError);
+        next.play().catch(onError);
+      }
 
-    function playHeroClip(video, src) {
-      video.classList.add('hero-video-fading');
-      window.setTimeout(() => {
-        video.src = src;
-        video.load();
-        video.play().catch(() => {}); // autoplay can be blocked; poster remains as fallback
-        video.classList.remove('hero-video-fading');
-      }, 350);
+      current.src = HERO_CLIPS[heroClipIndex];
+      current.load();
+      current.play().catch(() => {}); // autoplay can be blocked; poster remains as fallback
+      current.classList.add('active');
+      current.addEventListener('ended', crossfadeToNext, { once: true });
     }
 
     function initModuleTilt() {
