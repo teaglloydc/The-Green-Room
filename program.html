@@ -1033,6 +1033,74 @@
       .footer-bottom { flex-direction: column; text-align: center; }
     }
 
+    /* ── CELEBRATION MODAL ──────────────────────── */
+    .celebration-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 17, 0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .celebration-overlay.visible { display: flex; }
+
+    .celebration-card {
+      width: 100%;
+      max-width: 420px;
+      padding: clamp(28px, 5vw, 40px) clamp(24px, 5vw, 32px);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+      animation: celebrate-in 0.3s ease;
+    }
+
+    @keyframes celebrate-in {
+      from { opacity: 0; transform: translateY(14px) scale(0.97); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .celebration-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green-100);
+      color: var(--green-700);
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .celebration-card h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .celebration-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .celebration-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 900px) {
       .program-layout { grid-template-columns: 1fr; padding: 16px 14px 80px; gap: 16px; }
@@ -1149,6 +1217,15 @@
   </div>
 
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+  <div class="celebration-overlay" id="celebrationOverlay" onclick="if(event.target===this) closeCelebration()">
+    <div class="celebration-card">
+      <div class="celebration-icon">✓</div>
+      <h3 id="celebrationTitle">Congratulations!</h3>
+      <p id="celebrationMessage"></p>
+      <div class="celebration-actions" id="celebrationActions"></div>
+    </div>
+  </div>
 
   <script>
     /* ── MODULE DATA ────────────────────────────── */
@@ -2010,16 +2087,46 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
     /* ── MARK COMPLETE — unlocks Next but does NOT auto-navigate ── */
     function markComplete(num) {
-      if (!completed.includes(num)) {
+      const alreadyDone = completed.includes(num);
+      if (!alreadyDone) {
         completed.push(num);
         localStorage.setItem('completedModulesV2', JSON.stringify(completed));
         applyCompletion(num);
         updateProgress();
+        showCelebration(num);
       }
       if (num === TOTAL_MODULES) {
         const pmBox = document.getElementById('postMeasuresBox');
-        if (pmBox) { pmBox.style.display = 'block'; pmBox.scrollIntoView({ behavior: 'smooth' }); }
+        if (pmBox) {
+          pmBox.style.display = 'block';
+          if (alreadyDone) pmBox.scrollIntoView({ behavior: 'smooth' });
+        }
       }
+    }
+
+    /* ── CELEBRATION MODAL ──────────────────────── */
+    function showCelebration(num) {
+      const isLast = num === TOTAL_MODULES;
+      const title = document.getElementById('celebrationTitle');
+      const message = document.getElementById('celebrationMessage');
+      const actions = document.getElementById('celebrationActions');
+
+      title.textContent = isLast ? 'Congratulations!' : `Congratulations! You've completed Module ${num}`;
+
+      message.textContent = isLast
+        ? `You've finished all ${TOTAL_MODULES} modules of The Green Room. Take a moment to acknowledge how far you've come.`
+        : `You've completed "${getModuleName(num)}".${num < TOTAL_MODULES ? ` Module ${num + 1}, "${getModuleName(num + 1)}", is now unlocked.` : ''}`;
+
+      actions.innerHTML = isLast
+        ? `<button class="btn-module-nav btn-complete" onclick="closeCelebration(); document.getElementById('postMeasuresBox').scrollIntoView({behavior:'smooth'});">Continue</button>`
+        : `<button class="btn-module-nav btn-complete" onclick="closeCelebration()">Stay here</button>
+           <button class="btn-module-nav btn-next" onclick="closeCelebration(); showModule(${num + 1})">Continue to Module ${num + 1} →</button>`;
+
+      document.getElementById('celebrationOverlay').classList.add('visible');
+    }
+
+    function closeCelebration() {
+      document.getElementById('celebrationOverlay').classList.remove('visible');
     }
 
     function applyCompletion(num) {
