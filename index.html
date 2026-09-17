@@ -6,24 +6,24 @@
   <title>The Green Room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #fbf8f1;
-      --surface: #fffefa;
-      --surface-soft: #f2eadc;
+      --bg: #edf0e4;
+      --surface: #ffffff;
+      --surface-soft: #dceadb;
       --green-900: #234334;
       --green-800: #2e5542;
       --green-700: #416b55;
       --green-600: #527a63;
-      --green-100: #e8efe5;
-      --wood: #b48761;
-      --wood-dark: #8f6748;
-      --text: #26352b;
-      --muted: #71806f;
+      --green-100: #dceadb;
+      --wood: #b5722e;
+      --wood-dark: #8a5423;
+      --text: #1e2b21;
+      --muted: #56675a;
       --line: rgba(31, 52, 39, 0.14);
       --shadow: 0 22px 60px rgba(16, 36, 27, 0.12);
-      --radius: 8px;
+      --radius: 14px;
     }
 
     body.dark-mode {
@@ -35,10 +35,10 @@
       --green-700: #dfe8dd;
       --green-600: #9fb89e;
       --green-100: #233226;
-      --wood: #c2a07e;
-      --wood-dark: #dfc8aa;
+      --wood: #d89b54;
+      --wood-dark: #f0be86;
       --text: #eef3ea;
-      --muted: #aebbaa;
+      --muted: #a9b8a2;
       --line: rgba(238, 243, 234, 0.14);
       --shadow: 0 22px 70px rgba(0, 0, 0, 0.38);
     }
@@ -49,10 +49,10 @@
     body {
       min-height: 100vh;
       background:
-        radial-gradient(circle at 8% 0%, rgba(155,112,79,0.14), transparent 28%),
-        linear-gradient(180deg, var(--bg), #fbf8f1 48%, var(--bg));
+        radial-gradient(circle at 8% 0%, rgba(181,114,46,0.1), transparent 28%),
+        linear-gradient(180deg, var(--bg), #edf0e4 48%, var(--bg));
       color: var(--text);
-      font-family: Manrope, system-ui, sans-serif;
+      font-family: 'Instrument Sans', system-ui, sans-serif;
       line-height: 1.7;
       overflow-x: hidden;
       transition: background-color 0.25s, color 0.25s;
@@ -290,7 +290,7 @@
       justify-content: center;
       min-height: 48px;
       padding: 0 24px;
-      border-radius: 999px;
+      border-radius: 12px;
       text-decoration: none;
       font-weight: 700;
       transition: transform 0.2s, background 0.2s;
@@ -300,7 +300,7 @@
     }
 
     .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: #f8ecd8; color: #183427; }
+    .btn-primary { background: var(--wood); color: #fffbf3; }
     .btn-secondary { border: 1px solid rgba(255,250,240,0.34); color: #fffbf3; background: transparent; }
     .btn-green { background: var(--green-700); color: #fffbf3; }
 
@@ -755,6 +755,70 @@
         <p class="lead">Life with a preemie baby is busy. That's why our program is designed to fit around your schedule. You can work through it at your own pace and return whenever you need to. The aim is not perfection, but steady engagement.</p>
       </div>
       <div class="image-panel" aria-label="A quiet room looking out onto trees"></div>
+    </div>
+  </section>
+
+  <section class="section testimonials">
+    <div class="section-inner">
+      <p class="section-label">What mothers say</p>
+      <h2>Real voices from The Room.</h2>
+
+      <div class="testimonial-carousel" id="testimonialTrack">
+        <!-- Testimonial 1 — replace with a real participant quote once available -->
+        <div class="testimonial-card">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+          </div>
+          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>
+            <p>A real testimonial from a program participant will go here once available.</p>
+          </blockquote>
+          <div class="testimonial-name">Participant name</div>
+          <div class="testimonial-role">The Green Room participant</div>
+        </div>
+        <!-- Testimonial 2 -->
+        <div class="testimonial-card">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+          </div>
+          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>
+            <p>A real testimonial from a program participant will go here once available.</p>
+          </blockquote>
+          <div class="testimonial-name">Participant name</div>
+          <div class="testimonial-role">The Green Room participant</div>
+        </div>
+        <!-- Testimonial 3 -->
+        <div class="testimonial-card">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+          </div>
+          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>
+            <p>A real testimonial from a program participant will go here once available.</p>
+          </blockquote>
+          <div class="testimonial-name">Participant name</div>
+          <div class="testimonial-role">The Green Room participant</div>
+        </div>
+        <!-- Testimonial 4 -->
+        <div class="testimonial-card">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+          </div>
+          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>
+            <p>A real testimonial from a program participant will go here once available.</p>
+          </blockquote>
+          <div class="testimonial-name">Participant name</div>
+          <div class="testimonial-role">The Green Room participant</div>
+        </div>
+      </div>
+
+      <div class="testimonial-controls">
+        <button type="button" class="testimonial-arrow" onclick="scrollTestimonials(-1)" aria-label="Previous testimonial">←</button>
+        <div class="testimonial-dots" id="testimonialDots"></div>
+        <button type="button" class="testimonial-arrow" onclick="scrollTestimonials(1)" aria-label="Next testimonial">→</button>
+      </div>
     </div>
   </section>
 
