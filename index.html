@@ -539,6 +539,12 @@
     @media (max-width: 520px) {
       .modules-grid { grid-template-columns: 1fr; }
       .module-card { aspect-ratio: 4 / 3; }
+
+      /* Going from a tall 3:4 card to a short 4:3 one crops a lot more off
+         the top and bottom. These portraits have faces near the top of the
+         source image, so centring the crop was cutting heads off — bias
+         it upward instead. */
+      .module-card-media { background-position: center top; }
     }
 
     /* ── CLOSING ─────────────────────────────────── */
@@ -584,6 +590,7 @@
       transition: transform 0.2s, background 0.2s;
     }
     .float-btn:hover { transform: scale(1.1); }
+    .float-btn.active { background: var(--wood-dark); }
 
     .back-to-top {
       position: fixed;
@@ -913,8 +920,13 @@
   </footer>
 
   <div class="floating-controls">
+    <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds">🔈</button>
     <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
   </div>
+
+  <audio id="natureSound" loop preload="none">
+    <source src="nature-ambience.mp3" type="audio/mpeg">
+  </audio>
 
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
 
@@ -931,15 +943,50 @@
       applyDark(on);
     }
 
+    /* Calming nature-sound ambience — off by default, and never
+       autoplayed with sound on load even if it was left on last visit,
+       since browsers block audible autoplay without a fresh click. */
+    function applySound(on) {
+      const audio = document.getElementById('natureSound');
+      const btn = document.getElementById('soundBtn');
+      if (!audio || !btn) return;
+      if (on) {
+        audio.volume = 0.45;
+        audio.play().then(() => {
+          btn.classList.add('active');
+          btn.textContent = '🔊';
+          btn.title = 'Turn off nature sounds';
+        }).catch(() => {
+          btn.classList.remove('active');
+          btn.textContent = '🔈';
+          btn.title = 'Nature sounds';
+          localStorage.setItem('natureSound', 'false');
+        });
+      } else {
+        audio.pause();
+        btn.classList.remove('active');
+        btn.textContent = '🔈';
+        btn.title = 'Nature sounds';
+      }
+    }
+
+    function toggleSound() {
+      const on = !document.getElementById('soundBtn').classList.contains('active');
+      localStorage.setItem('natureSound', on);
+      applySound(on);
+    }
+
     function toggleMenu() {
       document.getElementById('mobileMenu').classList.toggle('open');
     }
 
     /* Hero alternates between two clips — the woman at the window, then a
        matching close-up of green leaves. Two stacked <video> elements take
-       turns: the next clip is started (muted, hidden) underneath the
-       current one, and only once it's actually playing do we crossfade —
-       so there's never a gap/black frame between them. */
+       turns. The key to a seamless blend (especially on slower mobile
+       connections): the next clip starts buffering in the background as
+       soon as the current one begins, not at the last second — so by the
+       time the crossfade actually happens, it's already ready to play
+       instantly instead of stalling mid-fade. */
     const HERO_CLIPS = ['IndexVideo1.mp4', 'IndexVideo2.mp4'];
     let heroClipIndex = 0;
 
@@ -952,40 +999,73 @@
       const saveData = navigator.connection && navigator.connection.saveData;
       if (reduceMotion || saveData) return; // poster image stays put
 
-      function crossfadeToNext() {
+      const CROSSFADE_LEAD = 1.4; // seconds before the end to start blending
+      let primed = false;
+      let swapping = false;
+
+      function primeNext() {
+        if (primed) return;
+        primed = true;
         const upcoming = (heroClipIndex + 1) % HERO_CLIPS.length;
+        next.preload = 'auto';
         next.src = HERO_CLIPS[upcoming];
         next.load();
+      }
+
+      function beginSwap() {
+        if (swapping) return;
+        swapping = true;
+        current.removeEventListener('timeupdate', onTimeUpdate);
+        current.removeEventListener('ended', onTimeUpdate);
+        primeNext(); // safety net if we somehow got here before priming
 
         const cleanup = () => {
-          next.removeEventListener('playing', onPlaying);
-          next.removeEventListener('error', onError);
+          next.removeEventListener('playing', onReady);
+          next.removeEventListener('error', onFail);
         };
-        const onPlaying = () => {
+        const rearm = () => {
+          current.addEventListener('timeupdate', onTimeUpdate);
+          current.addEventListener('ended', onTimeUpdate);
+        };
+        const onReady = () => {
           cleanup();
-          heroClipIndex = upcoming;
+          heroClipIndex = (heroClipIndex + 1) % HERO_CLIPS.length;
           next.classList.add('active');
           current.classList.remove('active');
           const swap = current; current = next; next = swap;
-          current.addEventListener('ended', crossfadeToNext, { once: true });
+          swapping = false;
+          primed = false;
+          rearm();
         };
-        const onError = () => {
+        const onFail = () => {
           cleanup();
+          swapping = false;
           // The next clip is missing/broken — keep looping the current one
           // (which is still playing) rather than showing anything broken.
-          current.addEventListener('ended', crossfadeToNext, { once: true });
+          rearm();
         };
 
-        next.addEventListener('playing', onPlaying);
-        next.addEventListener('error', onError);
-        next.play().catch(onError);
+        next.addEventListener('playing', onReady);
+        next.addEventListener('error', onFail);
+        next.play().catch(onFail);
       }
 
+      function onTimeUpdate() {
+        if (swapping) return;
+        const d = current.duration;
+        if (!d || isNaN(d)) return;
+        const remaining = d - current.currentTime;
+        if (remaining <= 4) primeNext(); // start buffering well ahead of time
+        if (remaining <= CROSSFADE_LEAD || current.ended) beginSwap();
+      }
+
+      current.preload = 'auto';
       current.src = HERO_CLIPS[heroClipIndex];
       current.load();
       current.play().catch(() => {}); // autoplay can be blocked; poster remains as fallback
       current.classList.add('active');
-      current.addEventListener('ended', crossfadeToNext, { once: true });
+      current.addEventListener('timeupdate', onTimeUpdate);
+      current.addEventListener('ended', onTimeUpdate);
     }
 
     function initModuleTilt() {
