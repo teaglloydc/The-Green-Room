@@ -429,43 +429,56 @@
 
     .subpage-nav-dots {
       display: flex;
-      align-items: center;
-      gap: 4px;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2px;
       margin: 18px 0 24px;
     }
 
-    /* A larger transparent tap target with the visible dot drawn as a
-       centred ::after — avoids relying on padding to grow the hit area,
-       which collapses to nothing under this page's global border-box. */
+    /* Each step is a dot plus a short always-visible label, not just a
+       bare dot — so where to jump is clear without hovering first. */
     .subpage-dot {
-      position: relative;
-      width: 22px;
-      height: 22px;
-      padding: 0;
-      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 0;
+      padding: 4px 2px;
       border: 0;
-      border-radius: 50%;
+      border-radius: 8px;
       background: transparent;
       appearance: none;
       -webkit-appearance: none;
       cursor: pointer;
+      transition: background 0.2s ease;
     }
-    .subpage-dot::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
+    .subpage-dot:hover { background: var(--surface-soft); }
+    .subpage-dot:focus-visible { outline: 2px solid var(--wood); outline-offset: 2px; }
+
+    .subpage-dot-mark {
       width: 9px;
       height: 9px;
       border-radius: 50%;
       background-color: var(--muted);
-      opacity: 0.55;
-      transform: translate(-50%, -50%);
+      opacity: 0.5;
       transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
     }
-    .subpage-dot:hover::after { background-color: var(--wood-dark); opacity: 0.85; }
-    .subpage-dot:focus-visible { outline: 2px solid var(--wood); outline-offset: 2px; }
-    .subpage-dot.active::after { background-color: var(--wood); opacity: 1; transform: translate(-50%, -50%) scale(1.25); }
+    .subpage-dot:hover .subpage-dot-mark { background-color: var(--wood-dark); opacity: 0.85; }
+    .subpage-dot.active .subpage-dot-mark { background-color: var(--wood); opacity: 1; transform: scale(1.25); }
+
+    .subpage-dot-label {
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .subpage-dot.active .subpage-dot-label { color: var(--wood-dark); }
 
     .carry-forward-note {
       margin-bottom: 16px;
@@ -650,7 +663,7 @@
     /* ── AUDIO PLAYER CARD — one shared photo + title, a tab to pick length ── */
     .audio-player-card {
       max-width: 360px;
-      margin-top: 16px;
+      margin: 16px auto 0;
       padding: 18px;
       border-radius: 20px;
       background: linear-gradient(160deg, var(--green-900), var(--green-800));
@@ -2091,11 +2104,11 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               ${moduleHeaderHTML}
 
               <div class="subpage-nav-dots" aria-label="Jump to any part of this module">
-                <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" title="Before you begin" aria-label="Before you begin"></button>
-                <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" title="Page 1" aria-label="Page 1"></button>
-                <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" title="Page 2" aria-label="Page 2"></button>
-                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" title="Reflect and practise" aria-label="Reflect and practise"></button>
-                <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" title="After this module" aria-label="After this module"></button>
+                <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" aria-label="Before you begin"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Before</span></button>
+                <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" aria-label="Page 1"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 1</span></button>
+                <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" aria-label="Page 2"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 2</span></button>
+                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Reflect and practise"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Practise</span></button>
+                <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" aria-label="After this module"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">After</span></button>
               </div>
 
               <div class="subpage active" id="subpage-${num}-1">

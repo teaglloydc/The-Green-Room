@@ -183,6 +183,14 @@
       height: 100%;
       object-fit: cover;
       z-index: 0;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .hero-video.hero-video-fading { opacity: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-video { transition: none; }
     }
 
     /* Phone-only: source footage frames her on the right third of a wide
@@ -359,7 +367,15 @@
       gap: 16px;
     }
 
-    .modules-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); perspective: 1400px; }
+    .modules-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    /* The 3D perspective context only exists to support the desktop
+       hover-tilt effect (see initModuleTilt, already gated to pointer:fine).
+       Keeping it off touch devices avoids any perspective/preserve-3d
+       interaction with clipping on mobile browsers. */
+    @media (hover: hover) and (pointer: fine) {
+      .modules-grid { perspective: 1400px; }
+    }
 
     .step-card {
       padding: 28px;
@@ -399,6 +415,8 @@
 
     .module-card {
       position: relative;
+      width: 100%;
+      max-width: 100%;
       aspect-ratio: 3 / 4;
       border-radius: var(--radius);
       overflow: hidden;
@@ -406,9 +424,11 @@
       display: block;
       isolation: isolate;
       box-shadow: 0 14px 40px rgba(16,36,27,0.14);
-      transform-style: preserve-3d;
       transition: transform 0.45s cubic-bezier(.2,.8,.2,1), box-shadow 0.45s ease;
-      will-change: transform;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .module-card { transform-style: preserve-3d; will-change: transform; }
     }
 
     .module-card:focus-visible {
@@ -701,9 +721,7 @@
   </div>
 
   <header class="hero">
-    <video class="hero-video" id="heroVideo" muted loop playsinline preload="none" poster="IndexCover10.png" aria-hidden="true">
-      <source data-src="IndexVideo1.mp4" type="video/mp4">
-    </video>
+    <video class="hero-video" id="heroVideo" muted playsinline preload="none" poster="IndexCover10.png" aria-hidden="true"></video>
     <div class="hero-inner">
       <div class="eyebrow"></div>
       <h1>Welcome in.</h1>
@@ -914,6 +932,13 @@
       document.getElementById('mobileMenu').classList.toggle('open');
     }
 
+    /* Hero alternates between two clips — the woman at the window, then a
+       matching close-up of green leaves — each playing through once before
+       swapping, with a quick fade so the cut isn't jarring. Only one clip
+       is ever loaded at a time (lighter than looping both at once). */
+    const HERO_CLIPS = ['IndexVideo1.mp4', 'IndexVideo2.mp4'];
+    let heroClipIndex = 0;
+
     function initHeroVideo() {
       const video = document.getElementById('heroVideo');
       if (!video) return;
@@ -922,10 +947,22 @@
       const saveData = navigator.connection && navigator.connection.saveData;
       if (reduceMotion || saveData) return; // poster image stays put
 
-      const source = video.querySelector('source');
-      if (source && source.dataset.src) source.src = source.dataset.src;
-      video.load();
-      video.play().catch(() => {}); // autoplay can be blocked; poster remains as fallback
+      video.addEventListener('ended', () => {
+        heroClipIndex = (heroClipIndex + 1) % HERO_CLIPS.length;
+        playHeroClip(video, HERO_CLIPS[heroClipIndex]);
+      });
+
+      playHeroClip(video, HERO_CLIPS[heroClipIndex]);
+    }
+
+    function playHeroClip(video, src) {
+      video.classList.add('hero-video-fading');
+      window.setTimeout(() => {
+        video.src = src;
+        video.load();
+        video.play().catch(() => {}); // autoplay can be blocked; poster remains as fallback
+        video.classList.remove('hero-video-fading');
+      }, 350);
     }
 
     function initModuleTilt() {
