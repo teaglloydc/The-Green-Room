@@ -437,11 +437,30 @@
     .subpage-dot {
       width: 9px;
       height: 9px;
+      padding: 7px;
+      margin: -7px;
+      border: 0;
       border-radius: 50%;
-      background: var(--line);
-      transition: background 0.2s ease, transform 0.2s ease;
+      background-color: var(--line);
+      background-clip: content-box;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
     }
-    .subpage-dot.active { background: var(--wood); transform: scale(1.25); }
+    .subpage-dot:hover { background-color: var(--wood-dark); }
+    .subpage-dot:focus-visible { outline: 2px solid var(--wood); outline-offset: 3px; }
+    .subpage-dot.active { background-color: var(--wood); transform: scale(1.25); }
+
+    .carry-forward-note {
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      background: var(--green-100);
+      color: var(--green-700);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
 
     .subpage-nav-buttons {
       display: flex;
@@ -1795,6 +1814,7 @@
     let completed = JSON.parse(localStorage.getItem('completedModulesV2') || '[]');
     const circleValues = {};
     const circleChanged = {};
+    const circleSubmitted = {};
     const dragState = {};
 
     function estimateReadMinutes(m) {
@@ -1985,7 +2005,7 @@
                 <div class="module-nav-buttons">
                   <span></span>
                   <button class="btn-module-nav btn-complete" onclick="markComplete(${num})">Mark as complete</button>
-                  <button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1})" style="display:none;">Next module →</button>
+                  <button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1}, {continueForward:true})" style="display:none;">Next module →</button>
                 </div>
               </div>
             </section>
@@ -2055,12 +2075,12 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
             <div class="module-card-shell">
               ${moduleHeaderHTML}
 
-              <div class="subpage-nav-dots">
-                <span class="subpage-dot active" data-page="1"></span>
-                <span class="subpage-dot" data-page="2"></span>
-                <span class="subpage-dot" data-page="3"></span>
-                <span class="subpage-dot" data-page="4"></span>
-                <span class="subpage-dot" data-page="5"></span>
+              <div class="subpage-nav-dots" aria-label="Jump to any part of this module">
+                <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" title="Before you begin" aria-label="Before you begin"></button>
+                <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" title="Page 1" aria-label="Page 1"></button>
+                <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" title="Page 2" aria-label="Page 2"></button>
+                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" title="Reflect and practise" aria-label="Reflect and practise"></button>
+                <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" title="After this module" aria-label="After this module"></button>
               </div>
 
               <div class="subpage active" id="subpage-${num}-1">
@@ -2121,7 +2141,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                 <div class="module-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showModule(${num-1})">← Previous module</button>
                   <button class="btn-module-nav btn-complete" onclick="markComplete(${num})">${isLast ? 'Mark program complete' : 'Mark as complete'}</button>
-                  ${!isLast ? `<button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1})" style="display:none;">Next module →</button>` : ''}
+                  ${!isLast ? `<button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1}, {continueForward:true})" style="display:none;">Next module →</button>` : ''}
                 </div>
 
                 ${postMeasuresBoxHTML}
@@ -2329,44 +2349,59 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     }
 
     function updateSubmitAvailability(n, phase) {
-      const btn = document.getElementById(`tc-btn-${tcKey(n, phase)}`);
-      if (btn && btn.textContent !== 'Submitted') btn.disabled = !hasChangedCircle(n, phase);
+      const key = tcKey(n, phase);
+      if (circleSubmitted[key]) return;
+      const btn = document.getElementById(`tc-btn-${key}`);
+      if (btn) btn.disabled = !hasChangedCircle(n, phase);
+    }
+
+    /* Renders (or re-renders) a single tc-section in place. Exposed
+       separately from renderThreeCircleTools so a carried-forward "before"
+       reading can be redrawn on its own without disturbing every other
+       circle tool on the page. */
+    function renderThreeCircleTool(section) {
+      const n = section.dataset.module;
+      const phase = section.dataset.phase || 'only';
+      const key = tcKey(n, phase);
+      const v = getModuleValues(n, phase);
+      const intro = phase === 'before' ? 'Before you dive in, notice how you’re feeling right now.'
+                  : phase === 'after'  ? 'Before you move on, notice how you’re feeling now.'
+                  : 'Notice how you’re feeling right now.';
+      section.innerHTML = `
+        <div class="tc-header">
+          <h3>A quick check-in</h3>
+          <p>${intro} Drag the edge of any circle to resize it — pull outward to grow, push inward to shrink. The legend below shows which colour is which system.</p>
+          <div class="tc-legend">
+            <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive (blue) — motivation</span></div>
+            <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing (green) — contentment</span></div>
+            <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat (red) — protection</span></div>
+          </div>
+        </div>
+        <div class="tc-circle-tool" id="tc-tool-${key}">
+          <div class="tc-live-circle drive"    data-module="${n}" data-phase="${phase}" data-system="drive"    style="--size:${v.drive};" title="Drive"></div>
+          <div class="tc-live-circle soothing" data-module="${n}" data-phase="${phase}" data-system="soothing" style="--size:${v.soothing};" title="Soothing"></div>
+          <div class="tc-live-circle threat"   data-module="${n}" data-phase="${phase}" data-system="threat"   style="--size:${v.threat};" title="Threat"></div>
+        </div>
+        <div class="tc-record-panel">
+          <div class="tc-record-label">Save your check-in</div>
+          <p class="tc-record-intro">When the circles reflect how you feel, tap Save to continue.</p>
+          <div class="tc-actions">
+            <button class="tc-submit-btn" id="tc-btn-${key}" onclick="tcSubmit('${n}','${phase}')" disabled>Save</button>
+            <div class="tc-saved-badge" id="tc-saved-${key}">Saved ✓</div>
+          </div>
+          <div class="tc-proportions" id="tc-prop-${key}"></div>
+        </div>
+      `;
+      setupCircleDragging(section);
+      if (circleSubmitted[key]) {
+        applyTcSubmittedUI(n, phase, v);
+      } else {
+        updateSubmitAvailability(n, phase);
+      }
     }
 
     function renderThreeCircleTools() {
-      document.querySelectorAll('.tc-section[data-module]').forEach(section => {
-        const n = section.dataset.module;
-        const phase = section.dataset.phase || 'only';
-        const key = tcKey(n, phase);
-        const heading = phase === 'before' ? 'How are you feeling right now, before starting this module?'
-                      : phase === 'after'  ? 'How are you feeling now, after this module?'
-                      : 'How are you feeling right now?';
-        section.innerHTML = `
-          <div class="tc-header">
-            <h3>${heading}</h3>
-            <p>Drag the edge of any circle to resize it — pull outward to grow, push inward to shrink. The legend below shows which colour is which system.</p>
-            <div class="tc-legend">
-              <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive (blue) — motivation</span></div>
-              <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing (green) — contentment</span></div>
-              <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat (red) — protection</span></div>
-            </div>
-          </div>
-          <div class="tc-circle-tool" id="tc-tool-${key}">
-            <div class="tc-live-circle drive"    data-module="${n}" data-phase="${phase}" data-system="drive"    style="--size:33;" title="Drive"></div>
-            <div class="tc-live-circle soothing" data-module="${n}" data-phase="${phase}" data-system="soothing" style="--size:33;" title="Soothing"></div>
-            <div class="tc-live-circle threat"   data-module="${n}" data-phase="${phase}" data-system="threat"   style="--size:33;" title="Threat"></div>
-          </div>
-          <div class="tc-record-panel">
-            <div class="tc-record-label">Record your circle sizes</div>
-            <p class="tc-record-intro">When the circles reflect how you feel, click Submit to save.</p>
-            <div class="tc-actions">
-              <button class="tc-submit-btn" id="tc-btn-${key}" onclick="tcSubmit('${n}','${phase}')" disabled>Submit</button>
-              <div class="tc-saved-badge" id="tc-saved-${key}">Saved ✓</div>
-            </div>
-            <div class="tc-proportions" id="tc-prop-${key}"></div>
-          </div>
-        `;
-      });
+      document.querySelectorAll('.tc-section[data-module]').forEach(renderThreeCircleTool);
     }
 
     function applyCircleSize(el, n, phase, value) {
@@ -2388,8 +2423,8 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       Object.values(pendingMoves).forEach(({ el, n, phase, value }) => applyCircleSize(el, n, phase, value));
     }
 
-    function setupCircleDragging() {
-      document.querySelectorAll('.tc-live-circle').forEach(circle => {
+    function setupCircleDragging(scope) {
+      (scope || document).querySelectorAll('.tc-live-circle').forEach(circle => {
         circle.addEventListener('pointerdown', event => {
           const n = circle.dataset.module;
           const phase = circle.dataset.phase || 'only';
@@ -2429,10 +2464,10 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       });
     }
 
-    function tcSubmit(n, phase) {
+    /* Shared by a real Save click and by a carried-forward reading —
+       works out proportions/dominant system and writes the saved-state UI. */
+    function applyTcSubmittedUI(n, phase, v) {
       const key = tcKey(n, phase);
-      if (!hasChangedCircle(n, phase)) { alert('Please resize at least one circle before submitting.'); return; }
-      const v = getModuleValues(n, phase);
       const total = v.threat + v.drive + v.soothing || 1;
       const tP = parseFloat((v.threat / total).toFixed(4));
       const dP = parseFloat((v.drive  / total).toFixed(4));
@@ -2440,18 +2475,8 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const dom = v.threat >= v.drive && v.threat >= v.soothing ? 'threat'
                 : v.drive >= v.soothing ? 'drive' : 'soothing';
 
-      const existing = JSON.parse(localStorage.getItem('tcResponses') || '[]');
-      existing.push({
-        moduleNumber: Number(n), phase, moduleName: getModuleName(n),
-        submittedAt: new Date().toISOString(),
-        threatRaw: v.threat, driveRaw: v.drive, soothingRaw: v.soothing,
-        threatProportion: tP, driveProportion: dP, soothingProportion: sP,
-        dominantSystem: dom
-      });
-      localStorage.setItem('tcResponses', JSON.stringify(existing));
-
       const btn = document.getElementById(`tc-btn-${key}`);
-      btn.disabled = true; btn.textContent = 'Submitted';
+      if (btn) { btn.disabled = true; btn.textContent = 'Saved'; }
       const badge = document.getElementById(`tc-saved-${key}`);
       if (badge) badge.classList.add('visible');
       const propEl = document.getElementById(`tc-prop-${key}`);
@@ -2459,40 +2484,109 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         propEl.textContent = `Threat ${Math.round(tP*100)}% | Drive ${Math.round(dP*100)}% | Soothing ${Math.round(sP*100)}% | Dominant: ${dom}`;
         propEl.classList.add('visible');
       }
+      return { tP, dP, sP, dom };
+    }
+
+    function recordTcResponse(n, phase, v, dom, tP, dP, sP, carriedForward) {
+      const existing = JSON.parse(localStorage.getItem('tcResponses') || '[]');
+      existing.push({
+        moduleNumber: Number(n), phase, moduleName: getModuleName(n),
+        submittedAt: new Date().toISOString(),
+        carriedForward: !!carriedForward,
+        threatRaw: v.threat, driveRaw: v.drive, soothingRaw: v.soothing,
+        threatProportion: tP, driveProportion: dP, soothingProportion: sP,
+        dominantSystem: dom
+      });
+      localStorage.setItem('tcResponses', JSON.stringify(existing));
+    }
+
+    function tcSubmit(n, phase) {
+      if (!hasChangedCircle(n, phase)) { alert('Please resize at least one circle before saving.'); return; }
+      const v = getModuleValues(n, phase);
+      const { tP, dP, sP, dom } = applyTcSubmittedUI(n, phase, v);
+      recordTcResponse(n, phase, v, dom, tP, dP, sP, false);
+      circleSubmitted[tcKey(n, phase)] = true;
     }
 
     /* ── MODULE NAVIGATION ──────────────────────── */
-    function showModule(num) {
+    function showModule(num, opts) {
+      opts = opts || {};
       stopReading();
       document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
       const section = document.getElementById('module-' + num);
       section.classList.add('active');
       document.getElementById('sidebar-' + num).classList.add('active');
-      resetSubpages(section);
+
+      if (section.querySelector('.subpage')) {
+        if (completed.includes(num)) {
+          // Already done this module before — land straight in the content,
+          // don't force another before-measure just to get back to it.
+          activateSubpage(section, 2);
+        } else if (opts.continueForward && circleSubmitted[tcKey(num - 1, 'after')]) {
+          // Coming straight from the previous module's after-measure in the
+          // same sitting — that reading doubles as this module's before-measure.
+          carryForwardBeforeMeasure(num, num - 1);
+        } else {
+          activateSubpage(section, 1);
+        }
+      }
+
       document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function resetSubpages(section) {
+    /* Every part of a module (before-measure / page 1 / page 2 / page 3 /
+       after-measure) is reachable at any time via the dots — nothing is
+       gated, so returning to a module never means re-clicking through
+       content you've already seen to find the bit you want. */
+    function activateSubpage(section, page) {
       const pages = section.querySelectorAll('.subpage');
       if (!pages.length) return;
       pages.forEach(p => p.classList.remove('active'));
-      pages[0].classList.add('active');
-      const dots = section.querySelectorAll('.subpage-dot');
-      dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+      const num = section.id.split('-')[1];
+      const target = document.getElementById(`subpage-${num}-${page}`) || pages[0];
+      target.classList.add('active');
+      section.querySelectorAll('.subpage-dot').forEach(d => {
+        d.classList.toggle('active', Number(d.dataset.page) === page);
+      });
     }
 
-    /* Click-through pages within a module (before-measure / page 1 / page 2 / page 3 / after-measure) */
     function showSubpage(num, page) {
       const scope = document.getElementById('module-' + num);
       if (!scope) return;
-      scope.querySelectorAll('.subpage').forEach(p => p.classList.remove('active'));
-      const target = document.getElementById(`subpage-${num}-${page}`);
-      if (target) target.classList.add('active');
-      scope.querySelectorAll('.subpage-dot').forEach(d => {
-        d.classList.toggle('active', Number(d.dataset.page) === page);
-      });
+      activateSubpage(scope, page);
       document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* Copies the previous module's after-measure into this module's
+       before-measure (silently saved, same as a real submission) and
+       skips straight past the before-measure page. */
+    function carryForwardBeforeMeasure(num, prevNum) {
+      const section = document.getElementById('module-' + num);
+      const key = tcKey(num, 'before');
+      if (!circleSubmitted[key]) {
+        const prevValues = getModuleValues(prevNum, 'after');
+        circleValues[key] = { ...prevValues };
+        circleChanged[key] = true;
+        circleSubmitted[key] = true;
+        const beforeSection = section.querySelector('.tc-section[data-phase="before"]');
+        if (beforeSection) {
+          renderThreeCircleTool(beforeSection);
+          const { tP, dP, sP, dom } = applyTcSubmittedUI(num, 'before', prevValues);
+          recordTcResponse(num, 'before', prevValues, dom, tP, dP, sP, true);
+        }
+        showCarryForwardNote(section, num);
+      }
+      activateSubpage(section, 2);
+    }
+
+    function showCarryForwardNote(section, num) {
+      const target = document.getElementById(`subpage-${num}-2`);
+      if (!target || target.querySelector('.carry-forward-note')) return;
+      const note = document.createElement('p');
+      note.className = 'carry-forward-note';
+      note.textContent = 'Your check-in from the end of the last module carried over as your starting point here — no need to do it twice.';
+      target.insertBefore(note, target.firstChild);
     }
 
     function showEmotion(event, emotion) {
@@ -2559,7 +2653,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       actions.innerHTML = isLast
         ? `<button class="btn-module-nav btn-complete" onclick="closeCelebration(); document.getElementById('postMeasuresBox').scrollIntoView({behavior:'smooth'});">Continue</button>`
         : `<button class="btn-module-nav btn-complete" onclick="closeCelebration()">Stay here</button>
-           <button class="btn-module-nav btn-next" onclick="closeCelebration(); showModule(${num + 1})">Continue to Module ${num + 1} →</button>`;
+           <button class="btn-module-nav btn-next" onclick="closeCelebration(); showModule(${num + 1}, {continueForward:true})">Continue to Module ${num + 1} →</button>`;
 
       document.getElementById('celebrationOverlay').classList.add('visible');
     }
