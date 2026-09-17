@@ -707,7 +707,7 @@
 
       h2 { font-size: clamp(1.9rem, 6vw, 2.8rem); }
 
-      .floating-controls { left: 12px; }
+      .floating-controls { left: 12px; right: auto; }
       .back-to-top { right: 14px; bottom: 18px; }
     }
   </style>
@@ -956,18 +956,33 @@
       const btn = document.getElementById('soundBtn');
       if (!audio || !btn) return;
       if (on) {
-        if (audio.readyState === 0) audio.load(); // preload="none" needs an explicit load on first play for some mobile browsers
-        audio.volume = 0.45;
-        audio.play().then(() => {
+        const markOn = () => {
           btn.classList.add('active');
           btn.textContent = '🔊';
           btn.title = 'Turn off nature sounds';
-        }).catch(() => {
+        };
+        const markOff = () => {
           btn.classList.remove('active');
           btn.textContent = '🔈';
           btn.title = 'Nature sounds';
           localStorage.setItem('natureSound', 'false');
-        });
+        };
+        // Some mobile browsers throw synchronously from play()/load() instead
+        // of rejecting a promise — a try/catch here is the only way to make
+        // sure the button always gives feedback rather than silently doing
+        // nothing when that happens.
+        try {
+          if (audio.readyState === 0) audio.load(); // preload="none" needs an explicit load on first play for some mobile browsers
+          audio.volume = 0.45;
+          const playResult = audio.play();
+          if (playResult && typeof playResult.then === 'function') {
+            playResult.then(markOn).catch(markOff);
+          } else {
+            markOn(); // legacy browsers: play() doesn't return a promise
+          }
+        } catch (err) {
+          markOff();
+        }
       } else {
         audio.pause();
         btn.classList.remove('active');
