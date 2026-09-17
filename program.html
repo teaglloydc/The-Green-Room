@@ -562,65 +562,116 @@
     .audio-title { color: var(--text); font-weight: 800; font-size: 0.95rem; }
     .audio-duration { color: var(--muted); font-size: 0.88rem; }
 
-    /* ── AUDIO PRACTICE — one shared image, a tab per practice length ── */
-    .audio-practice { margin-top: 12px; }
+    /* ── AUDIO PLAYER CARD — one shared photo + title, a tab to pick length ── */
+    .audio-player-card {
+      max-width: 360px;
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, var(--green-900), var(--green-800));
+      box-shadow: 0 20px 48px rgba(16,36,27,0.28);
+      color: #fffbf3;
+    }
 
-    .audio-hero-thumb {
+    .audio-player-art {
       width: 100%;
-      max-width: 220px;
       aspect-ratio: 1 / 1;
       object-fit: cover;
       display: block;
-      margin-bottom: 14px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
     }
 
-    .audio-choose-label {
-      font-size: 0.74rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--wood-dark);
-      margin-bottom: 10px;
+    .audio-player-info { margin-top: 16px; }
+
+    .audio-player-title {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.3;
     }
 
-    .audio-tab-buttons {
-      display: inline-flex;
+    .audio-player-subtitle {
+      margin-top: 3px;
+      color: rgba(255,250,240,0.58);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .audio-player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 6px;
-      padding: 6px;
-      margin-bottom: 14px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--surface-soft);
-      flex-wrap: wrap;
+      margin-top: 20px;
     }
 
-    .audio-tab-btn {
-      min-height: 38px;
-      padding: 0 16px;
+    .audio-ctrl-btn {
+      border: 0;
+      background: none;
+      color: rgba(255,250,240,0.5);
+      font-size: 1.05rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+
+    .audio-ctrl-play {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,250,240,0.9);
+      color: var(--green-900);
+      font-size: 1rem;
+    }
+
+    .audio-player-track {
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,250,240,0.18);
+      margin-top: 18px;
+      overflow: hidden;
+    }
+
+    .audio-player-track-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: var(--wood);
+    }
+
+    .audio-player-note {
+      margin-top: 10px;
+      color: rgba(255,250,240,0.48);
+      font-size: 0.78rem;
+      font-style: italic;
+    }
+
+    .audio-length-tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255,250,240,0.08);
+    }
+
+    .audio-length-btn {
+      flex: 1;
+      min-height: 34px;
       border: 0;
       border-radius: 999px;
       background: transparent;
-      color: var(--muted);
-      cursor: pointer;
+      color: rgba(255,250,240,0.68);
       font: inherit;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.82rem;
+      cursor: pointer;
       transition: background 0.2s, color 0.2s;
     }
 
-    .audio-tab-btn.active { background: var(--green-700); color: #fffbf3; }
-
-    .audio-tab-content {
-      display: none;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--surface);
-    }
-
-    .audio-tab-content.active { display: block; }
+    .audio-length-btn.active { background: var(--wood); color: #21301f; }
 
     /* ── CIRCLE TABS — one tab per system, only the selected one shows ── */
     .circle-tab-buttons {
@@ -1203,8 +1254,7 @@
       .circle-tab-buttons { display: flex; flex-wrap: wrap; border-radius: var(--radius); width: 100%; }
       .circle-tab-btn { flex: 1; min-width: 100px; }
 
-      .audio-tab-buttons { display: flex; flex-wrap: wrap; border-radius: var(--radius); width: 100%; }
-      .audio-tab-btn { flex: 1; min-width: 80px; }
+      .audio-player-card { max-width: none; }
 
       .module-nav-buttons { flex-direction: row; flex-wrap: wrap; }
       .btn-module-nav { flex: 1; min-width: 120px; justify-content: center; }
@@ -1719,21 +1769,27 @@
           </div>
         `;
 
-        const renderAudioOptions = (opts, img, scopeId) => `
-          <div class="audio-practice">
-            <img class="audio-hero-thumb" src="${img || ''}" alt="">
-            <p class="audio-choose-label">Choose a practice length</p>
-            <div class="audio-tab-buttons">
+        const renderAudioOptions = (opts, img, subtitle) => `
+          <div class="audio-player-card">
+            <img class="audio-player-art" src="${img || ''}" alt="">
+            <div class="audio-player-info">
+              <div class="audio-player-title">${opts[0].title}</div>
+              <div class="audio-player-subtitle">${subtitle}</div>
+            </div>
+            <div class="audio-player-controls">
+              <span class="audio-ctrl-btn" aria-hidden="true">⇄</span>
+              <span class="audio-ctrl-btn" aria-hidden="true">⏮</span>
+              <span class="audio-ctrl-btn audio-ctrl-play" aria-hidden="true">▶</span>
+              <span class="audio-ctrl-btn" aria-hidden="true">⏭</span>
+              <span class="audio-ctrl-btn" aria-hidden="true">≡</span>
+            </div>
+            <div class="audio-player-track"><div class="audio-player-track-fill"></div></div>
+            <p class="audio-player-note">Audio will be added here</p>
+            <div class="audio-length-tabs">
               ${opts.map((opt, oi) => `
-                <button type="button" class="audio-tab-btn ${oi === 0 ? 'active' : ''}" onclick="showAudioTab(event, '${scopeId}', ${oi})">${opt.label}</button>
+                <button type="button" class="audio-length-btn ${oi === 0 ? 'active' : ''}" data-title="${opt.title}" onclick="setAudioLength(event)">${opt.label}</button>
               `).join('')}
             </div>
-            ${opts.map((opt, oi) => `
-              <div class="audio-tab-content ${oi === 0 ? 'active' : ''}" id="audio-${scopeId}-${oi}">
-                <div class="audio-title">${opt.title}</div>
-                <div class="audio-duration">Audio will be added here</div>
-              </div>
-            `).join('')}
           </div>
         `;
 
@@ -1742,7 +1798,7 @@
         if (m.emotions) {
           const eo = m.emotionOptions || {};
           const renderEmotionAudio = (key) => eo[key]
-            ? renderAudioOptions(eo[key].options, eo[key].image, num + '-' + key)
+            ? renderAudioOptions(eo[key].options, eo[key].image, m.audio)
             : '<div class="audio-placeholder"><div><div class="audio-title">Audio will be added here</div></div></div>';
 
           audioSection = `
@@ -1784,7 +1840,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
           audioSection = exerciseBlock;
         } else {
           const audioHTML = m.audioOptions
-            ? renderAudioOptions(m.audioOptions, m.audioImage, String(num))
+            ? renderAudioOptions(m.audioOptions, m.audioImage, m.audio)
             : `<div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);"><img class="audio-thumb" src="${m.audioImage || ''}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>`;
 
           audioSection = `
@@ -2201,13 +2257,15 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       event.target.classList.add('active');
     }
 
-    function showAudioTab(event, scopeId, index) {
-      const container = event.target.closest('.audio-practice');
-      if (!container) return;
-      container.querySelectorAll('.audio-tab-content').forEach(t => t.classList.remove('active'));
-      container.querySelectorAll('.audio-tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('audio-' + scopeId + '-' + index).classList.add('active');
+    function setAudioLength(event) {
+      const card = event.target.closest('.audio-player-card');
+      if (!card) return;
+      card.querySelectorAll('.audio-length-btn').forEach(b => b.classList.remove('active'));
       event.target.classList.add('active');
+      const titleEl = card.querySelector('.audio-player-title');
+      if (titleEl) titleEl.textContent = event.target.dataset.title;
+      const fill = card.querySelector('.audio-player-track-fill');
+      if (fill) fill.style.width = '0%';
     }
 
     function showCircleTab(event, num, system) {
