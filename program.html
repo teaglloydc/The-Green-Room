@@ -199,11 +199,11 @@
   padding: clamp(88px, 9vw, 110px) clamp(20px, 5vw, 64px) 48px;
 
   background:
-    linear-gradient(
-      rgba(0, 0, 0, 0.35),
-      rgba(0, 0, 0, 0.35)
-    ),
-    url("IndexBackground.png") center/cover;
+    linear-gradient(to bottom,
+      rgba(0,0,0,0.32) 0%,
+      rgba(0,0,0,0.22) 45%,
+      rgba(0,0,0,0.62) 100%),
+    url("https://images.unsplash.com/photo-1750183000298-82115e4618dd?auto=format&fit=crop&w=1800&q=80") center/cover;
 
   color: #fffbf3;
 }
@@ -414,6 +414,14 @@
     }
 
     .module-readtime { background: var(--surface-soft); color: var(--wood-dark); }
+
+    .module-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
 
     .module-quicknav {
       display: flex;
@@ -1781,8 +1789,10 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                 <div class="module-label">Module ${num}</div>
                 <div class="module-header-top">
                   <h2>${m.title}</h2>
-                  <span class="module-progress">Module ${num} of ${TOTAL_MODULES}</span>
-                  <span class="module-progress module-readtime">${estimateReadMinutes(m)}</span>
+                  <div class="module-badges">
+                    <span class="module-progress">Module ${num} of ${TOTAL_MODULES}</span>
+                    <span class="module-progress module-readtime">${estimateReadMinutes(m)}</span>
+                  </div>
                 </div>
               </div>
 
