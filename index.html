@@ -350,6 +350,103 @@
       border: 1px solid rgba(255,255,255,0.45);
     }
 
+    /* ── TESTIMONIALS ───────────────────────────── */
+    .testimonials { background: var(--surface-soft); }
+
+    .testimonials h2 { margin-bottom: 4px; }
+
+    .testimonial-carousel {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 32px 4px 22px;
+      margin: 0 -4px;
+      scrollbar-width: none;
+    }
+    .testimonial-carousel::-webkit-scrollbar { display: none; }
+
+    .testimonial-card {
+      flex: 0 0 min(360px, 82vw);
+      scroll-snap-align: center;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 14px 40px rgba(16,36,27,0.08);
+      padding: 28px;
+    }
+
+    .testimonial-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--green-100);
+      color: var(--green-700);
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-quote-mark {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 2.4rem;
+      line-height: 1;
+      color: var(--wood);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .testimonial-card blockquote { margin: 0 0 22px; }
+
+    .testimonial-card blockquote p {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.42;
+      color: var(--text);
+    }
+
+    .testimonial-name { font-weight: 700; color: var(--text); font-size: 0.95rem; margin-top: auto; }
+    .testimonial-role { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
+
+    .testimonial-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 4px;
+    }
+
+    .testimonial-arrow {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .testimonial-arrow:hover { background: var(--green-100); transform: translateY(-2px); }
+
+    .testimonial-dots { display: flex; gap: 6px; }
+    .testimonial-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--line);
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+    }
+    .testimonial-dot.active { background: var(--wood); }
+
     /* ── STEPS ───────────────────────────────────── */
     .steps { background: var(--green-900); color: #fffbf3; }
     .steps h2, .steps .section-label { color: #fffbf3; }
@@ -1169,10 +1266,54 @@
       });
     }
 
+    /* Testimonials carousel — native horizontal scroll-snap does the swipe
+       gesture for free on touch devices; the arrows/dots just scroll the
+       same track programmatically and stay in sync via the scroll event. */
+    function testimonialStep(track) {
+      const card = track.querySelector('.testimonial-card');
+      const gap = 20;
+      return card ? card.getBoundingClientRect().width + gap : 300;
+    }
+
+    function scrollTestimonials(dir) {
+      const track = document.getElementById('testimonialTrack');
+      if (!track) return;
+      track.scrollBy({ left: dir * testimonialStep(track), behavior: 'smooth' });
+    }
+
+    function scrollTestimonialTo(index) {
+      const track = document.getElementById('testimonialTrack');
+      if (!track) return;
+      track.scrollTo({ left: index * testimonialStep(track), behavior: 'smooth' });
+    }
+
+    function initTestimonials() {
+      const track = document.getElementById('testimonialTrack');
+      const dotsWrap = document.getElementById('testimonialDots');
+      if (!track || !dotsWrap) return;
+      const cards = Array.from(track.querySelectorAll('.testimonial-card'));
+
+      dotsWrap.innerHTML = cards.map((_, i) => `
+        <button type="button" class="testimonial-dot ${i === 0 ? 'active' : ''}" aria-label="Go to testimonial ${i + 1}" onclick="scrollTestimonialTo(${i})"></button>
+      `).join('');
+      const dots = Array.from(dotsWrap.querySelectorAll('.testimonial-dot'));
+
+      let scrollTimer;
+      track.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          const step = testimonialStep(track);
+          const idx = Math.round(track.scrollLeft / step);
+          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }, 80);
+      });
+    }
+
     window.addEventListener('load', () => {
       if (localStorage.getItem('darkMode') === 'true') applyDark(true);
       initHeroVideo();
       initModuleTilt();
+      initTestimonials();
     });
 
     window.addEventListener('scroll', () => {
