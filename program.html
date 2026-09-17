@@ -413,6 +413,41 @@
       flex-shrink: 0;
     }
 
+    .module-readtime { background: var(--surface-soft); color: var(--wood-dark); }
+
+    .module-quicknav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0 4px;
+    }
+
+    .quicknav-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--text);
+      font: inherit;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .quicknav-btn:hover { background: var(--green-100); transform: translateY(-1px); }
+
+    .module-card-shell [id^="sec-"] { scroll-margin-top: 70px; }
+
+    .reveal-init { opacity: 0; transform: translateY(16px); }
+    .reveal-init.in-view {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-init, .reveal-init.in-view { opacity: 1; transform: none; transition: none; }
+    }
+
     .summary-box,
     .audio-placeholder,
     .tc-section {
@@ -1574,6 +1609,34 @@
     const circleChanged = {};
     const dragState = {};
 
+    function estimateReadMinutes(m) {
+      const raw = (m.written || '') + ' ' + (m.exercise || '') + ' ' + (m.summary || []).join(' ');
+      const words = raw.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+      return Math.max(1, Math.round(words / 200)) + ' min read';
+    }
+
+    function jumpToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function setupScrollReveal() {
+      if (!('IntersectionObserver' in window)) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const targets = document.querySelectorAll(
+        '.module-section .summary-box, .module-section .video-placeholder, .module-section .content-block, .module-section .exercise-block, .module-section .tc-section'
+      );
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      targets.forEach(el => { el.classList.add('reveal-init'); io.observe(el); });
+    }
+
     /* ── RENDER ─────────────────────────────────── */
     function renderProgramModules() {
       const sidebar = document.getElementById('sidebar');
@@ -1719,26 +1782,34 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                 <div class="module-header-top">
                   <h2>${m.title}</h2>
                   <span class="module-progress">Module ${num} of ${TOTAL_MODULES}</span>
+                  <span class="module-progress module-readtime">${estimateReadMinutes(m)}</span>
                 </div>
               </div>
 
-              <div class="summary-box">
+              <div class="module-quicknav" aria-label="Jump to a section of this module">
+                <button type="button" class="quicknav-btn" onclick="jumpToSection('sec-overview-${num}')">Overview</button>
+                <button type="button" class="quicknav-btn" onclick="jumpToSection('sec-video-${num}')">Video</button>
+                <button type="button" class="quicknav-btn" onclick="jumpToSection('sec-read-${num}')">Read</button>
+                <button type="button" class="quicknav-btn" onclick="jumpToSection('sec-practice-${num}')">Practice</button>
+              </div>
+
+              <div class="summary-box" id="sec-overview-${num}">
                 <h3>What this module covers</h3>
                 <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
               </div>
 
-              <div class="video-placeholder">
+              <div class="video-placeholder" id="sec-video-${num}">
                 <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
               </div>
 
-              <div class="content-block written-block">
+              <div class="content-block written-block" id="sec-read-${num}">
                 <h3></h3>
                 <div class="written-content">${m.written}</div>
               </div>
 
               ${circleBubblesHTML}
 
-              <div class="section-divider"></div>
+              <div class="section-divider" id="sec-practice-${num}"></div>
               ${audioSection}
 
               <div class="tc-section" data-module="${num}"></div>
@@ -2160,6 +2231,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       renderProgramModules();
       renderThreeCircleTools();
       setupCircleDragging();
+      setupScrollReveal();
       completed.forEach(n => applyCompletion(n));
       updateProgress();
       if (completed.includes(TOTAL_MODULES)) {
