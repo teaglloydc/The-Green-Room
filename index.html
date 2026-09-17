@@ -938,6 +938,7 @@
        is ever loaded at a time (lighter than looping both at once). */
     const HERO_CLIPS = ['IndexVideo1.mp4', 'IndexVideo2.mp4'];
     let heroClipIndex = 0;
+    let heroFallbackTried = false;
 
     function initHeroVideo() {
       const video = document.getElementById('heroVideo');
@@ -948,6 +949,22 @@
       if (reduceMotion || saveData) return; // poster image stays put
 
       video.addEventListener('ended', () => {
+        heroClipIndex = (heroClipIndex + 1) % HERO_CLIPS.length;
+        playHeroClip(video, HERO_CLIPS[heroClipIndex]);
+      });
+
+      // A clip that's missing or fails to load (e.g. not yet added to the
+      // project folder) should never leave a black box — fall back to the
+      // other clip once, and to the poster image if that fails too.
+      video.addEventListener('playing', () => { heroFallbackTried = false; });
+      video.addEventListener('error', () => {
+        if (heroFallbackTried) {
+          video.removeAttribute('src');
+          video.load(); // resets playback state so the poster shows again
+          video.classList.remove('hero-video-fading');
+          return;
+        }
+        heroFallbackTried = true;
         heroClipIndex = (heroClipIndex + 1) % HERO_CLIPS.length;
         playHeroClip(video, HERO_CLIPS[heroClipIndex]);
       });
