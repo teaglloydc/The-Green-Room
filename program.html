@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,6 +49,31 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; overflow-x: hidden; }
 
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -80px;
+      left: 12px;
+      z-index: 999;
+      background: var(--green-900);
+      color: #fffbf3;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus { top: 12px; }
+
     body {
       min-height: 100vh;
       background:
@@ -64,29 +89,6 @@
       background:
         radial-gradient(circle at 8% 0%, rgba(194, 160, 126, 0.09), transparent 28%),
         linear-gradient(180deg, #0f1711, #141d15 48%, #101711);
-    }
-
-    /* ── HANDS-FREE BANNER — content stays visible now ── */
-    .listen-banner {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 110;
-      padding: 10px 20px;
-      background: var(--wood-dark);
-      color: #fffbf3;
-      text-align: center;
-      font-size: 0.86rem;
-      font-weight: 700;
-    }
-    body.listen-mode .listen-banner { display: block; }
-
-    /* ── WORD-LEVEL TTS HIGHLIGHT ────────────────── */
-    .tts-word { transition: background 0.15s ease, color 0.15s ease; border-radius: 3px; }
-    .tts-word.active {
-      background: var(--wood);
-      color: #fffbf3;
-      padding: 0 1px;
     }
 
     /* ── FLOATING MODERN NAV ────────────────────── */
@@ -113,8 +115,6 @@
 
   color: #fff8ea;
 }
-
-    body.listen-mode .site-nav { top: 58px; }
 
     .nav-logo {
       display: inline-flex;
@@ -192,7 +192,6 @@
       .mobile-menu.open { animation: none; }
     }
     body.menu-open { overflow: hidden; }
-    body.listen-mode .mobile-menu { padding-top: 160px; }
 
     .mobile-menu a {
       display: block;
@@ -211,15 +210,6 @@
       opacity: 0.5;
       padding: 6px 0 6px 10px !important;
     }
-    .menu-badge {
-      display: inline-block;
-      vertical-align: super;
-      font-size: 0.34em;
-      font-weight: 700;
-      opacity: 0.5;
-      margin-left: 6px;
-    }
-
     /* ── PROGRAM INTRO HEADER ──────────────────── */
 .program-intro {
   position: relative;
@@ -1156,9 +1146,6 @@
     .float-btn:hover { transform: scale(1.1); }
     .float-btn.active { background: #fffbf3; color: var(--green-900); }
 
-    .float-tts { display: none; }
-    body.listen-mode .float-tts { display: flex; }
-
     /* ── BACK TO TOP ────────────────────────────── */
     .back-to-top {
       position: fixed;
@@ -1391,20 +1378,20 @@
 
       .content-block p { font-size: 0.93rem; }
 
-      .floating-controls { left: 12px; }
+      .floating-controls { left: 12px; right: auto; }
       .back-to-top { right: 14px; bottom: 18px; }
     }
   </style>
 </head>
 <body>
-  <div class="listen-banner">Hands-free mode is on. Press play to have this module read aloud — the text stays visible and highlights as it's spoken.</div>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <nav class="site-nav">
     <a href="index.html" class="nav-logo">
       <img src="TheGreenRoomLogo6.png" alt="The Green Room Logo">
       <span class="logo-text">The Green Room</span>
     </a>
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span><span></span><span></span>
     </button>
   </nav>
@@ -1417,7 +1404,7 @@
     <a href="about.html#the-program" class="menu-sub-link">The Program</a>
   </div>
 
-  <header class="program-intro">
+  <header class="program-intro" id="main-content">
     <div class="program-intro-inner">
       <p class="eyebrow">The Program</p>
       <h1>Move through the modules at your own pace.</h1>
@@ -1426,7 +1413,7 @@
   </header>
 
   <div class="program-layout">
-    <aside class="sidebar" id="sidebar"></aside>
+    <aside class="sidebar" id="sidebar" aria-label="Module list"></aside>
     <main class="main-content" id="mainContent"></main>
   </div>
 
@@ -1465,10 +1452,13 @@
   </footer>
 
   <div class="floating-controls">
+    <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds"></button>
     <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
-    <button class="float-btn float-listen" id="listenBtn" onclick="toggleListen()" aria-label="Toggle hands-free mode" title="Hands-free mode"></button>
-    <button class="float-btn float-tts" id="ttsBtn" onclick="toggleTTS()" aria-label="Play or pause reading" title="Play / pause reading"></button>
   </div>
+
+  <audio id="natureSound" loop preload="none">
+    <source src="nature-ambience.mp3" type="audio/mpeg">
+  </audio>
 
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
 
@@ -2190,10 +2180,59 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     const ICONS = {
       moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
       sun: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>',
-      headphones: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>',
-      play: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>',
-      pause: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>'
+      volume: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>',
+      mute: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>'
     };
+
+    /* ── NATURE SOUNDS ──────────────────────────── */
+    /* Same calming ambience as the home page — off by default, and never
+       autoplayed with sound on load even if it was left on last visit,
+       since browsers block audible autoplay without a fresh click. */
+    function applySound(on) {
+      const audio = document.getElementById('natureSound');
+      const btn = document.getElementById('soundBtn');
+      if (!audio || !btn) return;
+      if (on) {
+        const markOn = () => {
+          btn.classList.add('active');
+          btn.innerHTML = ICONS.volume;
+          btn.title = 'Turn off nature sounds';
+        };
+        const markOff = () => {
+          btn.classList.remove('active');
+          btn.innerHTML = ICONS.mute;
+          btn.title = 'Nature sounds';
+          localStorage.setItem('natureSound', 'false');
+        };
+        // Some mobile browsers throw synchronously from play()/load() instead
+        // of rejecting a promise — a try/catch here is the only way to make
+        // sure the button always gives feedback rather than silently doing
+        // nothing when that happens.
+        try {
+          if (audio.readyState === 0) audio.load(); // preload="none" needs an explicit load on first play for some mobile browsers
+          audio.volume = 0.45;
+          const playResult = audio.play();
+          if (playResult && typeof playResult.then === 'function') {
+            playResult.then(markOn).catch(markOff);
+          } else {
+            markOn(); // legacy browsers: play() doesn't return a promise
+          }
+        } catch (err) {
+          markOff();
+        }
+      } else {
+        audio.pause();
+        btn.classList.remove('active');
+        btn.innerHTML = ICONS.mute;
+        btn.title = 'Nature sounds';
+      }
+    }
+
+    function toggleSound() {
+      const on = !document.getElementById('soundBtn').classList.contains('active');
+      localStorage.setItem('natureSound', on);
+      applySound(on);
+    }
 
     function applyDark(on) {
       document.body.classList.toggle('dark-mode', on);
@@ -2209,197 +2248,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const on = !document.body.classList.contains('dark-mode');
       localStorage.setItem('darkMode', on);
       applyDark(on);
-    }
-
-    /* ── HANDS-FREE MODE ────────────────────────── */
-    function applyListen(on) {
-      document.body.classList.toggle('listen-mode', on);
-      const btn = document.getElementById('listenBtn');
-      if (btn) {
-        btn.classList.toggle('active', on);
-        btn.innerHTML = ICONS.headphones;
-        btn.title = on ? 'Exit hands-free mode' : 'Hands-free mode';
-      }
-      if (!on) stopReading();
-    }
-
-    function toggleListen() {
-      const on = !document.body.classList.contains('listen-mode');
-      localStorage.setItem('listenMode', on);
-      applyListen(on);
-    }
-
-    /* ── HANDS-FREE READING ENGINE ─────────────────
-       Reads the overview, the written content, and a
-       short mention of audio/video — without hiding any
-       text — and highlights each word as it is spoken.
-    ────────────────────────────────────────────── */
-    const ttsState = { queue: [], index: 0, playing: false, builtFor: null };
-
-    /* Browser TTS quality depends entirely on which voice the visitor's OS
-       ships — setting utterance.lang alone doesn't pick a good one. Actively
-       select the best available Australian English voice (most OSes ship at
-       least one natural-sounding en-AU voice, e.g. macOS/Safari's "Karen"),
-       preferring an obviously-female one since that's what was asked for. */
-    let cachedVoices = [];
-    function refreshVoiceList() {
-      if ('speechSynthesis' in window) cachedVoices = window.speechSynthesis.getVoices();
-    }
-    if ('speechSynthesis' in window) {
-      refreshVoiceList();
-      window.speechSynthesis.onvoiceschanged = refreshVoiceList; // voice list often loads async
-    }
-
-    function pickAustralianVoice() {
-      const auVoices = cachedVoices.filter(v => (v.lang || '').toLowerCase() === 'en-au');
-      if (!auVoices.length) return null;
-      const femaleHints = ['karen', 'catherine', 'olivia', 'female', 'woman'];
-      return auVoices.find(v => femaleHints.some(hint => v.name.toLowerCase().includes(hint))) || auVoices[0];
-    }
-
-    function wrapWordsOnce(el) {
-      if (el.dataset.ttsWrapped) return;
-      const text = el.textContent;
-      const tokens = text.split(/(\s+)/);
-      el.innerHTML = tokens.map(tok => tok.trim() === '' ? tok : `<span class="tts-word">${tok}</span>`).join('');
-      el.dataset.ttsWrapped = 'true';
-    }
-
-    function clearHighlight(el) {
-      el.querySelectorAll('.tts-word.active').forEach(s => s.classList.remove('active'));
-    }
-
-    function buildQueueForModule(num) {
-      const section = document.getElementById('module-' + num);
-      const queue = [];
-      const titleEl = section.querySelector('.module-header h2');
-      if (titleEl) queue.push({ type: 'plain', text: `Module ${num}. ${titleEl.textContent}.` });
-
-      const summaryItems = section.querySelectorAll('.summary-box li');
-      if (summaryItems.length) {
-        queue.push({ type: 'plain', text: 'Here is what this module covers.' });
-        summaryItems.forEach(li => queue.push({ type: 'highlight', el: li }));
-      }
-
-      const writtenP = section.querySelector('.written-block p');
-      if (writtenP) queue.push({ type: 'highlight', el: writtenP });
-
-      const activeEmotionP = section.querySelector('.emotion-tab-content.active p');
-      if (activeEmotionP) queue.push({ type: 'highlight', el: activeEmotionP });
-
-      queue.push({ type: 'plain', text: 'This module also includes a guided audio practice and a video, available above.' });
-      return queue;
-    }
-
-    /* If a paragraph about to be read/highlighted lives on a subpage that
-       isn't currently showing, flip to that subpage first so the reader
-       can actually see the highlight animate. */
-    function revealElementPage(el) {
-      const subpage = el.closest && el.closest('.subpage');
-      if (!subpage || subpage.classList.contains('active')) return;
-      const section = subpage.closest('.module-section');
-      if (!section) return;
-      const num = section.id.split('-')[1];
-      const page = subpage.id.split('-').pop();
-      if (num && page) showSubpage(Number(num), Number(page));
-    }
-
-    function speakSegment(seg, onDone) {
-      if (!('speechSynthesis' in window)) { onDone(); return; }
-
-      let text, words = null, el = null, offsets = null;
-
-      if (seg.type === 'highlight') {
-        revealElementPage(seg.el);
-        wrapWordsOnce(seg.el);
-        el = seg.el;
-        text = el.textContent;
-        words = Array.from(el.querySelectorAll('.tts-word'));
-        let cursor = 0, wi = 0;
-        offsets = [];
-        text.split(/(\s+)/).forEach(tok => {
-          if (tok.trim() !== '') { offsets.push({ start: cursor, end: cursor + tok.length, word: words[wi] }); wi++; }
-          cursor += tok.length;
-        });
-      } else {
-        text = seg.text;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.lang = 'en-AU';
-      const auVoice = pickAustralianVoice();
-      if (auVoice) utterance.voice = auVoice;
-
-      if (offsets) {
-        utterance.onboundary = (e) => {
-          if (e.name !== 'word') return;
-          clearHighlight(el);
-          const hit = offsets.find(o => e.charIndex >= o.start && e.charIndex < o.end);
-          if (hit) hit.word.classList.add('active');
-        };
-      }
-
-      utterance.onend = () => { if (el) clearHighlight(el); onDone(); };
-      utterance.onerror = () => { if (el) clearHighlight(el); onDone(); };
-
-      window.speechSynthesis.speak(utterance);
-    }
-
-    function playFromQueue() {
-      if (ttsState.index >= ttsState.queue.length) {
-        ttsState.playing = false;
-        updateTTSBtn();
-        return;
-      }
-      const seg = ttsState.queue[ttsState.index];
-      speakSegment(seg, () => {
-        if (!ttsState.playing) return;
-        ttsState.index++;
-        playFromQueue();
-      });
-    }
-
-    function toggleTTS() {
-      if (!('speechSynthesis' in window)) {
-        alert('Text-to-speech is not supported in your browser. Please try Chrome or Safari.');
-        return;
-      }
-
-      if (ttsState.playing) {
-        window.speechSynthesis.cancel();
-        ttsState.playing = false;
-        updateTTSBtn();
-        return;
-      }
-
-      const activeSection = document.querySelector('.module-section.active');
-      if (!activeSection) return;
-      const num = parseInt(activeSection.id.split('-')[1]);
-
-      if (ttsState.builtFor !== num) {
-        ttsState.queue = buildQueueForModule(num);
-        ttsState.index = 0;
-        ttsState.builtFor = num;
-      }
-
-      ttsState.playing = true;
-      updateTTSBtn();
-      playFromQueue();
-    }
-
-    function stopReading() {
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-      ttsState.playing = false;
-      ttsState.builtFor = null;
-      updateTTSBtn();
-    }
-
-    function updateTTSBtn() {
-      const btn = document.getElementById('ttsBtn');
-      if (!btn) return;
-      btn.innerHTML = ttsState.playing ? ICONS.pause : ICONS.play;
-      btn.title = ttsState.playing ? 'Pause reading' : 'Play / pause reading';
     }
 
     /* ── THREE CIRCLES — now measured before AND after each module, so
@@ -2580,7 +2428,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     /* ── MODULE NAVIGATION ──────────────────────── */
     function showModule(num, opts) {
       opts = opts || {};
-      stopReading();
       document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
       const section = document.getElementById('module-' + num);
@@ -2746,7 +2593,10 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
     function toggleMenu() {
       const open = document.getElementById('mobileMenu').classList.toggle('open');
-      document.querySelector('.hamburger').classList.toggle('open', open);
+      const hamburger = document.querySelector('.hamburger');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+      hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       document.body.classList.toggle('menu-open', open);
     }
 
@@ -2761,8 +2611,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     /* ── INIT ───────────────────────────────────── */
     window.addEventListener('load', () => {
       applyDark(localStorage.getItem('darkMode') === 'true');
-      applyListen(localStorage.getItem('listenMode') === 'true');
-      updateTTSBtn();
+      document.getElementById('soundBtn').innerHTML = ICONS.mute;
 
       renderProgramModules();
       renderThreeCircleTools();
@@ -2773,6 +2622,14 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       if (completed.includes(TOTAL_MODULES)) {
         const pmBox = document.getElementById('postMeasuresBox');
         if (pmBox) pmBox.style.display = 'block';
+      }
+
+      // A module tile on the home page links here as ?module=N — only jump
+      // straight to it if that module has actually been completed, so this
+      // can't be used to skip ahead into content that isn't unlocked yet.
+      const requestedModule = parseInt(new URLSearchParams(window.location.search).get('module'), 10);
+      if (requestedModule >= 1 && requestedModule <= TOTAL_MODULES && completed.includes(requestedModule)) {
+        showModule(requestedModule);
       }
     });
   </script>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,6 +45,31 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -80px;
+      left: 12px;
+      z-index: 999;
+      background: var(--green-900);
+      color: #fffbf3;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus { top: 12px; }
 
     body {
       min-height: 100vh;
@@ -182,15 +207,6 @@
       opacity: 0.5;
       padding: 6px 0 6px 10px !important;
     }
-    .menu-badge {
-      display: inline-block;
-      vertical-align: super;
-      font-size: 0.34em;
-      font-weight: 700;
-      opacity: 0.5;
-      margin-left: 6px;
-    }
-
     /* ── FULL-WIDTH HERO BANNER ─────────────────── */
     .page-hero {
       position: relative;
@@ -576,12 +592,14 @@
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <nav class="site-nav">
     <a href="index.html" class="nav-logo">
       <img src="TheGreenRoomLogo6.png" alt="The Green Room Logo">
       <span class="logo-text">The Green Room</span>
     </a>
-    <button class="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span><span></span><span></span>
     </button>
   </nav>
@@ -594,6 +612,7 @@
     <a href="about.html#the-program" class="menu-sub-link">The Program</a>
   </div>
 
+  <main id="main-content">
   <header class="page-hero">
     <div class="page-hero-inner">
       <p class="eyebrow"></p>
@@ -602,13 +621,14 @@
     </div>
   </header>
 
-  <main class="about-tabs">
+  <div class="about-tabs">
     <div class="tab-buttons">
       <button class="tab-btn active" onclick="showTab(event, 'people')">People</button>
       <button class="tab-btn" onclick="showTab(event, 'the-program')">The Program</button>
     </div>
 
     <section class="tab-content active" id="tab-people">
+      <h2 class="sr-only">Our team</h2>
       <div class="people-grid">
 
         <article class="person-card">
@@ -660,7 +680,7 @@
         </div>
       </div>
     </section>
-  </main>
+  </div>
 
   <!-- CONTACT US — sits under the About tabs, before the footer -->
   <section class="contact-section">
@@ -670,6 +690,7 @@
       <p>We want to make this experience better for you. If you are experiencing difficulties navigating the website, or have any suggestions, contact our team at <a href="mailto:teagan.collins@uq.edu.au">teagan.collins@uq.edu.au</a>.</p>
     </div>
   </section>
+  </main>
 
   <footer>
     <div class="footer-inner">
@@ -735,15 +756,19 @@
 
     function showTab(event, tab) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
       document.getElementById('tab-' + tab).classList.add('active');
       event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
       history.replaceState(null, '', '#' + tab);
     }
 
     function toggleMenu() {
       const open = document.getElementById('mobileMenu').classList.toggle('open');
-      document.querySelector('.hamburger').classList.toggle('open', open);
+      const hamburger = document.querySelector('.hamburger');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+      hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       document.body.classList.toggle('menu-open', open);
     }
 
