@@ -2553,10 +2553,26 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       if (hint) hint.classList.add('hidden');
     }
 
+    /* If the visitor moved the circles for this module's check-in but never
+       tapped its own Save button, capture it automatically when they move
+       on — so completing the module never depends on remembering a second,
+       separate save step. Only fires if the circles actually changed; if
+       they were never touched, nothing is recorded, same as today. */
+    function autoSaveThreeCircles(num) {
+      const section = document.getElementById('module-' + num);
+      if (!section) return;
+      const phase = section.querySelector('.subpage') ? 'after' : 'only';
+      const key = tcKey(num, phase);
+      if (!circleSubmitted[key] && hasChangedCircle(num, phase)) {
+        tcSubmit(num, phase);
+      }
+    }
+
     /* ── MARK COMPLETE — only reachable once per module, since the button
        itself turns into "Next module" (see applyCompletion) right after,
        so the congratulations modal only ever shows the first time. ── */
     function markComplete(num) {
+      autoSaveThreeCircles(num);
       if (completed.includes(num)) return;
       completed.push(num);
       localStorage.setItem('completedModulesV2', JSON.stringify(completed));
