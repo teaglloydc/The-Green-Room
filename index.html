@@ -1125,8 +1125,8 @@
   </footer>
 
   <div class="floating-controls">
-    <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds"></button>
-    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+    <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds" aria-pressed="false"></button>
+    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode" aria-pressed="false"></button>
   </div>
 
   <audio id="natureSound" loop preload="none">
@@ -1152,6 +1152,7 @@
         btn.classList.toggle('active', on);
         btn.innerHTML = on ? ICONS.sun : ICONS.moon;
         btn.title = on ? 'Light mode' : 'Dark mode';
+        btn.setAttribute('aria-pressed', on);
       }
     }
 
@@ -1173,11 +1174,13 @@
           btn.classList.add('active');
           btn.innerHTML = ICONS.volume;
           btn.title = 'Turn off nature sounds';
+          btn.setAttribute('aria-pressed', 'true');
         };
         const markOff = () => {
           btn.classList.remove('active');
           btn.innerHTML = ICONS.mute;
           btn.title = 'Nature sounds';
+          btn.setAttribute('aria-pressed', 'false');
           localStorage.setItem('natureSound', 'false');
         };
         // Some mobile browsers throw synchronously from play()/load() instead
@@ -1201,6 +1204,7 @@
         btn.classList.remove('active');
         btn.innerHTML = ICONS.mute;
         btn.title = 'Nature sounds';
+        btn.setAttribute('aria-pressed', 'false');
       }
     }
 
@@ -1351,7 +1355,7 @@
       const cards = Array.from(track.querySelectorAll('.testimonial-card'));
 
       dotsWrap.innerHTML = cards.map((_, i) => `
-        <button type="button" class="testimonial-dot ${i === 0 ? 'active' : ''}" aria-label="Go to testimonial ${i + 1}" onclick="scrollTestimonialTo(${i})"></button>
+        <button type="button" class="testimonial-dot ${i === 0 ? 'active' : ''}" aria-label="Go to testimonial ${i + 1}" onclick="scrollTestimonialTo(${i})" aria-current="${i === 0 ? 'true' : 'false'}"></button>
       `).join('');
       const dots = Array.from(dotsWrap.querySelectorAll('.testimonial-dot'));
 
@@ -1361,7 +1365,10 @@
         scrollTimer = setTimeout(() => {
           const step = testimonialStep(track);
           const idx = Math.round(track.scrollLeft / step);
-          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+          dots.forEach((d, i) => {
+            d.classList.toggle('active', i === idx);
+            d.setAttribute('aria-current', i === idx ? 'true' : 'false');
+          });
         }, 80);
       });
     }

@@ -1452,8 +1452,8 @@
   </footer>
 
   <div class="floating-controls">
-    <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds"></button>
-    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+    <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds" aria-pressed="false"></button>
+    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode" aria-pressed="false"></button>
   </div>
 
   <audio id="natureSound" loop preload="none">
@@ -1887,7 +1887,7 @@
           <div class="progress-text" id="progressText">0 of ${TOTAL_MODULES} modules completed</div>
         </div>
         ${modules.map((m, i) => `
-          <div class="sidebar-module ${i === 0 ? 'active' : ''}" onclick="showModule(${i+1})" id="sidebar-${i+1}">
+          <div class="sidebar-module ${i === 0 ? 'active' : ''}" onclick="showModule(${i+1})" onkeydown="handleKeyActivate(event, () => showModule(${i+1}))" id="sidebar-${i+1}" role="button" tabindex="0" aria-current="${i === 0 ? 'true' : 'false'}">
             <div>
               <div class="sidebar-module-number">Module ${i+1}</div>
               <div class="sidebar-module-title">${m.title}</div>
@@ -1903,7 +1903,7 @@
 
         const exerciseBlock = `
           <div class="exercise-block" id="exercise-mod-${num}">
-            <div class="exercise-toggle" onclick="toggleExercise('exercise-mod-${num}')">
+            <div class="exercise-toggle" onclick="toggleExercise('exercise-mod-${num}')" onkeydown="handleKeyActivate(event, () => toggleExercise('exercise-mod-${num}'))" role="button" tabindex="0" aria-expanded="false" aria-controls="exercise-mod-${num}">
               <h3>Reflection activity</h3>
               <span class="exercise-hint">Tap to open <span class="exercise-chevron">▾</span></span>
             </div>
@@ -1932,7 +1932,7 @@
             ${opts.length > 1 ? `
               <div class="audio-length-tabs">
                 ${opts.map((opt, oi) => `
-                  <button type="button" class="audio-length-btn ${oi === 0 ? 'active' : ''}" data-title="${opt.title}" onclick="setAudioLength(event)">${opt.label}</button>
+                  <button type="button" class="audio-length-btn ${oi === 0 ? 'active' : ''}" data-title="${opt.title}" onclick="setAudioLength(event)" aria-pressed="${oi === 0 ? 'true' : 'false'}">${opt.label}</button>
                 `).join('')}
               </div>
             ` : ''}
@@ -1947,7 +1947,7 @@
         const circleBubblesHTML = m.circleDefs ? `
           <div class="circle-tab-buttons">
             ${m.circleDefs.map(def => `
-              <button type="button" class="circle-tab-btn ${def.system}" onclick="showCircleTab(event, ${num}, '${def.system}')">${def.label.split(' — ')[0]}</button>
+              <button type="button" class="circle-tab-btn ${def.system}" onclick="showCircleTab(event, ${num}, '${def.system}')" aria-pressed="false">${def.label.split(' — ')[0]}</button>
             `).join('')}
           </div>
           <p class="circle-tab-hint" id="circle-hint-${num}">Select a circle above to read about it.</p>
@@ -2022,8 +2022,7 @@
 
                 <div class="module-nav-buttons">
                   <span></span>
-                  <button class="btn-module-nav btn-complete" onclick="markComplete(${num})">Mark as complete</button>
-                  <button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1}, {continueForward:true})" style="display:none;">Next module →</button>
+                  <button class="btn-module-nav btn-complete" id="complete-btn-${num}" onclick="markComplete(${num})">Mark as complete</button>
                 </div>
               </div>
             </section>
@@ -2043,9 +2042,9 @@
 
           page3ExtraHTML = `
             <div class="emotion-tab-buttons">
-              <button class="emotion-tab-btn active" onclick="showEmotion(event,'anger')">Anger</button>
-              <button class="emotion-tab-btn" onclick="showEmotion(event,'sadness')">Sadness</button>
-              <button class="emotion-tab-btn" onclick="showEmotion(event,'anxiety')">Anxiety</button>
+              <button class="emotion-tab-btn active" onclick="showEmotion(event,'anger')" aria-pressed="true">Anger</button>
+              <button class="emotion-tab-btn" onclick="showEmotion(event,'sadness')" aria-pressed="false">Sadness</button>
+              <button class="emotion-tab-btn" onclick="showEmotion(event,'anxiety')" aria-pressed="false">Anxiety</button>
             </div>
             <div class="emotion-tab-content active" id="emotion-anger">
               <div class="content-block written-block"><h3>Anger</h3><p>Anger may feel like irritation, blame, or frustration. It can arise when something feels unfair or overwhelming and can signal a need for boundaries or change.
@@ -2094,11 +2093,11 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               ${moduleHeaderHTML}
 
               <div class="subpage-nav-dots" aria-label="Jump to any part of this module">
-                <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" aria-label="Before you begin"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Before</span></button>
-                <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" aria-label="Page 1"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 1</span></button>
-                <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" aria-label="Page 2"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 2</span></button>
-                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Reflect and practise"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Practise</span></button>
-                <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" aria-label="After this module"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">After</span></button>
+                <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" aria-label="Before you begin" aria-current="true"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Before</span></button>
+                <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" aria-label="Page 1" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 1</span></button>
+                <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" aria-label="Page 2" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 2</span></button>
+                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Reflect and practise" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Practise</span></button>
+                <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" aria-label="After this module" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">After</span></button>
               </div>
 
               <div class="subpage active" id="subpage-${num}-1">
@@ -2158,8 +2157,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
                 <div class="module-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showModule(${num-1})">← Previous module</button>
-                  <button class="btn-module-nav btn-complete" onclick="markComplete(${num})">${isLast ? 'Mark program complete' : 'Mark as complete'}</button>
-                  ${!isLast ? `<button class="btn-module-nav btn-next" id="next-btn-${num}" onclick="showModule(${num+1}, {continueForward:true})" style="display:none;">Next module →</button>` : ''}
+                  <button class="btn-module-nav btn-complete" id="complete-btn-${num}" onclick="markComplete(${num})">${isLast ? 'Mark program complete' : 'Mark as complete'}</button>
                 </div>
 
                 ${postMeasuresBoxHTML}
@@ -2171,7 +2169,17 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     }
 
     function toggleExercise(id) {
-      document.getElementById(id).classList.toggle('open');
+      const el = document.getElementById(id);
+      const open = el.classList.toggle('open');
+      const toggle = el.querySelector('.exercise-toggle');
+      if (toggle) toggle.setAttribute('aria-expanded', open);
+    }
+
+    function handleKeyActivate(event, fn) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        fn();
+      }
     }
 
     /* ── DARK MODE ──────────────────────────────── */
@@ -2197,11 +2205,13 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
           btn.classList.add('active');
           btn.innerHTML = ICONS.volume;
           btn.title = 'Turn off nature sounds';
+          btn.setAttribute('aria-pressed', 'true');
         };
         const markOff = () => {
           btn.classList.remove('active');
           btn.innerHTML = ICONS.mute;
           btn.title = 'Nature sounds';
+          btn.setAttribute('aria-pressed', 'false');
           localStorage.setItem('natureSound', 'false');
         };
         // Some mobile browsers throw synchronously from play()/load() instead
@@ -2225,6 +2235,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         btn.classList.remove('active');
         btn.innerHTML = ICONS.mute;
         btn.title = 'Nature sounds';
+        btn.setAttribute('aria-pressed', 'false');
       }
     }
 
@@ -2241,6 +2252,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         btn.classList.toggle('active', on);
         btn.innerHTML = on ? ICONS.sun : ICONS.moon;
         btn.title = on ? 'Light mode' : 'Dark mode';
+        btn.setAttribute('aria-pressed', on);
       }
     }
 
@@ -2429,10 +2441,12 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     function showModule(num, opts) {
       opts = opts || {};
       document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.sidebar-module').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.sidebar-module').forEach(s => { s.classList.remove('active'); s.setAttribute('aria-current', 'false'); });
       const section = document.getElementById('module-' + num);
       section.classList.add('active');
-      document.getElementById('sidebar-' + num).classList.add('active');
+      const sidebarItem = document.getElementById('sidebar-' + num);
+      sidebarItem.classList.add('active');
+      sidebarItem.setAttribute('aria-current', 'true');
 
       if (section.querySelector('.subpage')) {
         if (completed.includes(num)) {
@@ -2463,7 +2477,9 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const target = document.getElementById(`subpage-${num}-${page}`) || pages[0];
       target.classList.add('active');
       section.querySelectorAll('.subpage-dot').forEach(d => {
-        d.classList.toggle('active', Number(d.dataset.page) === page);
+        const isCurrent = Number(d.dataset.page) === page;
+        d.classList.toggle('active', isCurrent);
+        d.setAttribute('aria-current', isCurrent ? 'true' : 'false');
       });
     }
 
@@ -2507,16 +2523,18 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
     function showEmotion(event, emotion) {
       document.querySelectorAll('.emotion-tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.emotion-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.emotion-tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
       document.getElementById('emotion-' + emotion).classList.add('active');
       event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
     }
 
     function setAudioLength(event) {
       const card = event.target.closest('.audio-player-card');
       if (!card) return;
-      card.querySelectorAll('.audio-length-btn').forEach(b => b.classList.remove('active'));
+      card.querySelectorAll('.audio-length-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
       event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
       const titleEl = card.querySelector('.audio-player-title');
       if (titleEl) titleEl.textContent = event.target.dataset.title;
       const fill = card.querySelector('.audio-player-track-fill');
@@ -2527,29 +2545,27 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const scope = document.getElementById('module-' + num);
       if (!scope) return;
       scope.querySelectorAll('.circle-tab-content').forEach(t => t.classList.remove('active'));
-      scope.querySelectorAll('.circle-tab-btn').forEach(b => b.classList.remove('active'));
+      scope.querySelectorAll('.circle-tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
       document.getElementById('circle-' + num + '-' + system).classList.add('active');
       event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
       const hint = document.getElementById('circle-hint-' + num);
       if (hint) hint.classList.add('hidden');
     }
 
-    /* ── MARK COMPLETE — unlocks Next but does NOT auto-navigate ── */
+    /* ── MARK COMPLETE — only reachable once per module, since the button
+       itself turns into "Next module" (see applyCompletion) right after,
+       so the congratulations modal only ever shows the first time. ── */
     function markComplete(num) {
-      const alreadyDone = completed.includes(num);
-      if (!alreadyDone) {
-        completed.push(num);
-        localStorage.setItem('completedModulesV2', JSON.stringify(completed));
-        applyCompletion(num);
-        updateProgress();
-        showCelebration(num);
-      }
+      if (completed.includes(num)) return;
+      completed.push(num);
+      localStorage.setItem('completedModulesV2', JSON.stringify(completed));
+      applyCompletion(num);
+      updateProgress();
+      showCelebration(num);
       if (num === TOTAL_MODULES) {
         const pmBox = document.getElementById('postMeasuresBox');
-        if (pmBox) {
-          pmBox.style.display = 'block';
-          if (alreadyDone) pmBox.scrollIntoView({ behavior: 'smooth' });
-        }
+        if (pmBox) pmBox.style.display = 'block';
       }
     }
 
@@ -2578,11 +2594,27 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       document.getElementById('celebrationOverlay').classList.remove('visible');
     }
 
+    /* Once a module is complete, its single button turns into the "next"
+       action in place — so a returning visitor never sees the completion
+       button (or the congratulations modal) again for a module they've
+       already finished. */
     function applyCompletion(num) {
       const tick = document.getElementById('tick-' + num);
       if (tick) tick.classList.add('done');
-      const nextBtn = document.getElementById(`next-btn-${num}`);
-      if (nextBtn) nextBtn.style.display = '';
+      const btn = document.getElementById('complete-btn-' + num);
+      if (!btn) return;
+      btn.classList.remove('btn-complete');
+      btn.classList.add('btn-next');
+      if (num === TOTAL_MODULES) {
+        btn.textContent = 'View final survey ↓';
+        btn.onclick = () => {
+          const pmBox = document.getElementById('postMeasuresBox');
+          if (pmBox) { pmBox.style.display = 'block'; pmBox.scrollIntoView({ behavior: 'smooth' }); }
+        };
+      } else {
+        btn.textContent = 'Next module →';
+        btn.onclick = () => showModule(num + 1, { continueForward: true });
+      }
     }
 
     function updateProgress() {

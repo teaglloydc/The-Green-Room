@@ -623,8 +623,8 @@
 
   <div class="about-tabs">
     <div class="tab-buttons">
-      <button class="tab-btn active" onclick="showTab(event, 'people')">People</button>
-      <button class="tab-btn" onclick="showTab(event, 'the-program')">The Program</button>
+      <button class="tab-btn active" onclick="showTab(event, 'people')" aria-pressed="true">People</button>
+      <button class="tab-btn" onclick="showTab(event, 'the-program')" aria-pressed="false">The Program</button>
     </div>
 
     <section class="tab-content active" id="tab-people">
@@ -727,7 +727,7 @@
   </footer>
 
   <div class="floating-controls">
-    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode" aria-pressed="false"></button>
   </div>
 
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
@@ -745,6 +745,7 @@
         btn.classList.toggle('active', on);
         btn.innerHTML = on ? ICONS.sun : ICONS.moon;
         btn.title = on ? 'Light mode' : 'Dark mode';
+        btn.setAttribute('aria-pressed', on);
       }
     }
 
