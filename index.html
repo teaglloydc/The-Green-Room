@@ -6,7 +6,7 @@
   <title>The Green Room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #edf0e4;
@@ -52,7 +52,7 @@
         radial-gradient(circle at 8% 0%, rgba(181,114,46,0.1), transparent 28%),
         linear-gradient(180deg, var(--bg), #edf0e4 48%, var(--bg));
       color: var(--text);
-      font-family: 'Instrument Sans', system-ui, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       line-height: 1.7;
       overflow-x: hidden;
       transition: background-color 0.25s, color 0.25s;
@@ -105,7 +105,7 @@
     }
 
     .logo-text {
-      font-family: "Fraunces", Georgia, serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       font-size: clamp(1.4rem, 3vw, 2rem);
       font-weight: 600;
       white-space: nowrap;
@@ -128,40 +128,70 @@
       color: #fff8ea;
       cursor: pointer;
       transition: background 0.2s;
+      position: relative;
+      z-index: 101;
     }
     .hamburger:hover { background: rgba(0,0,0,0.54); }
-    .hamburger span { display: block; width: 18px; height: 2px; background: currentColor; }
+    .hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* ── MOBILE MENU (matching floating card) ──── */
+    /* ── MOBILE MENU — full-screen takeover, bold stacked list ── */
     .mobile-menu {
       display: none;
       position: fixed;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 90;
-      width: min(1180px, calc(100% - 28px));
-      padding: 14px 22px 18px;
-      background: rgba(28, 54, 42, 0.97);
-      backdrop-filter: blur(16px);
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: 0 16px 44px rgba(16,36,27,0.32);
+      inset: 0;
+      z-index: 95;
+      padding: 120px 28px 40px;
+      background: var(--green-900);
+      overflow-y: auto;
     }
-    .mobile-menu.open { display: block; }
+    .mobile-menu.open {
+      display: flex;
+      flex-direction: column;
+      animation: menu-in 0.35s ease;
+    }
+    @keyframes menu-in {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mobile-menu.open { animation: none; }
+    }
+    body.menu-open { overflow: hidden; }
 
     .mobile-menu a {
       display: block;
-      padding: 12px 0;
-      color: rgba(247,241,230,0.9);
+      padding: 10px 0;
+      color: #fffbf3;
       text-decoration: none;
-      font-weight: 600;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.95rem;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 8vw, 3.2rem);
+      line-height: 1.08;
+      letter-spacing: -0.01em;
     }
-    .mobile-menu a:last-child { border-bottom: none; }
-    .menu-section-link { font-weight: 800; color: #fffbf3 !important; }
-    .menu-sub-link { padding-left: 22px !important; font-size: 0.87rem !important; opacity: 0.82; }
+    .menu-section-link { color: #fffbf3 !important; }
+    .menu-sub-link {
+      font-size: clamp(1.05rem, 4.2vw, 1.3rem) !important;
+      font-weight: 700 !important;
+      opacity: 0.5;
+      padding: 6px 0 6px 10px !important;
+    }
+    .menu-badge {
+      display: inline-block;
+      vertical-align: super;
+      font-size: 0.34em;
+      font-weight: 700;
+      opacity: 0.5;
+      margin-left: 6px;
+    }
 
     /* ── HERO ───────────────────────────────────── */
     /* CHANGE 2: dark gradient overlay added so text is always readable */
@@ -169,8 +199,9 @@
       position: relative;
       min-height: calc(100vh - 68px);
       display: grid;
-      align-items: end;
-      padding: clamp(100px, 11vw, 130px) clamp(20px, 5vw, 64px) 48px;
+      align-items: center;
+      justify-items: center;
+      padding: clamp(100px, 11vw, 130px) clamp(20px, 5vw, 64px) 80px;
       color: #fffbf3;
       overflow: hidden;
       background: #14241b;
@@ -238,30 +269,22 @@
     .hero-inner {
       position: relative;
       z-index: 2;
-      width: min(780px, 100%);
-    }
-
-    .eyebrow {
-      display: inline-flex;
+      width: min(880px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      color: rgba(255,250,240,0.86);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
     }
-
-    .eyebrow::before { content: ""; width: 42px; height: 1px; background: var(--wood); }
 
     /* CHANGE 3: text-shadow added to hero h1 */
     .hero h1 {
-      max-width: 700px;
-      font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(2.8rem, 7vw, 6.4rem);
-      font-weight: 600;
-      line-height: 0.96;
+      max-width: 760px;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: clamp(3.2rem, 8vw, 7.4rem);
+      font-weight: 800;
+      line-height: 0.94;
+      letter-spacing: -0.01em;
       text-wrap: balance;
       text-shadow: 0 2px 16px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.45);
     }
@@ -279,6 +302,7 @@
     .hero-actions {
       display: flex;
       align-items: center;
+      justify-content: center;
       flex-wrap: wrap;
       gap: 14px;
       margin-top: 32px;
@@ -300,12 +324,12 @@
     }
 
     .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: var(--wood); color: #fffbf3; }
+    .btn-primary { background: var(--green-100); color: var(--green-900); }
     .btn-secondary { border: 1px solid rgba(255,250,240,0.34); color: #fffbf3; background: transparent; }
     .btn-green { background: var(--green-700); color: #fffbf3; }
 
     /* ── SECTIONS ───────────────────────────────── */
-    .section { padding: clamp(60px, 8vw, 110px) clamp(20px, 5vw, 64px); }
+    .section { padding: clamp(76px, 10vw, 150px) clamp(20px, 5vw, 64px); }
     .section-inner { width: min(1180px, 100%); margin: 0 auto; }
 
     .intro-grid {
@@ -325,10 +349,11 @@
     }
 
     h2 {
-      font-family: "Fraunces", Georgia, serif;
-      font-size: clamp(2.1rem, 4vw, 3.8rem);
-      font-weight: 600;
-      line-height: 1.04;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.01em;
       color: var(--text);
       text-wrap: balance;
     }
@@ -346,8 +371,6 @@
       background:
         linear-gradient(180deg, rgba(16,36,27,0.04), rgba(16,36,27,0.2)),
         url("https://images.unsplash.com/photo-1770893055565-1f91c24adb77?auto=format&fit=crop&w=1600&q=80") center/cover;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,0.45);
     }
 
     /* ── TESTIMONIALS ───────────────────────────── */
@@ -373,9 +396,7 @@
       display: flex;
       flex-direction: column;
       background: var(--surface);
-      border: 1px solid var(--line);
       border-radius: var(--radius);
-      box-shadow: 0 14px 40px rgba(16,36,27,0.08);
       padding: 28px;
     }
 
@@ -391,7 +412,7 @@
     }
 
     .testimonial-quote-mark {
-      font-family: "Fraunces", Georgia, serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       font-size: 2.4rem;
       line-height: 1;
       color: var(--wood);
@@ -402,7 +423,7 @@
     .testimonial-card blockquote { margin: 0 0 22px; }
 
     .testimonial-card blockquote p {
-      font-family: "Fraunces", Georgia, serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       font-size: 1.15rem;
       font-weight: 600;
       line-height: 1.42;
@@ -478,8 +499,7 @@
 
     .step-card {
       padding: 28px;
-      background: rgba(255,250,240,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,250,240,0.06);
       border-radius: var(--radius);
     }
 
@@ -493,7 +513,7 @@
     }
 
     .step-card h3, .module-card h3 {
-      font-family: "Fraunces", Georgia, serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       font-size: clamp(1.3rem, 2.5vw, 1.6rem);
       font-weight: 600;
       line-height: 1.12;
@@ -602,7 +622,7 @@
     }
 
     .module-card h3 {
-      font-family: "Fraunces", Georgia, serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       font-size: clamp(1.1rem, 1.8vw, 1.34rem);
       font-weight: 600;
       line-height: 1.15;
@@ -655,9 +675,7 @@
     .quiet-card {
       padding: 32px;
       border-radius: var(--radius);
-      border: 1px solid var(--line);
       background: linear-gradient(145deg, var(--surface), var(--surface-soft));
-      box-shadow: 0 14px 40px rgba(16,36,27,0.08);
     }
 
     .quiet-card p { color: var(--muted); line-height: 1.85; margin-bottom: 20px; font-size: 0.97rem; }
@@ -687,7 +705,7 @@
       transition: transform 0.2s, background 0.2s;
     }
     .float-btn:hover { transform: scale(1.1); }
-    .float-btn.active { background: var(--wood-dark); }
+    .float-btn.active { background: #fffbf3; color: var(--green-900); }
 
     .back-to-top {
       position: fixed;
@@ -791,7 +809,7 @@
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 860px) {
       .hero { min-height: 680px; align-items: center; padding-top: clamp(90px, 11vw, 110px); }
-      .hero h1 { font-size: clamp(2.4rem, 8vw, 3.8rem); }
+      .hero h1 { font-size: clamp(2.6rem, 11vw, 4.2rem); }
 
       .intro-grid,
       .steps-header,
@@ -802,7 +820,7 @@
 
       .modules-header { flex-direction: column; align-items: flex-start; }
 
-      h2 { font-size: clamp(1.9rem, 6vw, 2.8rem); }
+      h2 { font-size: clamp(2.2rem, 9vw, 3.2rem); }
 
       .floating-controls { left: 12px; right: auto; }
       .back-to-top { right: 14px; bottom: 18px; }
@@ -824,17 +842,16 @@
     <a href="index.html">Home</a>
     <a href="program.html">Program</a>
     <a href="about.html" class="menu-section-link">About Us</a>
-    <a href="about.html#people" class="menu-sub-link">— People</a>
-    <a href="about.html#the-program" class="menu-sub-link">— The Program</a>
+    <a href="about.html#people" class="menu-sub-link">People</a>
+    <a href="about.html#the-program" class="menu-sub-link">The Program</a>
   </div>
 
   <header class="hero">
     <video class="hero-video" id="heroVideoA" muted playsinline preload="none" poster="IndexCover10.png" aria-hidden="true"></video>
     <video class="hero-video" id="heroVideoB" muted playsinline preload="none" aria-hidden="true"></video>
     <div class="hero-inner">
-      <div class="eyebrow"></div>
       <h1>Welcome in.</h1>
-      <p>When your little one arrives early, life can feel overwhelming. The Green Room offers a space to pause, understand your mind and learn how to navigate complex emotions with compassion.</p>
+      <p>When your little one arrives early, The Green Room is here for premmie mums — a space to pause and navigate it all with compassion.</p>
       <div class="hero-actions">
         <a href="program.html" class="btn btn-primary">Begin the Program</a>
         <a href="about.html" class="btn btn-secondary">Learn More</a>
@@ -959,7 +976,7 @@
         <a href="program.html" class="btn btn-green">View Modules</a>
       </div>
       <div class="modules-grid" id="modulesGrid">
-        <a href="program.html" class="module-card">
+        <a href="program.html?module=1" class="module-card">
           <div class="module-card-media" style="background-image:url('Introduction.png')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
@@ -968,7 +985,7 @@
             <p class="module-card-teaser">Who this program is for, and how to move through it in your own time.</p>
           </div>
         </a>
-        <a href="program.html" class="module-card">
+        <a href="program.html?module=2" class="module-card">
           <div class="module-card-media" style="background-image:url('Mindfulness2.png')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
@@ -977,7 +994,7 @@
             <p class="module-card-teaser">Why early motherhood changes the way your mind reacts, and what that means after a preterm birth.</p>
           </div>
         </a>
-        <a href="program.html" class="module-card">
+        <a href="program.html?module=3" class="module-card">
           <div class="module-card-media" style="background-image:url('TrickyBrains.png')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
@@ -986,7 +1003,7 @@
             <p class="module-card-teaser">How the mind's threat response works, and where compassion fits in.</p>
           </div>
         </a>
-        <a href="program.html" class="module-card">
+        <a href="program.html?module=4" class="module-card">
           <div class="module-card-media" style="background-image:url('OurThreeCircles.png')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
@@ -995,7 +1012,7 @@
             <p class="module-card-teaser">Threat, drive and soothing — the three systems shaping how you feel.</p>
           </div>
         </a>
-        <a href="program.html" class="module-card">
+        <a href="program.html?module=5" class="module-card">
           <div class="module-card-media" style="background-image:url('SoothingRythm.png')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
@@ -1004,7 +1021,7 @@
             <p class="module-card-teaser">Where the critical voice comes from, and how to meet it differently.</p>
           </div>
         </a>
-        <a href="program.html" class="module-card">
+        <a href="program.html?module=6" class="module-card">
           <div class="module-card-media" style="background-image:url('CompassionateSelf.png')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
@@ -1013,7 +1030,7 @@
             <p class="module-card-teaser">Practising the wise, steady part of you that can hold difficulty.</p>
           </div>
         </a>
-        <a href="program.html" class="module-card">
+        <a href="program.html?module=7" class="module-card">
           <div class="module-card-media" style="background-image:url('Anger.png')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
@@ -1022,7 +1039,7 @@
             <p class="module-card-teaser">Tools for anger, sadness and anxiety as they show up day to day.</p>
           </div>
         </a>
-        <a href="program.html" class="module-card">
+        <a href="program.html?module=8" class="module-card">
           <div class="module-card-media" style="background-image:url('4.png')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
@@ -1086,8 +1103,8 @@
   </footer>
 
   <div class="floating-controls">
-    <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds">🔈</button>
-    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds"></button>
+    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
   </div>
 
   <audio id="natureSound" loop preload="none">
@@ -1097,10 +1114,23 @@
   <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
 
   <script>
+    /* Clean line-icon SVGs (feather-style) used in place of emoji for the
+       floating control buttons — sized to fill the 46px circular buttons. */
+    const ICONS = {
+      moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
+      sun: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>',
+      volume: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>',
+      mute: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>'
+    };
+
     function applyDark(on) {
       document.body.classList.toggle('dark-mode', on);
       const btn = document.getElementById('darkBtn');
-      if (btn) { btn.textContent = on ? '☀️' : '🌙'; btn.title = on ? 'Light mode' : 'Dark mode'; }
+      if (btn) {
+        btn.classList.toggle('active', on);
+        btn.innerHTML = on ? ICONS.sun : ICONS.moon;
+        btn.title = on ? 'Light mode' : 'Dark mode';
+      }
     }
 
     function toggleDark() {
@@ -1119,12 +1149,12 @@
       if (on) {
         const markOn = () => {
           btn.classList.add('active');
-          btn.textContent = '🔊';
+          btn.innerHTML = ICONS.volume;
           btn.title = 'Turn off nature sounds';
         };
         const markOff = () => {
           btn.classList.remove('active');
-          btn.textContent = '🔈';
+          btn.innerHTML = ICONS.mute;
           btn.title = 'Nature sounds';
           localStorage.setItem('natureSound', 'false');
         };
@@ -1147,7 +1177,7 @@
       } else {
         audio.pause();
         btn.classList.remove('active');
-        btn.textContent = '🔈';
+        btn.innerHTML = ICONS.mute;
         btn.title = 'Nature sounds';
       }
     }
@@ -1159,7 +1189,9 @@
     }
 
     function toggleMenu() {
-      document.getElementById('mobileMenu').classList.toggle('open');
+      const open = document.getElementById('mobileMenu').classList.toggle('open');
+      document.querySelector('.hamburger').classList.toggle('open', open);
+      document.body.classList.toggle('menu-open', open);
     }
 
     /* Hero alternates between two clips — the woman at the window, then a
@@ -1310,7 +1342,8 @@
     }
 
     window.addEventListener('load', () => {
-      if (localStorage.getItem('darkMode') === 'true') applyDark(true);
+      applyDark(localStorage.getItem('darkMode') === 'true');
+      document.getElementById('soundBtn').innerHTML = ICONS.mute;
       initHeroVideo();
       initModuleTilt();
       initTestimonials();
