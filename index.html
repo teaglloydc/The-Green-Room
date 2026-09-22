@@ -257,6 +257,12 @@
       @media (prefers-reduced-motion: reduce) {
         .hero-video { animation: none; object-position: 65% center; }
       }
+
+      /* Phone-only: "Welcome in" and the subtext sit centred in the middle
+         of the screen here, rather than the bottom-left desktop layout. */
+      .hero { justify-items: center; }
+      .hero-inner { margin: 0 auto; text-align: center; }
+      .hero-actions { justify-content: center; }
     }
 
     .hero::before {
