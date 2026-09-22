@@ -868,7 +868,7 @@
 
   <main id="main-content">
   <header class="hero">
-    <video class="hero-video" id="heroVideoA" muted playsinline preload="none" poster="IndexCover10.png" aria-hidden="true"></video>
+    <video class="hero-video" id="heroVideoA" muted playsinline preload="none" poster="IndexCover11.jpg" aria-hidden="true"></video>
     <video class="hero-video" id="heroVideoB" muted playsinline preload="none" aria-hidden="true"></video>
     <div class="hero-inner">
       <h1>Welcome in.</h1>
@@ -1240,7 +1240,13 @@
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const saveData = navigator.connection && navigator.connection.saveData;
-      if (reduceMotion || saveData) return; // poster image stays put
+      if (reduceMotion || saveData) {
+        // Video element is opacity:0 until it gets .active — without this it
+        // never becomes visible at all, so the poster it was meant to fall
+        // back to never actually shows. Reveal it here instead of playing.
+        current.classList.add('active');
+        return;
+      }
 
       const CROSSFADE_LEAD = 1.4; // seconds before the end to start blending
       let primed = false;
