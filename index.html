@@ -997,7 +997,7 @@
       </div>
       <div class="modules-grid" id="modulesGrid">
         <a href="program.html?module=1" class="module-card">
-          <div class="module-card-media" style="background-image:url('Introduction.png')"></div>
+          <div class="module-card-media" style="background-image:url('Introduction.jpg')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
             <div class="module-number">Module 1</div>
@@ -1006,7 +1006,7 @@
           </div>
         </a>
         <a href="program.html?module=2" class="module-card">
-          <div class="module-card-media" style="background-image:url('Mindfulness2.png')"></div>
+          <div class="module-card-media" style="background-image:url('Mindfulness2.jpg')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
             <div class="module-number">Module 2</div>
@@ -1015,7 +1015,7 @@
           </div>
         </a>
         <a href="program.html?module=3" class="module-card">
-          <div class="module-card-media" style="background-image:url('TrickyBrains.png')"></div>
+          <div class="module-card-media" style="background-image:url('TrickyBrains.jpg')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
             <div class="module-number">Module 3</div>
@@ -1024,7 +1024,7 @@
           </div>
         </a>
         <a href="program.html?module=4" class="module-card">
-          <div class="module-card-media" style="background-image:url('OurThreeCircles.png')"></div>
+          <div class="module-card-media" style="background-image:url('OurThreeCircles.jpg')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
             <div class="module-number">Module 4</div>
@@ -1033,7 +1033,7 @@
           </div>
         </a>
         <a href="program.html?module=5" class="module-card">
-          <div class="module-card-media" style="background-image:url('SoothingRythm.png')"></div>
+          <div class="module-card-media" style="background-image:url('SoothingRythm.jpg')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
             <div class="module-number">Module 5</div>
@@ -1042,7 +1042,7 @@
           </div>
         </a>
         <a href="program.html?module=6" class="module-card">
-          <div class="module-card-media" style="background-image:url('CompassionateSelf.png')"></div>
+          <div class="module-card-media" style="background-image:url('CompassionateSelf.jpg')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
             <div class="module-number">Module 6</div>
@@ -1051,7 +1051,7 @@
           </div>
         </a>
         <a href="program.html?module=7" class="module-card">
-          <div class="module-card-media" style="background-image:url('Anger.png')"></div>
+          <div class="module-card-media" style="background-image:url('Anger.jpg')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
             <div class="module-number">Module 7</div>
@@ -1060,7 +1060,7 @@
           </div>
         </a>
         <a href="program.html?module=8" class="module-card">
-          <div class="module-card-media" style="background-image:url('4.png')"></div>
+          <div class="module-card-media" style="background-image:url('4.jpg')"></div>
           <div class="module-card-scrim"></div>
           <div class="module-card-body">
             <div class="module-number">Module 8</div>
@@ -1111,7 +1111,7 @@
 
       <div class="footer-bottom">
         <div class="footer-logos">
-          <img src="uqlogo4.png" alt="University of Queensland logo">
+          <img src="uqlogo4.jpg" alt="University of Queensland logo">
           <img src="CMRGLogo.png" alt="Compassionate Mind Research Group logo" class="cmrg-logo">
         </div>
         <div>
@@ -1378,13 +1378,17 @@
       });
     }
 
-    window.addEventListener('load', () => {
-      applyDark(localStorage.getItem('darkMode') === 'true');
-      document.getElementById('soundBtn').innerHTML = ICONS.mute;
-      initHeroVideo();
-      initModuleTilt();
-      initTestimonials();
-    });
+    /* Runs immediately rather than waiting on window's "load" event — that
+       event only fires once every image on the page (including the ~2MB+
+       of below-the-fold module tile photos) has finished downloading, which
+       was delaying the hero video from even starting to fetch on mobile.
+       This script tag is the last thing in <body>, so the DOM these
+       functions touch already exists by the time it runs. */
+    applyDark(localStorage.getItem('darkMode') === 'true');
+    document.getElementById('soundBtn').innerHTML = ICONS.mute;
+    initHeroVideo();
+    initModuleTilt();
+    initTestimonials();
 
     window.addEventListener('scroll', () => {
       document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 420);
