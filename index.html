@@ -1124,6 +1124,7 @@
   </footer>
 
   <div class="floating-controls">
+    <button class="float-btn" id="heroVideoBtn" onclick="toggleHeroVideo()" aria-label="Pause background video" title="Pause background video" aria-pressed="false"></button>
     <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds" aria-pressed="false"></button>
     <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode" aria-pressed="false"></button>
   </div>
@@ -1141,8 +1142,34 @@
       moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
       sun: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>',
       volume: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>',
-      mute: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>'
+      mute: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>',
+      play: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>',
+      pause: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>'
     };
+
+    /* ── HERO VIDEO PAUSE CONTROL ───────────────────
+       The video autoplays regardless of prefers-reduced-motion (see
+       initHeroVideo) since it's gentle, muted, ambient motion — but WCAG
+       still expects an on-page way to stop auto-playing motion that runs
+       longer than 5 seconds, so this button is that mechanism. */
+    let heroVideoPaused = false;
+    function toggleHeroVideo() {
+      const btn = document.getElementById('heroVideoBtn');
+      heroVideoPaused = !heroVideoPaused;
+      ['heroVideoA', 'heroVideoB'].forEach(id => {
+        const v = document.getElementById(id);
+        if (!v || !v.src) return;
+        if (heroVideoPaused) v.pause(); else v.play().catch(() => {});
+      });
+      if (btn) {
+        btn.innerHTML = heroVideoPaused ? ICONS.play : ICONS.pause;
+        btn.classList.toggle('active', heroVideoPaused);
+        btn.setAttribute('aria-pressed', heroVideoPaused);
+        const label = heroVideoPaused ? 'Play background video' : 'Pause background video';
+        btn.setAttribute('aria-label', label);
+        btn.title = label;
+      }
+    }
 
     function applyDark(on) {
       document.body.classList.toggle('dark-mode', on);
@@ -1237,12 +1264,15 @@
       let next = document.getElementById('heroVideoB');
       if (!current || !next) return;
 
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Muted, slow-crossfade ambient background video plays regardless of
+      // prefers-reduced-motion — it's gentle rather than the kind of jarring
+      // animation that setting guards against — but a visible pause control
+      // (see toggleHeroVideo) still gives anyone who wants it off an on-page
+      // way to do that, satisfying the same underlying accessibility need.
+      // Data-saver mode is different (about data cost, not motion) so that
+      // still falls back to the static poster.
       const saveData = navigator.connection && navigator.connection.saveData;
-      if (reduceMotion || saveData) {
-        // Video element is opacity:0 until it gets .active — without this it
-        // never becomes visible at all, so the poster it was meant to fall
-        // back to never actually shows. Reveal it here instead of playing.
+      if (saveData) {
         current.classList.add('active');
         return;
       }
@@ -1386,6 +1416,7 @@
        functions touch already exists by the time it runs. */
     applyDark(localStorage.getItem('darkMode') === 'true');
     document.getElementById('soundBtn').innerHTML = ICONS.mute;
+    document.getElementById('heroVideoBtn').innerHTML = ICONS.pause;
     initHeroVideo();
     initModuleTilt();
     initTestimonials();
