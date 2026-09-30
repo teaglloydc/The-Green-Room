@@ -843,43 +843,38 @@
     .brain-diagram-intro { color: var(--muted); line-height: 1.85; margin-bottom: 20px; font-size: 0.97rem; }
 
     .brain-diagram-body { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
-    .brain-svg { width: min(360px, 100%); height: auto; flex-shrink: 0; }
 
-    .brain-outline { fill: var(--surface-soft); stroke: var(--green-700); stroke-width: 2.5; stroke-linejoin: round; }
-    .brain-cerebellum { fill: var(--green-100); }
-    .brain-fissure { fill: none; stroke: var(--green-700); stroke-width: 2; opacity: 0.7; }
-    .brain-fold { fill: none; stroke: var(--green-600); stroke-width: 1.6; opacity: 0.55; stroke-linecap: round; }
+    .brain-image-wrap { position: relative; width: min(360px, 100%); flex-shrink: 0; }
+    .brain-photo { width: 100%; height: auto; display: block; }
 
-    .brain-region { cursor: pointer; }
-    .brain-region .brain-dot {
-      opacity: 0.88;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-    .brain-region:hover .brain-dot,
-    .brain-region:focus-visible .brain-dot {
-      opacity: 1;
-      transform: scale(1.14);
-    }
-    .brain-region:focus-visible .brain-dot { stroke: var(--wood); stroke-width: 3; }
-    .brain-region.active .brain-dot { opacity: 1; stroke: var(--text); stroke-width: 2; }
-    .brain-region:focus-visible { outline: none; }
-
-    .brain-dot-number {
-      font-size: 10px;
+    /* Numbered pins sit on top of the illustration at percentage coordinates
+       (set inline per region) so they track the image at any width. */
+    .brain-region {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #fffbf3;
+      background: var(--wood);
+      color: #fffbf3;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       font-weight: 700;
-      fill: #fffbf3;
-      pointer-events: none;
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(16,36,27,0.35);
+      transition: transform 0.2s ease, background 0.2s ease;
     }
-    .brain-region-label {
-      font-size: 12px;
-      font-weight: 600;
-      fill: var(--text);
-      pointer-events: none;
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    .brain-region:hover,
+    .brain-region:focus-visible,
+    .brain-region.active {
+      background: var(--wood-dark);
+      transform: translate(-50%, -50%) scale(1.15);
     }
+    .brain-region:focus-visible { outline: 3px solid var(--wood); outline-offset: 2px; }
 
     .brain-detail-panel { flex: 1; min-width: 240px; }
     .brain-detail-hint { color: var(--muted); font-size: 0.93rem; font-style: italic; }
@@ -1599,18 +1594,19 @@
     <p>Then ask yourself: "What is this trying to help me to do or cope with?"</p>
   `,
     brainDiagram: {
-      intro: 'Each of the changes above is linked to a part of the brain. Tap a region below to see what’s going on there.',
+      image: 'BrainDiagram.png',
+      intro: 'Each of the changes above is linked to a part of the brain. Tap a numbered pin below to see what’s going on there.',
       regions: [
-        { id: 'amygdala', number: 1, shortLabel: 'Amygdala', labelX: 150, labelY: 260, cx: 175, cy: 220, r: 18, color: '#b5722e',
-          title: 'Amygdala — feeling tuned into danger',
-          description: 'The amygdala is part of the brain’s alarm system — it notices threat and triggers a fast, protective response. After birth it can become more active, which is part of why even small things, like your baby’s cry or an unfamiliar sound at night, can suddenly feel urgent. This isn’t something wrong with you — it’s your brain doing exactly what it evolved to do: help you keep your baby safe.' },
-        { id: 'prefrontal', number: 2, shortLabel: 'Social brain', labelX: 150, labelY: 120, cx: 150, cy: 90, r: 20, color: '#416b55',
+        { id: 'prefrontal', number: 1, shortLabel: 'Social brain', xPercent: 62.5, yPercent: 18.6,
           title: 'Prefrontal cortex — paying closer attention to others',
           description: 'This network helps us sense what others are thinking and feeling. Research shows it changes during pregnancy and early motherhood, which is thought to help mothers tune into their baby’s cues — and often makes them more aware of the people around them too.' },
-        { id: 'reward', number: 3, shortLabel: 'Reward', labelX: 255, labelY: 120, cx: 255, cy: 150, r: 18, color: '#527a9c',
+        { id: 'amygdala', number: 2, shortLabel: 'Amygdala', xPercent: 43.75, yPercent: 65.6,
+          title: 'Amygdala — feeling tuned into danger',
+          description: 'The amygdala is part of the brain’s alarm system — it notices threat and triggers a fast, protective response. After birth it can become more active, which is part of why even small things, like your baby’s cry or an unfamiliar sound at night, can suddenly feel urgent. This isn’t something wrong with you — it’s your brain doing exactly what it evolved to do: help you keep your baby safe.' },
+        { id: 'reward', number: 3, shortLabel: 'Reward', xPercent: 25.8, yPercent: 30.6,
           title: 'Reward system — putting baby first',
           description: 'This is part of the brain’s reward pathway. After birth it becomes especially responsive to your baby — their face, their smell, even the sound of their cry. It’s part of why caring for your baby can feel so compelling even when you’re exhausted, though it can also make it harder to notice or prioritise your own needs.' },
-        { id: 'hypothalamus', number: 4, shortLabel: 'Hypothalamus', labelX: 270, labelY: 248, cx: 270, cy: 215, r: 17, color: '#8a5423',
+        { id: 'hypothalamus', number: 4, shortLabel: 'Hypothalamus', xPercent: 85.2, yPercent: 51.4,
           title: 'Hypothalamus — needing a "village"',
           description: 'The hypothalamus helps release hormones like oxytocin, which support bonding and feelings of closeness. It’s also thought to be part of why we’re wired to seek support from others after birth — humans evolved to raise children within a community, not alone.' }
       ]
@@ -2036,43 +2032,25 @@
 
         /* Interactive brain diagram — currently only Module 2 ("Motherhood
            and the brain") supplies brainDiagram data, so this renders empty
-           for every other module. Each region is its own focusable SVG <g>
-           (keyboard operable via handleKeyActivate), and clicking/activating
-           one swaps the detail panel text rather than opening anything new. */
+           for every other module. Numbered pins sit on top of a real
+           illustration (position:absolute at percentage coordinates, so it
+           scales with the image at any width) rather than a hand-drawn
+           shape. Each pin is keyboard operable via handleKeyActivate, and
+           clicking/activating one swaps the detail panel text rather than
+           opening anything new. */
         const brainDiagramHTML = m.brainDiagram ? `
           <div class="brain-diagram-card">
             <h3>Explore the changing brain</h3>
             <p class="brain-diagram-intro">${m.brainDiagram.intro}</p>
             <div class="brain-diagram-body">
-              <svg class="brain-svg" viewBox="0 0 420 340" role="img" aria-label="Simplified side-on diagram of a brain with four clickable regions">
-                <path class="brain-outline" d="M 95,175 C 78,165 70,145 75,125 C 68,112 72,95 88,88 C 84,72 96,58 112,60 C 114,44 132,34 148,40 C 152,26 172,20 186,30 C 196,18 216,18 226,30 C 240,20 260,24 266,38 C 282,30 302,38 306,54 C 322,50 338,62 340,78 C 356,80 366,96 362,112 C 372,122 372,140 360,150 C 366,166 358,182 342,186 C 344,202 332,216 316,216 C 314,230 300,240 286,238 C 278,250 262,256 250,250 C 246,238 234,232 224,222 C 210,226 196,218 190,206 C 174,210 158,202 152,188 C 134,194 116,190 108,178 Z"></path>
-                <path class="brain-outline" d="M 108,178 C 114,194 110,212 98,222 C 102,238 118,248 134,244 C 142,256 158,258 168,248 C 176,254 190,252 196,242 C 192,226 190,212 190,206 C 158,202 134,194 108,178 Z"></path>
-                <path class="brain-fissure" d="M 112,182 C 132,190 152,192 170,190"></path>
-                <path class="brain-outline brain-cerebellum" d="M 300,220 C 296,236 304,252 320,258 C 318,272 330,284 346,282 C 358,290 374,284 378,270 C 390,266 396,252 388,240 C 392,226 384,214 370,214 C 366,202 350,196 338,204 C 326,198 312,206 310,218 Z"></path>
-                <path class="brain-fold" d="M 314,232 C 330,238 348,238 366,232"></path>
-                <path class="brain-fold" d="M 316,246 C 334,252 354,252 374,246"></path>
-                <path class="brain-fold" d="M 322,260 C 338,265 356,265 372,260"></path>
-                <path class="brain-outline" d="M 296,238 C 292,254 292,270 300,284 C 308,290 320,290 326,284 C 320,270 318,254 316,240 Z"></path>
-                <path class="brain-fold" d="M 95,110 C 102,120 100,132 108,140"></path>
-                <path class="brain-fold" d="M 118,82 C 126,94 122,108 130,118"></path>
-                <path class="brain-fold" d="M 145,62 C 153,74 149,88 158,98"></path>
-                <path class="brain-fold" d="M 175,50 C 183,62 178,76 188,86"></path>
-                <path class="brain-fold" d="M 208,44 C 216,56 210,70 220,80"></path>
-                <path class="brain-fold" d="M 242,46 C 250,58 244,72 254,82"></path>
-                <path class="brain-fold" d="M 275,58 C 283,70 277,84 287,94"></path>
-                <path class="brain-fold" d="M 305,78 C 313,90 307,104 317,114"></path>
-                <path class="brain-fold" d="M 330,102 C 338,112 334,124 342,134"></path>
-                <path class="brain-fold" d="M 340,140 C 346,150 342,160 348,168"></path>
+              <div class="brain-image-wrap">
+                <img class="brain-photo" src="${m.brainDiagram.image}" alt="Illustration of a brain, side view" loading="lazy">
                 ${m.brainDiagram.regions.map(r => `
-                  <g class="brain-region" id="brain-region-${num}-${r.id}" tabindex="0" role="button" aria-label="${r.shortLabel}: tap to learn what changes there" aria-pressed="false" onclick="showBrainRegion(${num},'${r.id}')" onkeydown="handleKeyActivate(event, () => showBrainRegion(${num},'${r.id}'))">
-                    <circle class="brain-dot" cx="${r.cx}" cy="${r.cy}" r="${r.r}" style="fill:${r.color}"></circle>
-                    <text class="brain-dot-number" x="${r.cx}" y="${r.cy + 4}" text-anchor="middle">${r.number}</text>
-                    <text class="brain-region-label" x="${r.labelX}" y="${r.labelY}" text-anchor="middle">${r.shortLabel}</text>
-                  </g>
+                  <button type="button" class="brain-region" id="brain-region-${num}-${r.id}" style="left:${r.xPercent}%;top:${r.yPercent}%" aria-label="${r.shortLabel}: tap to learn what changes there" aria-pressed="false" onclick="showBrainRegion(${num},'${r.id}')">${r.number}</button>
                 `).join('')}
-              </svg>
+              </div>
               <div class="brain-detail-panel">
-                <p class="brain-detail-hint" id="brain-hint-${num}">Select a region of the brain to learn what changes there.</p>
+                <p class="brain-detail-hint" id="brain-hint-${num}">Select a numbered pin on the brain to learn what changes there.</p>
                 ${m.brainDiagram.regions.map(r => `
                   <div class="brain-detail-content" id="brain-detail-${num}-${r.id}">
                     <h4>${r.title}</h4>
@@ -2675,6 +2653,21 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       event.target.classList.add('active');
       event.target.setAttribute('aria-pressed', 'true');
       const hint = document.getElementById('circle-hint-' + num);
+      if (hint) hint.classList.add('hidden');
+    }
+
+    function showBrainRegion(num, regionId) {
+      const scope = document.getElementById('module-' + num);
+      if (!scope) return;
+      scope.querySelectorAll('.brain-region').forEach(g => {
+        const active = g.id === `brain-region-${num}-${regionId}`;
+        g.classList.toggle('active', active);
+        g.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      scope.querySelectorAll('.brain-detail-content').forEach(el => {
+        el.classList.toggle('active', el.id === `brain-detail-${num}-${regionId}`);
+      });
+      const hint = document.getElementById('brain-hint-' + num);
       if (hint) hint.classList.add('hidden');
     }
 
