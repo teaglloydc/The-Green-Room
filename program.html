@@ -837,6 +837,63 @@
     .circle-tab-content li { margin-bottom: 6px; }
     .circle-tab-content p:last-child, .circle-tab-content ul:last-child { margin-bottom: 0; }
 
+    /* ── BRAIN DIAGRAM — Module 2 only, clickable regions ── */
+    .brain-diagram-card { margin: 40px 0; }
+    .brain-diagram-card h3 { margin-bottom: 8px; }
+    .brain-diagram-intro { color: var(--muted); line-height: 1.85; margin-bottom: 20px; font-size: 0.97rem; }
+
+    .brain-diagram-body { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
+    .brain-svg { width: min(360px, 100%); height: auto; flex-shrink: 0; }
+
+    .brain-outline { fill: var(--surface-soft); stroke: var(--green-700); stroke-width: 2.5; stroke-linejoin: round; }
+    .brain-cerebellum { fill: var(--green-100); }
+    .brain-fissure { fill: none; stroke: var(--green-700); stroke-width: 2; opacity: 0.7; }
+    .brain-fold { fill: none; stroke: var(--green-600); stroke-width: 1.6; opacity: 0.55; stroke-linecap: round; }
+
+    .brain-region { cursor: pointer; }
+    .brain-region .brain-dot {
+      opacity: 0.88;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    .brain-region:hover .brain-dot,
+    .brain-region:focus-visible .brain-dot {
+      opacity: 1;
+      transform: scale(1.14);
+    }
+    .brain-region:focus-visible .brain-dot { stroke: var(--wood); stroke-width: 3; }
+    .brain-region.active .brain-dot { opacity: 1; stroke: var(--text); stroke-width: 2; }
+    .brain-region:focus-visible { outline: none; }
+
+    .brain-dot-number {
+      font-size: 10px;
+      font-weight: 700;
+      fill: #fffbf3;
+      pointer-events: none;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+    .brain-region-label {
+      font-size: 12px;
+      font-weight: 600;
+      fill: var(--text);
+      pointer-events: none;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+
+    .brain-detail-panel { flex: 1; min-width: 240px; }
+    .brain-detail-hint { color: var(--muted); font-size: 0.93rem; font-style: italic; }
+    .brain-detail-hint.hidden { display: none; }
+    .brain-detail-content { display: none; }
+    .brain-detail-content.active { display: block; }
+    .brain-detail-content h4 {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .brain-detail-content p { color: var(--muted); line-height: 1.85; font-size: 0.97rem; }
+
     /* ── COLLAPSIBLE EXERCISE BLOCK ────── */
     .exercise-block {
       margin: 40px 0;
@@ -1519,10 +1576,10 @@
 <p>Changes are different for every mother, but some describe experiences such as:</p>
 
 <ul>
-  <li><strong>Feeling tuned into danger:</strong> The brain becomes more focused on protecting the baby, making us quicker to notice possible risks or problems.</li>
-  <li><strong>Paying closer attention to others:</strong> As we become more attuned to our baby’s cues, we may also become more aware of the thoughts and feelings of others around us. </li>
-  <li><strong>Putting baby first:</strong> Our brains reward system shifts to make caring for the baby feel especially important. This can sometimes lead us to put our own needs last.</li>
-  <li><strong>A strong need for support or a "village":</strong> Humans are one of the few primates that share the care of their young. We are evolutionarily wired to seek support from others during pregnancy and after birth, even if we now live in a way where we could theoretically look after ourselves and our baby alone.</li>
+  <li><strong>text here.</li>
+  <li><strong>text here </li>
+  <li><strong>text here.</li>
+  <li><strong>text here.</li>
 </ul>
 
 <p>These changes are not random. During pregnancy and after birth, hormones help reshape our brains for caregiving. These changes can help us notice, respond to and care for our little ones, but they can also make challenges involving our baby feel more emotionally intense.</p>
@@ -1541,6 +1598,23 @@
     <p>There's no need to fix or explain anything. Just notice what comes to mind.</p>
     <p>Then ask yourself: "What is this trying to help me to do or cope with?"</p>
   `,
+    brainDiagram: {
+      intro: 'Each of the changes above is linked to a part of the brain. Tap a region below to see what’s going on there.',
+      regions: [
+        { id: 'amygdala', number: 1, shortLabel: 'Amygdala', labelX: 150, labelY: 260, cx: 175, cy: 220, r: 18, color: '#b5722e',
+          title: 'Amygdala — feeling tuned into danger',
+          description: 'The amygdala is part of the brain’s alarm system — it notices threat and triggers a fast, protective response. After birth it can become more active, which is part of why even small things, like your baby’s cry or an unfamiliar sound at night, can suddenly feel urgent. This isn’t something wrong with you — it’s your brain doing exactly what it evolved to do: help you keep your baby safe.' },
+        { id: 'prefrontal', number: 2, shortLabel: 'Social brain', labelX: 150, labelY: 120, cx: 150, cy: 90, r: 20, color: '#416b55',
+          title: 'Prefrontal cortex — paying closer attention to others',
+          description: 'This network helps us sense what others are thinking and feeling. Research shows it changes during pregnancy and early motherhood, which is thought to help mothers tune into their baby’s cues — and often makes them more aware of the people around them too.' },
+        { id: 'reward', number: 3, shortLabel: 'Reward', labelX: 255, labelY: 120, cx: 255, cy: 150, r: 18, color: '#527a9c',
+          title: 'Reward system — putting baby first',
+          description: 'This is part of the brain’s reward pathway. After birth it becomes especially responsive to your baby — their face, their smell, even the sound of their cry. It’s part of why caring for your baby can feel so compelling even when you’re exhausted, though it can also make it harder to notice or prioritise your own needs.' },
+        { id: 'hypothalamus', number: 4, shortLabel: 'Hypothalamus', labelX: 270, labelY: 248, cx: 270, cy: 215, r: 17, color: '#8a5423',
+          title: 'Hypothalamus — needing a "village"',
+          description: 'The hypothalamus helps release hormones like oxytocin, which support bonding and feelings of closeness. It’s also thought to be part of why we’re wired to seek support from others after birth — humans evolved to raise children within a community, not alone.' }
+      ]
+    },
 },
       { title: 'Compassion and our tricky brains', summary: ['What is Tricky Brain?','How can my tricky brain impact me after preterm birth?','What is compassion?','How can compassion help?'],
         written: `
@@ -1960,6 +2034,56 @@
           `).join('')}
         ` : '';
 
+        /* Interactive brain diagram — currently only Module 2 ("Motherhood
+           and the brain") supplies brainDiagram data, so this renders empty
+           for every other module. Each region is its own focusable SVG <g>
+           (keyboard operable via handleKeyActivate), and clicking/activating
+           one swaps the detail panel text rather than opening anything new. */
+        const brainDiagramHTML = m.brainDiagram ? `
+          <div class="brain-diagram-card">
+            <h3>Explore the changing brain</h3>
+            <p class="brain-diagram-intro">${m.brainDiagram.intro}</p>
+            <div class="brain-diagram-body">
+              <svg class="brain-svg" viewBox="0 0 420 340" role="img" aria-label="Simplified side-on diagram of a brain with four clickable regions">
+                <path class="brain-outline" d="M 95,175 C 78,165 70,145 75,125 C 68,112 72,95 88,88 C 84,72 96,58 112,60 C 114,44 132,34 148,40 C 152,26 172,20 186,30 C 196,18 216,18 226,30 C 240,20 260,24 266,38 C 282,30 302,38 306,54 C 322,50 338,62 340,78 C 356,80 366,96 362,112 C 372,122 372,140 360,150 C 366,166 358,182 342,186 C 344,202 332,216 316,216 C 314,230 300,240 286,238 C 278,250 262,256 250,250 C 246,238 234,232 224,222 C 210,226 196,218 190,206 C 174,210 158,202 152,188 C 134,194 116,190 108,178 Z"></path>
+                <path class="brain-outline" d="M 108,178 C 114,194 110,212 98,222 C 102,238 118,248 134,244 C 142,256 158,258 168,248 C 176,254 190,252 196,242 C 192,226 190,212 190,206 C 158,202 134,194 108,178 Z"></path>
+                <path class="brain-fissure" d="M 112,182 C 132,190 152,192 170,190"></path>
+                <path class="brain-outline brain-cerebellum" d="M 300,220 C 296,236 304,252 320,258 C 318,272 330,284 346,282 C 358,290 374,284 378,270 C 390,266 396,252 388,240 C 392,226 384,214 370,214 C 366,202 350,196 338,204 C 326,198 312,206 310,218 Z"></path>
+                <path class="brain-fold" d="M 314,232 C 330,238 348,238 366,232"></path>
+                <path class="brain-fold" d="M 316,246 C 334,252 354,252 374,246"></path>
+                <path class="brain-fold" d="M 322,260 C 338,265 356,265 372,260"></path>
+                <path class="brain-outline" d="M 296,238 C 292,254 292,270 300,284 C 308,290 320,290 326,284 C 320,270 318,254 316,240 Z"></path>
+                <path class="brain-fold" d="M 95,110 C 102,120 100,132 108,140"></path>
+                <path class="brain-fold" d="M 118,82 C 126,94 122,108 130,118"></path>
+                <path class="brain-fold" d="M 145,62 C 153,74 149,88 158,98"></path>
+                <path class="brain-fold" d="M 175,50 C 183,62 178,76 188,86"></path>
+                <path class="brain-fold" d="M 208,44 C 216,56 210,70 220,80"></path>
+                <path class="brain-fold" d="M 242,46 C 250,58 244,72 254,82"></path>
+                <path class="brain-fold" d="M 275,58 C 283,70 277,84 287,94"></path>
+                <path class="brain-fold" d="M 305,78 C 313,90 307,104 317,114"></path>
+                <path class="brain-fold" d="M 330,102 C 338,112 334,124 342,134"></path>
+                <path class="brain-fold" d="M 340,140 C 346,150 342,160 348,168"></path>
+                ${m.brainDiagram.regions.map(r => `
+                  <g class="brain-region" id="brain-region-${num}-${r.id}" tabindex="0" role="button" aria-label="${r.shortLabel}: tap to learn what changes there" aria-pressed="false" onclick="showBrainRegion(${num},'${r.id}')" onkeydown="handleKeyActivate(event, () => showBrainRegion(${num},'${r.id}'))">
+                    <circle class="brain-dot" cx="${r.cx}" cy="${r.cy}" r="${r.r}" style="fill:${r.color}"></circle>
+                    <text class="brain-dot-number" x="${r.cx}" y="${r.cy + 4}" text-anchor="middle">${r.number}</text>
+                    <text class="brain-region-label" x="${r.labelX}" y="${r.labelY}" text-anchor="middle">${r.shortLabel}</text>
+                  </g>
+                `).join('')}
+              </svg>
+              <div class="brain-detail-panel">
+                <p class="brain-detail-hint" id="brain-hint-${num}">Select a region of the brain to learn what changes there.</p>
+                ${m.brainDiagram.regions.map(r => `
+                  <div class="brain-detail-content" id="brain-detail-${num}-${r.id}">
+                    <h4>${r.title}</h4>
+                    <p>${r.description}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        ` : '';
+
         const moduleHeaderHTML = `
           <div class="module-header">
             <div class="module-label">Module ${num}</div>
@@ -2133,6 +2257,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                 <div class="content-block written-block">
                   <div class="written-content">${page2Written}</div>
                 </div>
+                ${brainDiagramHTML}
                 ${circleBubblesHTML}
                 <div class="subpage-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},2)">← Back</button>
