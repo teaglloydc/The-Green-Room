@@ -724,6 +724,22 @@
     .float-btn:hover { transform: scale(1.1); }
     .float-btn.active { background: #fffbf3; color: var(--green-900); }
 
+    /* Sits on the hero video itself (bottom-right, mirroring the hero
+       content's bottom-left position) rather than with the other floating
+       controls, so it reads as a control for the video specifically. */
+    .hero-video-btn {
+      position: absolute;
+      right: clamp(20px, 5vw, 64px);
+      bottom: 24px;
+      z-index: 2;
+      width: 40px;
+      height: 40px;
+      background: rgba(16,36,27,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .hero-video-btn.active { background: rgba(255,251,243,0.92); }
+
     .back-to-top {
       position: fixed;
       right: 20px;
@@ -869,6 +885,7 @@
   <header class="hero">
     <video class="hero-video" id="heroVideoA" muted playsinline preload="none" poster="IndexCover11.jpg" aria-hidden="true"></video>
     <video class="hero-video" id="heroVideoB" muted playsinline preload="none" aria-hidden="true"></video>
+    <button class="float-btn hero-video-btn" id="heroVideoBtn" onclick="toggleHeroVideo()" aria-label="Pause background video" title="Pause background video" aria-pressed="false"></button>
     <div class="hero-inner">
       <h1>Welcome in.</h1>
       <p>Text placeholder</p>
@@ -1124,7 +1141,6 @@
   </footer>
 
   <div class="floating-controls">
-    <button class="float-btn" id="heroVideoBtn" onclick="toggleHeroVideo()" aria-label="Pause background video" title="Pause background video" aria-pressed="false"></button>
     <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds" aria-pressed="false"></button>
     <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode" aria-pressed="false"></button>
   </div>
