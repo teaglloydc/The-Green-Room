@@ -2,7 +2,7 @@
 <html lang="en-AU">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>The Program - The Green Room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1604,7 +1604,7 @@
       position: relative;
       z-index: 2;
       text-align: center;
-      padding: clamp(80px, 12vw, 110px) 24px 0;
+      padding: calc(clamp(80px, 12vw, 110px) + env(safe-area-inset-top, 0px)) 24px 0;
     }
 
     .audio-session-title {
@@ -1695,7 +1695,7 @@
       align-items: center;
       justify-content: center;
       gap: 28px;
-      padding: 0 24px clamp(48px, 8vw, 72px);
+      padding: 0 24px calc(clamp(48px, 8vw, 72px) + env(safe-area-inset-bottom, 0px));
     }
 
     .audio-session-restart,
