@@ -1583,9 +1583,9 @@
 
     .audio-session-close {
       position: absolute;
-      top: clamp(18px, 4vw, 28px);
-      right: clamp(18px, 4vw, 28px);
-      z-index: 2;
+      top: calc(clamp(18px, 4vw, 28px) + env(safe-area-inset-top, 0px));
+      right: calc(clamp(18px, 4vw, 28px) + env(safe-area-inset-right, 0px));
+      z-index: 3;
       width: 42px;
       height: 42px;
       border-radius: 50%;
