@@ -1465,10 +1465,17 @@
         padding: 30px 14px;
       }
 
+      /* Same percentage gap as desktop is much less actual space on a
+         narrow screen, so the circles were overlapping far more than
+         intended by the time they'd grown even a little — widen the gap
+         between anchor points here to compensate. */
       .tc-live-circle {
         width: calc(46px + var(--size) * 1.15px);
         height: calc(46px + var(--size) * 1.15px);
       }
+      .tc-live-circle.drive { left: 28%; }
+      .tc-live-circle.soothing { left: 72%; }
+      .tc-live-circle.threat { top: 74%; }
 
       .emotion-tab-buttons { display: flex; flex-wrap: wrap; border-radius: var(--radius); width: 100%; }
       .emotion-tab-btn { flex: 1; min-width: 80px; }
@@ -1543,7 +1550,7 @@
       <div class="footer-divider"></div>
 
       <div class="footer-safety">
-        <p>The Green Room isn't a replacement for professional support.</p>
+        <p>The Green Room is not a replacement for professional support.</p>
         <p><strong>In immediate danger, call 000.</strong> For crisis support, call Lifeline on <a href="tel:131114">13 11 14</a> (24/7).</p>
       </div>
 
@@ -2212,7 +2219,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                 <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" aria-label="Before you begin" aria-current="true"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Before</span></button>
                 <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" aria-label="Page 1" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 1</span></button>
                 <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" aria-label="Page 2" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 2</span></button>
-                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Reflect and practise" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Practise</span></button>
+                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Reflection and activities" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Activities</span></button>
                 <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" aria-label="After this module" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">After</span></button>
               </div>
 
@@ -2258,7 +2265,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               </div>
 
               <div class="subpage" id="subpage-${num}-4">
-                <p class="subpage-label">Reflect and practise</p>
+                <p class="subpage-label">Reflection and activities</p>
                 ${exerciseBlock}
                 ${page3ExtraHTML}
                 <div class="subpage-nav-buttons">
@@ -2616,6 +2623,20 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         d.classList.toggle('active', isCurrent);
         d.setAttribute('aria-current', isCurrent ? 'true' : 'false');
       });
+      playVisibleVideos(target);
+    }
+
+    /* Mobile browsers (iOS Safari in particular) won't actually start an
+       autoplay <video> that was sitting inside a display:none ancestor —
+       toggling .active back to display:block doesn't retrigger autoplay on
+       its own, so the audio-practice nature videos would stay frozen on
+       their poster frame until manually tapped. Re-asking for play() once
+       the container holding them is actually visible fixes that. */
+    function playVisibleVideos(scope) {
+      if (!scope) return;
+      scope.querySelectorAll('video[autoplay]').forEach(v => {
+        if (v.paused) v.play().catch(() => {});
+      });
     }
 
     function showSubpage(num, page) {
@@ -2659,9 +2680,11 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     function showEmotion(event, emotion) {
       document.querySelectorAll('.emotion-tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.emotion-tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
-      document.getElementById('emotion-' + emotion).classList.add('active');
+      const target = document.getElementById('emotion-' + emotion);
+      target.classList.add('active');
       event.target.classList.add('active');
       event.target.setAttribute('aria-pressed', 'true');
+      playVisibleVideos(target);
     }
 
     function setAudioLength(event) {
