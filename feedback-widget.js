@@ -30,7 +30,7 @@
     '#fbPanel.open{transform:translateX(0);}',
     '#fbPanel h2{margin:0 0 4px;font-size:1.3rem;}',
     '#fbPanelSub{margin:0 0 18px;color:var(--muted,#56675a);font-size:0.9rem;}',
-    '#fbClose{position:absolute;top:18px;right:18px;background:none;border:none;',
+    '#fbClose{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));right:18px;background:none;border:none;',
     'font-size:1.5rem;line-height:1;cursor:pointer;color:var(--muted,#56675a);padding:4px;}',
     '#fbClose:hover{color:var(--text,#1e2b21);}',
 
@@ -66,6 +66,7 @@
 
     '@media (max-width:560px){',
     '#fbPanel{top:auto;bottom:0;right:0;left:0;width:100%;height:auto;max-height:82vh;',
+    'padding-bottom:calc(26px + env(safe-area-inset-bottom,0px));',
     'border-radius:18px 18px 0 0;transform:translateY(100%);}',
     '#fbPanel.open{transform:translateY(0);}',
     '#fbTab{padding:12px 7px;font-size:0.76rem;}',

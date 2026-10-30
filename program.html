@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#14241b">
   <title>The Program - The Green Room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +48,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; overflow-x: hidden; }
+    html { scroll-behavior: smooth; overflow-x: hidden; background: #14241b; }
 
     .sr-only {
       position: absolute;
@@ -94,7 +95,7 @@
     /* ── FLOATING MODERN NAV ────────────────────── */
     .site-nav {
   position: absolute;
-  top: 20px;
+  top: calc(20px + env(safe-area-inset-top, 0px));
   left: 0;
   right: 0;
   z-index: 100;
@@ -819,7 +820,7 @@
       right: 0;
       top: 0;
       z-index: 2;
-      padding: 18px 16px;
+      padding: calc(18px + env(safe-area-inset-top, 0px)) 16px 18px;
       text-align: center;
       background: linear-gradient(to bottom, rgba(8,15,11,0.55) 0%, rgba(8,15,11,0.25) 60%, rgba(8,15,11,0) 100%);
     }
@@ -1338,7 +1339,7 @@
     .floating-controls {
   position: fixed;
   right: 76px;
-  bottom: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   z-index: 80;
   display: flex;
   gap: 10px;
@@ -1366,7 +1367,7 @@
     .back-to-top {
       position: fixed;
       right: 20px;
-      bottom: 24px;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
       z-index: 80;
       display: none;
       width: 46px;
@@ -1777,7 +1778,7 @@
       .content-block p { font-size: 0.93rem; }
 
       .floating-controls { left: 12px; right: auto; }
-      .back-to-top { right: 14px; bottom: 18px; }
+      .back-to-top { right: 14px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
     }
 
     /* Phone-only: the audio video breaks out of every ancestor's padding
@@ -1795,7 +1796,7 @@
       .audio-player-art {
         aspect-ratio: auto;
         height: 100vh;
-        height: 100dvh;
+        height: 100lvh;
       }
       .breath-circle-sm { max-width: 200px; max-height: 200px; }
 
@@ -1803,7 +1804,7 @@
          screen too, so move the dark-mode/sound floating buttons up near
          the nav instead of letting them sit on top of it. */
       .floating-controls {
-        top: 76px;
+        top: calc(76px + env(safe-area-inset-top, 0px));
         bottom: auto;
         right: 16px;
         left: auto;
@@ -2591,8 +2592,9 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                 <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" aria-label="Check-in before this module" aria-current="true"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Check-in</span></button>
                 <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" aria-label="Page 1" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 1</span></button>
                 <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" aria-label="Page 2" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 2</span></button>
-                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Reflection and exercises" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Exercises</span></button>
-                <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" aria-label="Check-in after this module" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Check-in</span></button>
+                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Reflection activity" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Reflect</span></button>
+                <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" aria-label="Audio practice" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Practice</span></button>
+                <button type="button" class="subpage-dot" data-page="6" onclick="showSubpage(${num},6)" aria-label="Check-in after this module" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Check-in</span></button>
               </div>
 
               <div class="subpage active" id="subpage-${num}-1">
@@ -2637,9 +2639,8 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               </div>
 
               <div class="subpage" id="subpage-${num}-4">
-                <p class="subpage-label">Reflection and exercises</p>
+                <p class="subpage-label">Reflect</p>
                 ${exerciseBlock}
-                ${page3ExtraHTML}
                 <div class="subpage-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},3)">← Back</button>
                   <button class="btn-module-nav btn-next" onclick="showSubpage(${num},5)">Continue →</button>
@@ -2647,8 +2648,17 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               </div>
 
               <div class="subpage" id="subpage-${num}-5">
+                <p class="subpage-label">Practice</p>
+                ${page3ExtraHTML}
+                <div class="subpage-nav-buttons">
+                  <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},4)">← Back</button>
+                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},6)">Continue →</button>
+                </div>
+              </div>
+
+              <div class="subpage" id="subpage-${num}-6">
                 <p class="subpage-label">Check-in</p>
-                <button type="button" class="btn-module-nav btn-prev" onclick="showSubpage(${num},4)" style="margin-bottom:20px;">← Back</button>
+                <button type="button" class="btn-module-nav btn-prev" onclick="showSubpage(${num},5)" style="margin-bottom:20px;">← Back</button>
                 <div class="tc-section" data-module="${num}" data-phase="after"></div>
 
                 <div class="module-nav-buttons">

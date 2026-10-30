@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#14241b">
   <title>The Green Room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,7 +45,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; overflow-x: hidden; }
+    html { scroll-behavior: smooth; overflow-x: hidden; background: #14241b; }
 
     .sr-only {
       position: absolute;
@@ -94,7 +95,7 @@
     /* ── FLOATING MODERN NAV ────────────────────── */
     .site-nav {
   position:absolute;
-  top: 20px;
+  top: calc(20px + env(safe-area-inset-top, 0px));
   left: 0;
   right: 0;
   z-index: 100;
@@ -228,6 +229,7 @@
     .hero {
       position: relative;
       min-height: 100vh;
+      min-height: 100lvh;
       display: grid;
       align-items: end;
       padding: clamp(100px, 11vw, 130px) clamp(20px, 5vw, 64px) 48px;
@@ -745,7 +747,7 @@
     .floating-controls {
   position: fixed;
   right: 76px;
-  bottom: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   z-index: 80;
   display: flex;
   gap: 10px;
@@ -774,7 +776,7 @@
     .hero-video-btn {
       position: absolute;
       right: clamp(20px, 5vw, 64px);
-      bottom: 24px;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
       z-index: 2;
       width: 40px;
       height: 40px;
@@ -787,7 +789,7 @@
     .back-to-top {
       position: fixed;
       right: 20px;
-      bottom: 24px;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
       z-index: 80;
       display: none;
       width: 46px;
@@ -884,7 +886,7 @@
 
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 860px) {
-      .hero { min-height: calc(100vh + 24px); min-height: calc(100dvh + 24px); align-items: center; padding-top: clamp(90px, 11vw, 110px); }
+      .hero { min-height: 100vh; min-height: 100lvh; align-items: center; padding-top: clamp(90px, 11vw, 110px); }
       .hero h1 { font-size: clamp(2.6rem, 11vw, 4.2rem); }
 
       .intro-grid,
@@ -899,7 +901,7 @@
       h2 { font-size: clamp(2.2rem, 9vw, 3.2rem); }
 
       .floating-controls { left: 12px; right: auto; }
-      .back-to-top { right: 14px; bottom: 18px; }
+      .back-to-top { right: 14px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
     }
   </style>
 </head>
