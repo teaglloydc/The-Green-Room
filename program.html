@@ -466,7 +466,7 @@
       cursor: pointer;
       transition: background 0.2s ease;
     }
-    .subpage-dot:hover { background: var(--surface-soft); }
+    .subpage-dot:hover { background: rgba(16,36,27,0.06); }
     .subpage-dot:focus-visible { outline: 2px solid var(--wood); outline-offset: 2px; }
 
     .subpage-dot-mark {
@@ -568,7 +568,8 @@
     }
 
     .summary-box {
-      background: var(--surface-soft);
+      background: var(--surface);
+      border: 1px solid var(--line);
       padding: 24px;
       margin-bottom: 40px;
     }
@@ -955,6 +956,7 @@
     .exercise-block {
       margin: 40px 0;
       border-radius: var(--radius);
+      border: 1px solid var(--line);
       overflow: hidden;
     }
 
@@ -965,12 +967,12 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+      background: var(--surface);
       user-select: none;
       transition: background 0.2s;
     }
 
-    .exercise-toggle:hover { background: var(--surface-soft); }
+    .exercise-toggle:hover { background: rgba(16,36,27,0.04); }
 
     .exercise-toggle h3 {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -1003,7 +1005,7 @@
     .exercise-body {
       display: none;
       padding: 18px 22px 22px;
-      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+      background: var(--surface);
       border-top: 1px solid var(--line);
     }
 
@@ -1286,7 +1288,7 @@
 
     /* ── FOOTER ─────────────────────────────────── */
     footer {
-      padding: clamp(36px, 6vw, 56px) clamp(16px, 4vw, 48px) clamp(28px, 4vw, 40px);
+      padding: clamp(24px, 3.5vw, 36px) clamp(16px, 4vw, 48px) clamp(18px, 2.5vw, 24px);
       background: var(--green-900);
       color: rgba(255,250,240,0.78);
     }
@@ -1296,7 +1298,7 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 26px;
+      gap: 16px;
     }
 
     .footer-flags {
@@ -1304,11 +1306,11 @@
       justify-content: center;
       flex-wrap: wrap;
       gap: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     .footer-flags img {
-      height: 28px;
+      height: 24px;
       width: auto;
       border-radius: 3px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.25);
@@ -1317,11 +1319,11 @@
     .footer-acknowledgement { text-align: center; }
 
     .footer-statement {
-      font-size: 0.86rem;
-      line-height: 1.85;
+      font-size: 0.82rem;
+      line-height: 1.55;
       color: rgba(255,250,240,0.7);
       max-width: 680px;
-      margin: 0 auto 10px;
+      margin: 0 auto 6px;
     }
     .footer-statement:last-child { margin-bottom: 0; }
 
@@ -1329,11 +1331,11 @@
 
     .footer-safety, .footer-contact {
       text-align: center;
-      font-size: 0.86rem;
-      line-height: 1.85;
+      font-size: 0.82rem;
+      line-height: 1.55;
       color: rgba(255,250,240,0.78);
     }
-    .footer-safety p, .footer-contact p { max-width: 680px; margin: 0 auto 10px; }
+    .footer-safety p, .footer-contact p { max-width: 680px; margin: 0 auto 6px; }
     .footer-safety p:last-child, .footer-contact p:last-child { margin-bottom: 0; }
     .footer-safety a, .footer-contact a { color: #f8ecd8; text-decoration: underline; }
 
@@ -1346,9 +1348,9 @@
     }
 
     .footer-logos { display: flex; align-items: center; gap: 18px; }
-    .footer-logos img { height: 75px; width: auto; display: block; opacity: 0.92; }
-    .cmrg-logo {height: 200px;width: auto;}
-    .footer-copyright { font-size: 0.82rem; color: rgba(255,250,240,0.6); }
+    .footer-logos img { height: 56px; width: auto; display: block; opacity: 0.92; }
+    .cmrg-logo { height: 100px; width: auto; }
+    .footer-copyright { font-size: 0.78rem; color: rgba(255,250,240,0.6); }
 
     @media (max-width: 600px) {
       .footer-bottom { flex-direction: column; text-align: center; }
@@ -1540,15 +1542,15 @@
           <img src="TorresStraitFlag.png" alt="Torres Strait Islander flag">
           <img src="RainbowFlag.png" alt="Pride flag">
         </div>
-        <p class="footer-statement">The Green Room proudly operates within Australia, supporting mothers across the country with their wellbeing.</p>
-        <p class="footer-statement">The Green Room acknowledges Aboriginal and Torres Strait Islander peoples as the traditional owners of country throughout Australia, and their continuing connection to land, sea and community. We pay our respects to them and their cultures, and to elders both past and present.</p>
+        <p class="footer-statement">The Green Room supports mothers across Australia with their wellbeing.</p>
+        <p class="footer-statement">We acknowledge the Aboriginal and Torres Strait Islander peoples as Traditional Owners of the land, and pay our respects to Elders past and present.</p>
       </div>
 
       <div class="footer-divider"></div>
 
       <div class="footer-safety">
-        <p>The Green Room is not a replacement for professional help. If you need mental health support, please talk to your doctor.</p>
-        <p><strong>If you or someone else is in immediate danger, call 000 for police and ambulance.</strong> For immediate support, call Lifeline on <a href="tel:131114">13 11 14</a> (24 hours, 7 days a week).</p>
+        <p>The Green Room isn't a replacement for professional help — talk to your doctor for mental health support.</p>
+        <p><strong>In immediate danger, call 000.</strong> For crisis support, call Lifeline on <a href="tel:131114">13 11 14</a> (24/7).</p>
       </div>
 
       <div class="footer-divider"></div>
@@ -2431,13 +2433,10 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const phase = section.dataset.phase || 'only';
       const key = tcKey(n, phase);
       const v = getModuleValues(n, phase);
-      const intro = phase === 'before' ? 'Before you dive in, notice how you’re feeling right now.'
-                  : phase === 'after'  ? 'Before you move on, notice how you’re feeling now.'
-                  : 'Notice how you’re feeling right now.';
       section.innerHTML = `
         <div class="tc-header">
           <h3>A quick check-in</h3>
-          <p>${intro} Drag the edge of any circle to resize it — pull outward to grow, push inward to shrink. The legend below shows which colour is which system.</p>
+          <p>Add text here</p>
           <div class="tc-legend">
             <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive (blue) — motivation</span></div>
             <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing (green) — contentment</span></div>
