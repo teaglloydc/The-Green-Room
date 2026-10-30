@@ -714,24 +714,39 @@
     .audio-title { color: var(--text); font-weight: 800; font-size: 0.95rem; }
     .audio-duration { color: var(--muted); font-size: 0.88rem; }
 
-    /* ── AUDIO PLAYER CARD — one shared photo + title, a tab to pick length ── */
+    /* ── AUDIO PLAYER CARD — a wide video screen + title, a tab to pick
+       length. Sized to match the page's other content blocks (e.g.
+       .video-placeholder) rather than a small floating square, so it
+       doesn't feel out of place next to them. */
     .audio-player-card {
-      max-width: 360px;
+      max-width: 640px;
+      width: 100%;
       margin: 16px auto 0;
-      padding: 18px;
+      padding: 20px;
       border-radius: 20px;
       background: linear-gradient(160deg, var(--green-900), var(--green-800));
       box-shadow: 0 10px 24px rgba(16,36,27,0.16);
       color: #fffbf3;
+      box-sizing: border-box;
     }
 
     .audio-player-art {
       width: 100%;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 16 / 9;
       object-fit: cover;
       display: block;
       border-radius: 14px;
       box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+    }
+
+    @media (max-width: 480px) {
+      .audio-player-art { aspect-ratio: 4 / 3; }
+    }
+
+    /* Data-saver fallback — no video request at all, just a quiet gradient
+       so the card still looks intentional rather than broken. */
+    .audio-player-art-static {
+      background: linear-gradient(135deg, rgba(255,251,243,0.14), rgba(255,251,243,0.03));
     }
 
     .audio-player-info { margin-top: 16px; }
@@ -1960,11 +1975,14 @@
       /* Nature video that plays behind every guided-audio card, looping
          independently of the audio's length (2/5/10 min) — the <video>
          "loop" attribute just keeps repeating until the visitor leaves the
-         page, so no syncing to track length is needed. Cycles through a
-         small pool so not every card on the page shows the same clip. */
-      const NATURE_LOOPS = ['IndexVideo2.mp4', 'IndexVideo1.mp4', 'IndexVideo3.mp4'];
-      let natureLoopIndex = 0;
-      const nextNatureLoop = () => NATURE_LOOPS[natureLoopIndex++ % NATURE_LOOPS.length];
+         page, so no syncing to track length is needed. Hidden modules/tabs
+         are display:none, which already stops their videos from loading,
+         so at most a couple of these play at once — but on a data-saver
+         connection we skip the video file entirely and show a lightweight
+         static screen instead, so mobile data isn't spent on an ambient
+         loop nobody asked for. */
+      const SAVE_DATA = !!(navigator.connection && navigator.connection.saveData);
+      const nextNatureLoop = () => 'Audioimagery1.mp4';
 
       mainContent.innerHTML = modules.map((m, i) => {
         const num = i + 1;
@@ -1984,7 +2002,9 @@
 
         const renderAudioOptions = (opts, img, subtitle) => `
           <div class="audio-player-card">
-            <video class="audio-player-art" src="${nextNatureLoop()}" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+            ${SAVE_DATA
+              ? `<div class="audio-player-art audio-player-art-static" aria-hidden="true"></div>`
+              : `<video class="audio-player-art" src="${nextNatureLoop()}" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>`}
             <div class="audio-player-info">
               <div class="audio-player-title">${opts[0].title}</div>
               <div class="audio-player-subtitle">${subtitle}</div>
