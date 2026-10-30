@@ -25,6 +25,8 @@
       --line: rgba(31, 52, 39, 0.14);
       --shadow: 0 22px 60px rgba(16, 36, 27, 0.12);
       --radius: 14px;
+      --chrome-top: #14241b;
+      --chrome-bottom: #14241b;
     }
 
     body.dark-mode {
@@ -45,7 +47,16 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; overflow-x: hidden; background: #14241b; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      /* Matches whichever hero clip is currently playing (see
+         setChromeColors in the script) — top/bottom halves are coloured
+         separately since each video's edge colour differs. This is what
+         shows through behind the iPhone status bar / home-indicator area
+         on the sliver Safari itself still controls. */
+      background: linear-gradient(to bottom, var(--chrome-top) 0%, var(--chrome-top) 50%, var(--chrome-bottom) 50%, var(--chrome-bottom) 100%);
+    }
 
     .sr-only {
       position: absolute;
@@ -1328,6 +1339,25 @@
     const HERO_CLIPS = ['IndexVideo1.mp4', 'IndexVideo3.mp4', 'Indexvideo4.mp4', 'Audioimagery3.mp4'];
     let heroClipIndex = 0;
 
+    // Sampled directly from each clip's own top/bottom edge pixels, so the
+    // sliver of OS chrome Safari still draws (status bar / home-indicator
+    // area, outside what viewport-fit=cover lets page content reach)
+    // matches that clip instead of a single fixed colour for all four.
+    const HERO_EDGE_COLORS = {
+      'IndexVideo1.mp4':    { top: '#737f5c', bottom: '#757e5e' },
+      'IndexVideo3.mp4':    { top: '#233012', bottom: '#bdb398' },
+      'Indexvideo4.mp4':    { top: '#a2907f', bottom: '#b09b8a' },
+      'Audioimagery3.mp4':  { top: '#8d8a63', bottom: '#676423' }
+    };
+    function setChromeColors(src) {
+      const c = HERO_EDGE_COLORS[src];
+      if (!c) return;
+      document.documentElement.style.setProperty('--chrome-top', c.top);
+      document.documentElement.style.setProperty('--chrome-bottom', c.bottom);
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', c.top);
+    }
+
     // Mobile-only crop treatment per clip (see the .frame-pan/.frame-drift
     // rules) — clips not listed here just use the default centered crop.
     const HERO_MOBILE_FRAME = {
@@ -1355,6 +1385,7 @@
       const saveData = navigator.connection && navigator.connection.saveData;
       if (saveData) {
         current.classList.add('active');
+        setChromeColors(HERO_CLIPS[heroClipIndex]);
         return;
       }
 
@@ -1392,6 +1423,7 @@
           heroClipIndex = (heroClipIndex + 1) % HERO_CLIPS.length;
           next.classList.add('active');
           current.classList.remove('active');
+          setChromeColors(HERO_CLIPS[heroClipIndex]);
           const swap = current; current = next; next = swap;
           swapping = false;
           primed = false;
@@ -1422,6 +1454,7 @@
       current.preload = 'auto';
       current.src = HERO_CLIPS[heroClipIndex];
       applyMobileFrame(current, HERO_CLIPS[heroClipIndex]);
+      setChromeColors(HERO_CLIPS[heroClipIndex]);
       current.load();
       current.play().catch(() => {}); // autoplay can be blocked; poster remains as fallback
       current.classList.add('active');

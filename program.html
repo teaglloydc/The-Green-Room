@@ -28,6 +28,8 @@
       --threat: #b85d52;
       --drive: #52799c;
       --soothing: #4f8a63;
+      --chrome-top: #14241b;
+      --chrome-bottom: #14241b;
     }
 
     body.dark-mode {
@@ -48,7 +50,14 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; overflow-x: hidden; background: #14241b; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      /* Matches whichever nature video is currently in view (hero-style
+         intro video, an audio practice video on mobile, or the full-screen
+         session) — see setChromeColors in the script. */
+      background: linear-gradient(to bottom, var(--chrome-top) 0%, var(--chrome-top) 50%, var(--chrome-bottom) 50%, var(--chrome-bottom) 100%);
+    }
 
     .sr-only {
       position: absolute;
@@ -2262,6 +2271,31 @@
     ];
 
     const TOTAL_MODULES = modules.length;
+
+    // Sampled from each video's own top/bottom edge pixels, so the sliver
+    // of OS chrome Safari still draws (status bar / home-indicator area,
+    // outside what viewport-fit=cover lets page content reach) matches
+    // whichever video is actually on screen instead of one fixed colour.
+    const VIDEO_EDGE_COLORS = {
+      'WhatisTGR.mp4':      { top: '#656054', bottom: '#3e3e30' },
+      'Audioimagery1.mp4':  { top: '#decfa8', bottom: '#898780' },
+      'Audioimagery4.mp4':  { top: '#68754b', bottom: '#343914' },
+      'Audioimagery5.mp4':  { top: '#e7c2a0', bottom: '#3b251c' },
+      'Audioimagery6.mp4':  { top: '#67704f', bottom: '#5e594f' },
+      'Audioimagery7.mp4':  { top: '#5e79b3', bottom: '#788499' },
+      'Audioimagery8.mp4':  { top: '#3e3d2e', bottom: '#717073' },
+      'Audioimagery9.mp4':  { top: '#5b5b4c', bottom: '#141428' },
+      'Audioimagery10.mp4': { top: '#767357', bottom: '#5d3e4a' },
+      'Indexvideo5.mp4':    { top: '#a0a385', bottom: '#7b934d' }
+    };
+    function setChromeColors(src) {
+      const c = VIDEO_EDGE_COLORS[src];
+      if (!c) return;
+      document.documentElement.style.setProperty('--chrome-top', c.top);
+      document.documentElement.style.setProperty('--chrome-bottom', c.bottom);
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', c.top);
+    }
     let completed = JSON.parse(localStorage.getItem('completedModulesV2') || '[]');
     const circleValues = {};
     const circleChanged = {};
@@ -3121,6 +3155,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         videoEl.src = video;
         videoEl.play().catch(() => {});
       }
+      setChromeColors(video);
 
       audioSessionTotalSeconds = minutes * 60;
       audioSessionElapsedSeconds = 0;
@@ -3219,6 +3254,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       videoEl.pause();
       videoEl.removeAttribute('src');
       videoEl.load();
+      setChromeColors('WhatisTGR.mp4');
     }
 
     function showCircleTab(event, num, system) {
@@ -3351,13 +3387,30 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
     function getModuleName(n) { return modules[n - 1]?.title || `Module ${n}`; }
 
+    // On phones the audio video runs full-screen (see the 640px media
+    // query), so as each one scrolls to fill the screen its own edge
+    // colours should take over from whatever was showing before it.
+    function setupAudioChromeObserver() {
+      if (!window.matchMedia('(max-width: 640px)').matches) return;
+      const cards = document.querySelectorAll('.audio-player-card[data-video]');
+      if (!cards.length) return;
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) setChromeColors(entry.target.dataset.video);
+        });
+      }, { threshold: [0.6] });
+      cards.forEach(card => observer.observe(card));
+    }
+
     /* ── INIT ───────────────────────────────────── */
     window.addEventListener('load', () => {
       applyDark(localStorage.getItem('darkMode') === 'true');
       document.getElementById('soundBtn').innerHTML = ICONS.mute;
       document.getElementById('tgrVideoBtn').innerHTML = ICONS.pause;
+      setChromeColors('WhatisTGR.mp4');
 
       renderProgramModules();
+      setupAudioChromeObserver();
       renderThreeCircleTools();
       setupCircleDragging();
       setupScrollReveal();
