@@ -351,7 +351,7 @@
 
     .intro-grid {
       display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(300px, 1.1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 1fr);
       gap: clamp(32px, 6vw, 80px);
       align-items: center;
     }
@@ -381,6 +381,11 @@
       font-size: 1.02rem;
       line-height: 1.9;
     }
+
+    /* Extra breathing room when several .lead paragraphs stack back-to-back
+       (e.g. the "What is The Green Room?" intro) so they read as distinct
+       thoughts rather than one dense block. */
+    .lead + .lead { margin-top: 28px; }
 
     .image-panel {
       min-height: 480px;
@@ -906,7 +911,7 @@
         <p class="lead">The program includes 8 self guided modules, each with a video, written information, exercises and an emotional check-in. Each module builds on the last.</p>
         <p class="lead">Life with a preemie baby is busy. That's why our program is designed to fit around your schedule. You can work through it at your own pace and return whenever you need to. The aim is not perfection, but steady engagement.</p>
       </div>
-      <video class="image-panel" src="WhatisTGR.mp4" poster="WhatisTGR-poster.jpg" controls autoplay muted playsinline preload="auto" aria-label="What is The Green Room? — explainer video"></video>
+      <video class="image-panel" src="WhatisTGR.mp4" poster="WhatisTGR-poster.jpg" controls autoplay muted loop playsinline preload="auto" aria-label="What is The Green Room? — explainer video"></video>
     </div>
   </section>
 

@@ -634,6 +634,53 @@
     .content-block { margin: 40px 0; }
     .content-block h3 { margin-bottom: 8px; }
 
+    /* Nature/motherhood photo breaks scattered through the written module
+       content — same brightened, rounded treatment as the homepage's
+       "What is The Green Room" panel, so the two feel like one family.
+       Each module uses a different shape/size modifier (below) so the set
+       doesn't read as one repeated template. Floated variants clear
+       themselves on mobile, where they just stack full-width. */
+    .module-inline-image { margin: 28px 0; }
+    .module-inline-image img {
+      display: block;
+      width: 100%;
+      object-fit: cover;
+      border-radius: var(--radius);
+      filter: brightness(1.12) saturate(1.08);
+    }
+    .module-inline-image figcaption {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .module-inline-image.mi-wide img { aspect-ratio: 16 / 7; }
+    .module-inline-image.mi-banner img { aspect-ratio: 21 / 9; }
+    .module-inline-image.mi-tall { max-width: 360px; margin-inline: auto; }
+    .module-inline-image.mi-tall img { aspect-ratio: 3 / 4; }
+    .module-inline-image.mi-square { max-width: 320px; margin-inline: auto; }
+    .module-inline-image.mi-square img { aspect-ratio: 1 / 1; }
+    .module-inline-image.mi-circle { max-width: 220px; float: right; margin: 4px 0 16px 24px; }
+    .module-inline-image.mi-circle img { aspect-ratio: 1 / 1; border-radius: 50%; }
+    .module-inline-image.mi-float-right { float: right; width: 44%; max-width: 300px; margin: 4px 0 16px 24px; }
+    .module-inline-image.mi-float-right img { aspect-ratio: 3 / 4; }
+    .module-inline-image.mi-float-left { float: left; width: 44%; max-width: 300px; margin: 4px 24px 16px 0; }
+    .module-inline-image.mi-float-left img { aspect-ratio: 3 / 4; }
+
+    @media (max-width: 640px) {
+      .module-inline-image.mi-float-right,
+      .module-inline-image.mi-float-left,
+      .module-inline-image.mi-circle {
+        float: none;
+        width: 100%;
+        max-width: none;
+        margin: 24px 0;
+      }
+      .module-inline-image.mi-circle img { aspect-ratio: 16 / 10; border-radius: var(--radius); }
+      .module-inline-image img { aspect-ratio: 4 / 3 !important; }
+    }
+
     .content-block p {
       color: var(--muted);
       line-height: 1.85;
@@ -1557,6 +1604,11 @@
 `,
         audio: 'Guided audio — Introduction',
         audioImage: "Introduction.jpg",
+        audioOptions: [
+          { label: '2 min', title: 'Introduction — 2 min practice', file: '' },
+          { label: '5 min', title: 'Introduction — 5 min practice', file: '' },
+          { label: '10 min', title: 'Introduction — 10 min practice', file: '' }
+        ],
         softLanding: {
           title: 'Soft landing — guided practice',
           description: 'Before you start reading, take a few minutes just to arrive. There is no right or wrong way to do this — simply notice what feels supportive to you right now.',
@@ -1577,7 +1629,7 @@
 </ul>
 
 <p>Text here</p>
-`, 
+`,
     audio: 'Guided audio — Motherhood and the brain',
     audioImage: "Mindfulness2.jpg",
     audioOptions: [
@@ -1767,7 +1819,6 @@
 
 <p>Add text here.</p>
 
-
 <p>Add text here.</p>
 `,
         audio: 'Guided audio — Building your compassionate self',
@@ -1824,7 +1875,9 @@
 
       { title: 'Next steps',
         summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
-        written: 'Your written content for module 8 will go here.',
+        written: `
+<p>Your written content for module 8 will go here.</p>
+`,
         audio: 'Guided audio — Next steps',
         audioImage: '',
         audioOptions: [
@@ -1904,6 +1957,15 @@
         `).join('')}
       `;
 
+      /* Nature video that plays behind every guided-audio card, looping
+         independently of the audio's length (2/5/10 min) — the <video>
+         "loop" attribute just keeps repeating until the visitor leaves the
+         page, so no syncing to track length is needed. Cycles through a
+         small pool so not every card on the page shows the same clip. */
+      const NATURE_LOOPS = ['IndexVideo2.mp4', 'IndexVideo1.mp4', 'IndexVideo3.mp4'];
+      let natureLoopIndex = 0;
+      const nextNatureLoop = () => NATURE_LOOPS[natureLoopIndex++ % NATURE_LOOPS.length];
+
       mainContent.innerHTML = modules.map((m, i) => {
         const num = i + 1;
         const isLast = num === TOTAL_MODULES;
@@ -1922,7 +1984,7 @@
 
         const renderAudioOptions = (opts, img, subtitle) => `
           <div class="audio-player-card">
-            <img class="audio-player-art" src="${img || ''}" alt="">
+            <video class="audio-player-art" src="${nextNatureLoop()}" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
             <div class="audio-player-info">
               <div class="audio-player-title">${opts[0].title}</div>
               <div class="audio-player-subtitle">${subtitle}</div>
@@ -2056,6 +2118,11 @@
 
                 <div class="section-divider"></div>
                 ${exerciseBlock}
+
+                <div class="content-block">
+                  <h3>Audio practice</h3>
+                  ${renderAudioOptions(m.audioOptions, m.audioImage, m.audio)}
+                </div>
 
                 <div class="tc-section" data-module="${num}"></div>
 
