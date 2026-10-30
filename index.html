@@ -392,17 +392,14 @@
       margin-top: 18px;
       color: var(--muted);
       font-size: 1.02rem;
-      line-height: 2;
+      line-height: 1.7;
     }
 
-    /* Extra breathing room when several .lead paragraphs stack back-to-back
-       (e.g. the "What is The Green Room?" intro) so they read as distinct
-       thoughts rather than one dense block. */
-    .lead + .lead { margin-top: 36px; }
+    .lead + .lead { margin-top: 20px; }
 
     .image-panel {
-      min-height: 360px;
-      max-width: 420px;
+      aspect-ratio: 4 / 3;
+      max-width: 480px;
       width: 100%;
       display: block;
       margin-left: auto;
@@ -870,7 +867,7 @@
       .steps-header,
       .closing-grid { grid-template-columns: 1fr; }
 
-      .image-panel { min-height: 320px; max-width: none; margin-left: 0; }
+      .image-panel { max-width: none; margin-left: 0; }
       .steps-grid { grid-template-columns: 1fr; }
 
       .modules-header { flex-direction: column; align-items: flex-start; }
@@ -921,7 +918,6 @@
   <section class="section">
     <div class="section-inner intro-grid">
       <div>
-        <p class="section-label"></p>
         <h2>What is The Green Room?</h2>
         <p class="lead">The Green Room is program grounded in Compassion Focused Therapy to support mothers who have experienced a preterm birth.</p>
         <p class="lead">The program includes 8 self guided modules, each with a video, written information, exercises and an emotional check-in. Each module builds on the last.</p>
@@ -1302,7 +1298,7 @@
        soon as the current one begins, not at the last second — so by the
        time the crossfade actually happens, it's already ready to play
        instantly instead of stalling mid-fade. */
-    const HERO_CLIPS = ['IndexVideo1.mp4', 'IndexVideo3.mp4', 'Indexvideo4.mp4', 'IndexVideo2.mp4'];
+    const HERO_CLIPS = ['IndexVideo1.mp4', 'IndexVideo3.mp4', 'Indexvideo4.mp4', 'Audioimagery3.mp4'];
     let heroClipIndex = 0;
 
     function initHeroVideo() {
