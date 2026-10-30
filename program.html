@@ -562,8 +562,7 @@
     }
 
     .summary-box,
-    .audio-placeholder,
-    .tc-section {
+    .audio-placeholder {
       border-radius: var(--radius);
     }
 
@@ -1046,16 +1045,13 @@
     .emotion-tab-content { display: none; }
     .emotion-tab-content.active { display: block; }
 
-    /* ── THREE CIRCLES ─────────────────────────── */
+    /* ── THREE CIRCLES — lives directly on the page, not in a card ── */
     .tc-section {
-      overflow: hidden;
       margin-top: 28px;
-      background: var(--surface);
     }
 
     .tc-header {
-      padding: 22px 24px;
-      background: var(--surface);
+      padding: 0 0 22px;
       border-bottom: 1px solid var(--line);
     }
 
@@ -1088,57 +1084,57 @@
     .tc-legend-dot.drive { background: var(--drive); }
     .tc-legend-dot.soothing { background: var(--soothing); }
 
-    /* Circle tool — larger + faster (no width/height transition lag) */
+    /* Circle tool — the three anchor points sit close together (as
+       percentages of this container) so that growing a circle makes it
+       overlap its neighbours, Venn-diagram style, instead of each circle
+       being boxed into its own separate grid cell. */
     .tc-circle-tool {
+      position: relative;
       min-height: 460px;
-      padding: 48px 28px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        "drive soothing"
-        "threat threat";
-      align-items: center;
-      justify-items: center;
-      gap: 36px;
+      padding: 48px 0;
       touch-action: none;
       user-select: none;
-      background: var(--surface);
     }
 
     .tc-live-circle {
+      position: absolute;
       width: calc(58px + var(--size) * 1.55px);
       height: calc(58px + var(--size) * 1.55px);
       border-radius: 50%;
       cursor: grab;
       will-change: width, height;
       transition: box-shadow 0.15s ease;
-      flex-shrink: 0;
+      transform: translate(-50%, -50%);
     }
 
-    .tc-live-circle.dragging { cursor: grabbing; box-shadow: 0 12px 32px rgba(16,36,27,0.22); }
+    .tc-live-circle.dragging { cursor: grabbing; box-shadow: 0 12px 32px rgba(16,36,27,0.22); z-index: 10; }
 
     .tc-live-circle.threat {
-      grid-area: threat;
+      left: 50%;
+      top: 68%;
       background: var(--threat);
       box-shadow: 0 4px 18px rgba(184,93,82,0.38);
     }
 
     .tc-live-circle.drive {
-      grid-area: drive;
+      left: 36%;
+      top: 36%;
       background: var(--drive);
       box-shadow: 0 4px 18px rgba(82,121,156,0.38);
+      z-index: 1;
     }
 
     .tc-live-circle.soothing {
-      grid-area: soothing;
+      left: 64%;
+      top: 36%;
       background: var(--soothing);
       box-shadow: 0 4px 18px rgba(79,138,99,0.38);
+      z-index: 2;
     }
 
     .tc-record-panel {
-      padding: 22px 24px;
+      padding: 22px 0 0;
       border-top: 1px solid var(--line);
-      background: var(--surface);
     }
 
     .tc-record-label { color: var(--wood-dark); margin-bottom: 4px; }
@@ -1464,13 +1460,8 @@
       .video-placeholder { min-height: 220px; }
 
       .tc-circle-tool {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-          "drive soothing"
-          "threat threat";
         min-height: 340px;
         padding: 30px 14px;
-        gap: 22px;
       }
 
       .tc-live-circle {
@@ -2438,9 +2429,9 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
           <h3>A quick check-in</h3>
           <p>Add text here</p>
           <div class="tc-legend">
-            <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive (blue) — motivation</span></div>
-            <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing (green) — contentment</span></div>
-            <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat (red) — protection</span></div>
+            <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive (blue)</span></div>
+            <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing (green)</span></div>
+            <div class="tc-legend-item"><div class="tc-legend-dot threat"></div><span>Threat (red)</span></div>
           </div>
         </div>
         <div class="tc-circle-tool" id="tc-tool-${key}">
