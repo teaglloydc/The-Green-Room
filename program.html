@@ -1053,7 +1053,7 @@
 
     .tc-header {
       padding: 22px 24px;
-      background: linear-gradient(135deg, var(--surface-soft), var(--surface));
+      background: var(--surface);
       border-bottom: 1px solid var(--line);
     }
 
@@ -1100,7 +1100,7 @@
       gap: 36px;
       touch-action: none;
       user-select: none;
-      background: var(--surface-soft);
+      background: var(--surface);
     }
 
     .tc-live-circle {
@@ -1619,6 +1619,7 @@
 `,
         audio: 'Guided audio — Introduction',
         audioImage: "Introduction.jpg",
+        natureVideo: 'Audioimagery7.mp4',
         audioOptions: [
           { label: '2 min', title: 'Introduction — 2 min practice', file: '' },
           { label: '5 min', title: 'Introduction — 5 min practice', file: '' },
@@ -1627,7 +1628,8 @@
         softLanding: {
           title: 'Soft landing — guided practice',
           description: 'Before you start reading, take a few minutes just to arrive. There is no right or wrong way to do this — simply notice what feels supportive to you right now.',
-          audioImage: 'Introduction.jpg'
+          audioImage: 'Introduction.jpg',
+          natureVideo: 'Audioimagery2.mp4'
         } },
 
       { title: 'Motherhood and the brain', summary: ['How does motherhood change the brain?','How do these changes impact me after preterm birth?','How can these changes impact my mental health?'],
@@ -1647,6 +1649,7 @@
 `,
     audio: 'Guided audio — Motherhood and the brain',
     audioImage: "Mindfulness2.jpg",
+    natureVideo: 'Audioimagery3.mp4',
     audioOptions: [
       { label: '2 min', title: 'Motherhood and the brain — 2 min practice', file: '' },
       { label: '5 min', title: 'Motherhood and the brain — 5 min practice', file: '' },
@@ -1698,8 +1701,9 @@
 
 <p>Add text here.</p>
 `,
-   audio: 'Guided audio — Compassion and our tricky brains', 
+   audio: 'Guided audio — Compassion and our tricky brains',
    audioImage: "sooth2.png",
+   natureVideo: 'Audioimagery8.mp4',
    audioOptions: [
      { label: '2 min', title: 'Compassion and our tricky brains — 2 min practice', file: '' },
      { label: '5 min', title: 'Compassion and our tricky brains — 5 min practice', file: '' },
@@ -1783,6 +1787,7 @@
         written: `<p>Our minds and bodies are organised into three interconnected systems that help us respond to life: threat, drive, and soothing. After a preterm birth, these systems can become highly activated in different ways. Select a tab below to read about each system and how it can show up after a preterm birth.</p>`,
         audio: 'Guided audio — Our three circles',
         audioImage: "SoothingRythm.jpg",
+        natureVideo: 'Audioimagery5.mp4',
         audioOptions: [
           { label: '2 min', title: 'Our three circles — 2 min practice', file: '' },
           { label: '5 min', title: 'Our three circles — 5 min practice', file: '' },
@@ -1815,6 +1820,7 @@
 `,
         audio: 'Guided audio — Working with your inner critic',
         audioImage: "TrickyBrains.jpg",
+        natureVideo: 'Audioimagery6.mp4',
         audioOptions: [
           { label: '2 min', title: 'Working with your inner critic — 2 min practice', file: '' },
           { label: '5 min', title: 'Working with your inner critic — 5 min practice', file: '' },
@@ -1838,6 +1844,7 @@
 `,
         audio: 'Guided audio — Building your compassionate self',
         audioImage: "CompassionateSelf.jpg",
+        natureVideo: 'Audioimagery10.mp4',
         audioOptions: [
           { label: '2 min', title: 'Building your compassionate self — 2 min practice', file: '' },
           { label: '5 min', title: 'Building your compassionate self — 5 min practice', file: '' },
@@ -1862,6 +1869,7 @@
         emotionOptions: {
           anger: {
             image: 'Anger.jpg',
+            natureVideo: 'Audioimagery9.mp4',
             options: [
               { label: '2 min', title: 'Working with anger — 2 min practice', file: '' },
               { label: '5 min', title: 'Working with anger — 5 min practice', file: '' },
@@ -1870,6 +1878,7 @@
           },
           sadness: {
             image: 'Sadness.png',
+            natureVideo: 'Audioimagery4.mp4',
             options: [
               { label: '2 min', title: 'Working with sadness — 2 min practice', file: '' },
               { label: '5 min', title: 'Working with sadness — 5 min practice', file: '' },
@@ -1878,6 +1887,7 @@
           },
           anxiety: {
             image: 'Anxiety.png',
+            natureVideo: 'Audioimagery1.mp4',
             options: [
               { label: '2 min', title: 'Working with anxiety — 2 min practice', file: '' },
               { label: '5 min', title: 'Working with anxiety — 5 min practice', file: '' },
@@ -1895,6 +1905,7 @@
 `,
         audio: 'Guided audio — Next steps',
         audioImage: '',
+        natureVideo: 'Audioimagery7.mp4',
         audioOptions: [
           { label: '2 min', title: 'Next steps — 2 min practice', file: '' },
           { label: '5 min', title: 'Next steps — 5 min practice', file: '' },
@@ -1982,7 +1993,7 @@
          static screen instead, so mobile data isn't spent on an ambient
          loop nobody asked for. */
       const SAVE_DATA = !!(navigator.connection && navigator.connection.saveData);
-      const nextNatureLoop = () => 'Audioimagery1.mp4';
+      const DEFAULT_NATURE_VIDEO = 'Audioimagery1.mp4';
 
       mainContent.innerHTML = modules.map((m, i) => {
         const num = i + 1;
@@ -2000,11 +2011,11 @@
           </div>
         `;
 
-        const renderAudioOptions = (opts, img, subtitle) => `
+        const renderAudioOptions = (opts, img, subtitle, video) => `
           <div class="audio-player-card">
             ${SAVE_DATA
               ? `<div class="audio-player-art audio-player-art-static" aria-hidden="true"></div>`
-              : `<video class="audio-player-art" src="${nextNatureLoop()}" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>`}
+              : `<video class="audio-player-art" src="${video || DEFAULT_NATURE_VIDEO}" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>`}
             <div class="audio-player-info">
               <div class="audio-player-title">${opts[0].title}</div>
               <div class="audio-player-subtitle">${subtitle}</div>
@@ -2113,7 +2124,7 @@
               <div class="soft-landing-label">Before you begin</div>
               <h3>Soft landing</h3>
               <p>${m.softLanding.description}</p>
-              ${renderAudioOptions([{ title: m.softLanding.title }], m.softLanding.audioImage, 'Guided audio — Soft landing')}
+              ${renderAudioOptions([{ title: m.softLanding.title }], m.softLanding.audioImage, 'Guided audio — Soft landing', m.softLanding.natureVideo)}
             </div>
           ` : '';
 
@@ -2141,7 +2152,7 @@
 
                 <div class="content-block">
                   <h3>Audio practice</h3>
-                  ${renderAudioOptions(m.audioOptions, m.audioImage, m.audio)}
+                  ${renderAudioOptions(m.audioOptions, m.audioImage, m.audio, m.natureVideo)}
                 </div>
 
                 <div class="tc-section" data-module="${num}"></div>
@@ -2163,7 +2174,7 @@
         if (m.emotions) {
           const eo = m.emotionOptions || {};
           const renderEmotionAudio = (key) => eo[key]
-            ? renderAudioOptions(eo[key].options, eo[key].image, m.audio)
+            ? renderAudioOptions(eo[key].options, eo[key].image, m.audio, eo[key].natureVideo)
             : '<div class="audio-placeholder"><div><div class="audio-title">Audio will be added here</div></div></div>';
 
           page3ExtraHTML = `
@@ -2202,7 +2213,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
           `;
         } else {
           const audioHTML = m.audioOptions
-            ? renderAudioOptions(m.audioOptions, m.audioImage, m.audio)
+            ? renderAudioOptions(m.audioOptions, m.audioImage, m.audio, m.natureVideo)
             : `<div class="audio-placeholder" style="border:1px solid var(--line);border-radius:var(--radius);"><img class="audio-thumb" src="${m.audioImage || ''}" alt=""><div><div class="audio-title">${m.audio}</div><div class="audio-duration">Audio will be added here</div></div></div>`;
 
           page3ExtraHTML = `
