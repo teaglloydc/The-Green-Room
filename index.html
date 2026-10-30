@@ -384,10 +384,11 @@
 
     .image-panel {
       min-height: 480px;
+      width: 100%;
+      display: block;
       border-radius: var(--radius);
-      background:
-        linear-gradient(180deg, rgba(16,36,27,0.04), rgba(16,36,27,0.2)),
-        url("https://images.unsplash.com/photo-1770893055565-1f91c24adb77?auto=format&fit=crop&w=1600&q=80") center/cover;
+      object-fit: cover;
+      background: rgba(16,36,27,0.08);
     }
 
     /* ── TESTIMONIALS ───────────────────────────── */
@@ -904,7 +905,7 @@
         <p class="lead">The program includes 8 self guided modules, each with a video, written information, exercises and an emotional check-in. Each module builds on the last.</p>
         <p class="lead">Life with a preemie baby is busy. That's why our program is designed to fit around your schedule. You can work through it at your own pace and return whenever you need to. The aim is not perfection, but steady engagement.</p>
       </div>
-      <div class="image-panel" aria-label="A quiet room looking out onto trees"></div>
+      <video class="image-panel" src="WhatisTGR.mp4" poster="WhatisTGR-poster.jpg" controls autoplay muted playsinline preload="auto" aria-label="What is The Green Room? — explainer video"></video>
     </div>
   </section>
 
