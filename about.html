@@ -228,11 +228,21 @@
       align-items: flex-end;
       padding: clamp(96px, 10vw, 130px) clamp(20px, 5vw, 64px) 52px;
       background:
-        url("https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=2200&q=82") center/cover;
+        url("AboutUsBanner.jpg") center/cover;
       color: #fffbf3;
+      overflow: hidden;
     }
 
-    .page-hero-inner { width: min(860px, 100%); }
+    .page-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.2) 45%, rgba(0,0,0,0.55) 100%);
+      pointer-events: none;
+    }
+
+    .page-hero-inner { position: relative; z-index: 1; width: min(860px, 100%); }
 
     .eyebrow {
       color: rgba(255,250,240,0.82);
@@ -712,6 +722,8 @@
 
     <section class="tab-content" id="tab-research">
       <div class="program-about">
+        <h2 class="sr-only">Research</h2>
+        <p style="color:var(--muted);line-height:1.88;font-size:0.97rem;margin:0 0 28px;">The Green Room is grounded in published research on compassion-focused therapy and the experience of parents after preterm birth.</p>
         <div class="research-list">
           <div class="research-item">
             <p>Lloyd-Collins, T.M., Fitzallen, G.C. &amp; Kirby, J.N. A Compassion-Focused Approach to Support Parents After Preterm Birth. <em>Clin Child Fam Psychol Rev</em> 28, 954–972 (2025).</p>
