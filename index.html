@@ -255,11 +255,14 @@
       .hero-video { transition: none; }
     }
 
-    /* Phone-only: source footage frames her on the right third of a wide
-       shot, so on a narrow/tall viewport "center" crops part of her out.
-       Slowly pan the crop window instead. Desktop stays as it was. */
+    /* Phone-only: each clip gets its own crop treatment instead of one
+       pan applied to all of them. Desktop stays as it was. */
     @media (max-width: 640px) {
-      .hero-video {
+      .hero-video { object-position: center center; }
+
+      /* IndexVideo1 — source footage frames her on the right third of a
+         wide shot, so "center" crops part of her out. Slowly pan instead. */
+      .hero-video.frame-pan {
         object-position: 65% center;
         animation: hero-video-pan 18s ease-in-out infinite;
       }
@@ -268,8 +271,28 @@
         50%  { object-position: 80% center; }
         100% { object-position: 28% center; }
       }
+
+      /* Audioimagery3 — the sunlit highlight sits left-of-centre in the
+         wide shot; a gentle drift keeps it in view without the wide swing
+         the pan above uses. */
+      .hero-video.frame-drift {
+        object-position: 35% center;
+        animation: hero-video-drift 22s ease-in-out infinite;
+      }
+      @keyframes hero-video-drift {
+        0%   { object-position: 20% 45%; }
+        50%  { object-position: 55% 45%; }
+        100% { object-position: 20% 45%; }
+      }
+
+      /* IndexVideo3 (pram) and Indexvideo4 (hand close-up) already frame
+         their subject centrally, so they use the base centered crop above
+         with no animation — a pan would swing away from the subject. */
+
       @media (prefers-reduced-motion: reduce) {
-        .hero-video { animation: none; object-position: 65% center; }
+        .hero-video { animation: none !important; }
+        .hero-video.frame-pan { object-position: 65% center; }
+        .hero-video.frame-drift { object-position: 35% center; }
       }
 
       /* Phone-only: "Welcome in" and the subtext sit centred in the middle
@@ -861,7 +884,7 @@
 
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 860px) {
-      .hero { min-height: 100vh; min-height: 100dvh; align-items: center; padding-top: clamp(90px, 11vw, 110px); }
+      .hero { min-height: calc(100vh + 24px); min-height: calc(100dvh + 24px); align-items: center; padding-top: clamp(90px, 11vw, 110px); }
       .hero h1 { font-size: clamp(2.6rem, 11vw, 4.2rem); }
 
       .intro-grid,
@@ -1303,6 +1326,18 @@
     const HERO_CLIPS = ['IndexVideo1.mp4', 'IndexVideo3.mp4', 'Indexvideo4.mp4', 'Audioimagery3.mp4'];
     let heroClipIndex = 0;
 
+    // Mobile-only crop treatment per clip (see the .frame-pan/.frame-drift
+    // rules) — clips not listed here just use the default centered crop.
+    const HERO_MOBILE_FRAME = {
+      'IndexVideo1.mp4': 'frame-pan',
+      'Audioimagery3.mp4': 'frame-drift'
+    };
+    function applyMobileFrame(el, src) {
+      el.classList.remove('frame-pan', 'frame-drift');
+      const cls = HERO_MOBILE_FRAME[src];
+      if (cls) el.classList.add(cls);
+    }
+
     function initHeroVideo() {
       let current = document.getElementById('heroVideoA');
       let next = document.getElementById('heroVideoB');
@@ -1331,6 +1366,7 @@
         const upcoming = (heroClipIndex + 1) % HERO_CLIPS.length;
         next.preload = 'auto';
         next.src = HERO_CLIPS[upcoming];
+        applyMobileFrame(next, HERO_CLIPS[upcoming]);
         next.load();
       }
 
@@ -1383,6 +1419,7 @@
 
       current.preload = 'auto';
       current.src = HERO_CLIPS[heroClipIndex];
+      applyMobileFrame(current, HERO_CLIPS[heroClipIndex]);
       current.load();
       current.play().catch(() => {}); // autoplay can be blocked; poster remains as fallback
       current.classList.add('active');
