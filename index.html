@@ -910,20 +910,21 @@
 
   <section class="section testimonials">
     <div class="section-inner">
-      <h2>Real voices from The Room.</h2>
+      <h2>The voices that shaped The Room.</h2>
+      <p class="lead">This program was developed by researchers, with help from mothers of preterm babies.</p>
+      <p class="lead">These are some things the mothers wanted to see.</p>
 
       <div class="testimonial-carousel" id="testimonialTrack">
-        <!-- Testimonial 1 — replace with a real participant quote once available -->
+        <!-- Testimonial 1 -->
         <div class="testimonial-card">
           <div class="testimonial-avatar" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
           </div>
           <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
           <blockquote>
-            <p>A real testimonial from a program participant will go here once available.</p>
+            <p>You could do it whenever suits you and it can just be in the moment. You could even be doing something while you&rsquo;re sitting by the bed, or if you get a moment away.</p>
           </blockquote>
-          <div class="testimonial-name">Participant name</div>
-          <div class="testimonial-role">The Green Room participant</div>
+          <div class="testimonial-name">Sarah</div>
         </div>
         <!-- Testimonial 2 -->
         <div class="testimonial-card">
@@ -932,10 +933,9 @@
           </div>
           <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
           <blockquote>
-            <p>A real testimonial from a program participant will go here once available.</p>
+            <p>Just to sort of reset, or help with something that you&rsquo;re particularly struggling with at the time.</p>
           </blockquote>
-          <div class="testimonial-name">Participant name</div>
-          <div class="testimonial-role">The Green Room participant</div>
+          <div class="testimonial-name">Priya</div>
         </div>
         <!-- Testimonial 3 -->
         <div class="testimonial-card">
@@ -944,10 +944,9 @@
           </div>
           <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
           <blockquote>
-            <p>A real testimonial from a program participant will go here once available.</p>
+            <p>Having something really easily accessible, something you can just connect to, put your headphones in&hellip; something you can listen to while you&rsquo;re also attending to your baby.</p>
           </blockquote>
-          <div class="testimonial-name">Participant name</div>
-          <div class="testimonial-role">The Green Room participant</div>
+          <div class="testimonial-name">Emily</div>
         </div>
         <!-- Testimonial 4 -->
         <div class="testimonial-card">
@@ -956,10 +955,20 @@
           </div>
           <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
           <blockquote>
-            <p>A real testimonial from a program participant will go here once available.</p>
+            <p>I really like the idea of an online resource, because trying to find time during the day, especially being back at work now, to even just go to like a doctor&rsquo;s appointment for myself is like bottom of the list, you know?</p>
           </blockquote>
-          <div class="testimonial-name">Participant name</div>
-          <div class="testimonial-role">The Green Room participant</div>
+          <div class="testimonial-name">Hannah</div>
+        </div>
+        <!-- Testimonial 5 -->
+        <div class="testimonial-card">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+          </div>
+          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>
+            <p>So that&rsquo;s very much how I did my own learning in those times where it was flexible, I could do it whilst I was breastfeeding.</p>
+          </blockquote>
+          <div class="testimonial-name">Megan</div>
         </div>
       </div>
 
@@ -1412,8 +1421,8 @@
       track.addEventListener('scroll', () => {
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(() => {
-          const step = testimonialStep(track);
-          const idx = Math.round(track.scrollLeft / step);
+          const maxScroll = track.scrollWidth - track.clientWidth;
+          const idx = maxScroll <= 0 ? 0 : Math.round((track.scrollLeft / maxScroll) * (cards.length - 1));
           dots.forEach((d, i) => {
             d.classList.toggle('active', i === idx);
             d.setAttribute('aria-current', i === idx ? 'true' : 'false');
@@ -1441,5 +1450,6 @@
 
     function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
   </script>
+  <script src="feedback-widget.js" defer></script>
 </body>
 </html>
