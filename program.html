@@ -749,28 +749,19 @@
        .video-placeholder) rather than a small floating square, so it
        doesn't feel out of place next to them. */
     .audio-player-card {
-      max-width: 640px;
+      max-width: 760px;
       width: 100%;
       margin: 16px auto 0;
-      padding: 20px;
-      border-radius: 20px;
-      background: linear-gradient(160deg, var(--green-900), var(--green-800));
-      box-shadow: 0 10px 24px rgba(16,36,27,0.16);
-      color: #fffbf3;
+      padding: 0;
+      color: var(--text);
       box-sizing: border-box;
     }
 
     .audio-player-art {
       width: 100%;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 4 / 3;
       object-fit: cover;
       display: block;
-      border-radius: 14px;
-      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
-    }
-
-    @media (max-width: 480px) {
-      .audio-player-art { aspect-ratio: 4 / 3; }
     }
 
     /* Data-saver fallback — no video request at all, just a quiet gradient
@@ -779,13 +770,78 @@
       background: linear-gradient(135deg, rgba(255,251,243,0.14), rgba(255,251,243,0.03));
     }
 
-    .audio-player-info { margin-top: 16px; }
+    /* Small preview of the full-screen breathing guide, layered over the
+       card's own video so tapping play feels like a continuation of what
+       was already showing, not a jump to something unrelated. Pure CSS
+       (no JS) since it's decorative here — the real, labelled guide only
+       runs once the full-screen session opens. */
+    .audio-player-art-wrap {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+    }
+
+    .audio-player-breath {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .breath-circle-sm {
+      position: relative;
+      width: 34%;
+      max-width: 120px;
+      max-height: 120px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: breath-scale-preview 10s ease-in-out infinite;
+    }
+    @keyframes breath-scale-preview {
+      0%   { transform: scale(1.15); }
+      50%  { transform: scale(0.72); }
+      100% { transform: scale(1.15); }
+    }
+
+    /* Title sits as a transparent layer over the top of the video, mirroring
+       the controls layer at the bottom — a scrim keeps it legible against
+       whatever footage is playing underneath. */
+    .audio-player-overlay-top {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      z-index: 2;
+      padding: 18px 16px;
+      text-align: center;
+      background: linear-gradient(to bottom, rgba(8,15,11,0.55) 0%, rgba(8,15,11,0.25) 60%, rgba(8,15,11,0) 100%);
+    }
 
     .audio-player-title {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       font-size: 1.1rem;
       font-weight: 600;
       line-height: 1.3;
+      color: #fffbf3;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+
+    /* Controls + length tabs sit as a transparent layer over the bottom of
+       the video itself, not below it — a scrim keeps them legible against
+       whatever footage is playing underneath. */
+    .audio-player-overlay-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      padding: 18px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(to top, rgba(8,15,11,0.6) 0%, rgba(8,15,11,0.3) 55%, rgba(8,15,11,0) 100%);
     }
 
     .audio-player-controls {
@@ -793,13 +849,12 @@
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      margin-top: 20px;
     }
 
     .audio-ctrl-btn {
       border: 0;
       background: none;
-      color: rgba(255,250,240,0.5);
+      color: rgba(255,251,243,0.6);
       font-size: 1.05rem;
       display: inline-flex;
       align-items: center;
@@ -811,10 +866,16 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: rgba(255,250,240,0.9);
-      color: var(--green-900);
+      background: rgba(255,251,243,0.22);
+      border: 1.5px solid rgba(255,251,243,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #fffbf3;
       font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
     }
+    .audio-ctrl-play:hover { transform: scale(1.06); background: rgba(255,251,243,0.32); }
 
     /* Skip back/forward — plain bordered buttons with a simple line icon,
        not a floating emoji-style glyph. */
@@ -822,15 +883,18 @@
       width: 36px;
       height: 36px;
       padding: 0;
-      border: 1.5px solid rgba(255,250,240,0.32);
+      border: 1.5px solid rgba(255,251,243,0.4);
       border-radius: 50%;
-      color: rgba(255,250,240,0.78);
+      background: rgba(255,251,243,0.08);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      color: rgba(255,251,243,0.85);
     }
 
     .audio-player-track {
       height: 4px;
       border-radius: 999px;
-      background: rgba(255,250,240,0.18);
+      background: var(--line);
       margin-top: 18px;
       overflow: hidden;
     }
@@ -839,12 +903,12 @@
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: #fffbf3;
+      background: var(--green-700);
     }
 
     .audio-player-note {
       margin-top: 10px;
-      color: rgba(255,250,240,0.48);
+      color: var(--muted);
       font-size: 0.78rem;
       font-style: italic;
     }
@@ -852,25 +916,27 @@
     .audio-length-tabs {
       display: flex;
       justify-content: center;
-      gap: 12px;
-      margin-top: 22px;
+      gap: 10px;
+      margin-top: 14px;
       flex-wrap: wrap;
     }
 
     .audio-length-btn {
-      border: 1.5px solid rgba(255,250,240,0.32);
+      border: 1.5px solid rgba(255,251,243,0.45);
       border-radius: 999px;
-      background: transparent;
-      padding: 11px 24px;
-      color: rgba(255,250,240,0.78);
+      background: rgba(255,251,243,0.1);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 8px 18px;
+      color: rgba(255,251,243,0.85);
       font: inherit;
       font-weight: 700;
-      font-size: 1.02rem;
+      font-size: 0.92rem;
       cursor: pointer;
       transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
 
-    .audio-length-btn.active { border-color: #fffbf3; background: #fffbf3; color: var(--green-900); }
+    .audio-length-btn.active { border-color: #fffbf3; background: rgba(255,251,243,0.92); color: var(--green-900); }
 
     /* ── CIRCLE TABS — one tab per system, only the selected one shows ── */
     .circle-tab-buttons {
@@ -1485,6 +1551,186 @@
       flex-wrap: wrap;
     }
 
+    /* ── GUIDED AUDIO SESSION — full-screen player over the module's
+       nature video, with a breathing guide layered transparently on top. */
+    .audio-session-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: var(--green-900);
+      overflow: hidden;
+    }
+    .audio-session-overlay.visible { display: flex; }
+
+    .audio-session-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .audio-session-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(8,15,11,0.55) 0%, rgba(8,15,11,0.2) 35%, rgba(8,15,11,0.6) 100%);
+    }
+
+    .audio-session-close {
+      position: absolute;
+      top: clamp(18px, 4vw, 28px);
+      right: clamp(18px, 4vw, 28px);
+      z-index: 2;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 0;
+      background: rgba(8,15,11,0.4);
+      color: #fffbf3;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+    }
+    .audio-session-close:hover { background: rgba(8,15,11,0.6); }
+
+    .audio-session-top {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: clamp(80px, 12vw, 110px) 24px 0;
+    }
+
+    .audio-session-title {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      font-weight: 700;
+      color: #fffbf3;
+      text-wrap: balance;
+    }
+
+    .audio-session-timer {
+      margin-top: 8px;
+      color: rgba(255,251,243,0.7);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .audio-session-breath {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Transparent concentric rings over the video, like a breathing
+       "target" — rather than a solid shape, so the footage stays visible
+       through it. The whole group grows on "Breathe out", shrinks on
+       "Breathe in" — each held for 5s to match the JS-driven label. */
+    .breath-circle {
+      position: relative;
+      width: 54vw;
+      height: 54vw;
+      max-width: 260px;
+      max-height: 260px;
+      min-width: 170px;
+      min-height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: scale(1.15);
+      transition: transform 5s ease-in-out;
+    }
+    .breath-circle.shrink { transform: scale(0.72); }
+
+    .breath-ring {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,251,243,0.1);
+      border: 1px solid rgba(255,251,243,0.22);
+    }
+    .breath-ring-3 { inset: 0; }
+    .breath-ring-2 { inset: 16%; background: rgba(255,251,243,0.16); }
+    .breath-ring-1 { inset: 32%; background: rgba(255,251,243,0.22); }
+
+    .breath-core {
+      position: relative;
+      z-index: 1;
+      width: 40%;
+      height: 40%;
+      border-radius: 50%;
+      background: rgba(255,251,243,0.32);
+      border: 1px solid rgba(255,251,243,0.5);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .breath-label {
+      color: #fffbf3;
+      font-weight: 700;
+      font-size: clamp(0.85rem, 2vw, 1.05rem);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+
+    .audio-session-overlay.paused .breath-circle { transition: none; }
+
+    .audio-session-controls {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      padding: 0 24px clamp(48px, 8vw, 72px);
+    }
+
+    .audio-session-restart,
+    .audio-session-spacer {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 0;
+      background: transparent;
+      color: rgba(255,251,243,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .audio-session-restart:hover { background: rgba(255,251,243,0.12); }
+
+    .audio-session-play {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: 0;
+      background: #fffbf3;
+      color: var(--green-900);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+    .audio-session-play:hover { transform: scale(1.06); }
+    .audio-session-play svg { width: 22px; height: 22px; }
+
+    .audio-session-overlay.complete .breath-circle { transition: transform 0.6s ease; transform: scale(1); }
+
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 900px) {
       .program-layout { grid-template-columns: 1fr; padding: 16px 14px 80px; gap: 16px; }
@@ -1530,6 +1776,26 @@
 
       .floating-controls { left: 12px; right: auto; }
       .back-to-top { right: 14px; bottom: 18px; }
+    }
+
+    /* Phone-only: the audio video breaks out of every ancestor's padding
+       to run edge-to-edge and fills the full screen height, so landing on
+       it feels like its own immersive moment rather than a small card in
+       the middle of a scrolling page. */
+    @media (max-width: 640px) {
+      .audio-player-art-wrap {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .audio-player-art {
+        aspect-ratio: auto;
+        height: 100vh;
+        height: 100dvh;
+      }
+      .breath-circle-sm { max-width: 200px; max-height: 200px; }
     }
   </style>
 </head>
@@ -1627,6 +1893,39 @@
       <h3 id="celebrationTitle">Congratulations!</h3>
       <p id="celebrationMessage"></p>
       <div class="celebration-actions" id="celebrationActions"></div>
+    </div>
+  </div>
+
+  <div class="audio-session-overlay" id="audioSessionOverlay" role="dialog" aria-modal="true" aria-label="Guided audio session">
+    <video class="audio-session-video" id="audioSessionVideo" muted loop playsinline preload="none" aria-hidden="true"></video>
+    <div class="audio-session-scrim"></div>
+
+    <button type="button" class="audio-session-close" onclick="closeAudioSession()" aria-label="Close session">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <div class="audio-session-top">
+      <h2 class="audio-session-title" id="audioSessionTitle"></h2>
+      <div class="audio-session-timer" id="audioSessionTimer">0:00</div>
+    </div>
+
+    <div class="audio-session-breath">
+      <div class="breath-circle" id="breathCircle">
+        <span class="breath-ring breath-ring-3"></span>
+        <span class="breath-ring breath-ring-2"></span>
+        <span class="breath-ring breath-ring-1"></span>
+        <span class="breath-core">
+          <span class="breath-label" id="breathLabel">Breathe in</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="audio-session-controls">
+      <button type="button" class="audio-session-restart" onclick="restartAudioSession()" aria-label="Restart session">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+      </button>
+      <button type="button" class="audio-session-play" id="audioSessionPlayBtn" onclick="toggleAudioSessionPlay()" aria-label="Pause"></button>
+      <span class="audio-session-spacer" aria-hidden="true"></span>
     </div>
   </div>
 
@@ -2050,33 +2349,44 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
             <span>Grab your headphones for the best experience</span>
           </div>
-          <div class="audio-player-card">
-            ${SAVE_DATA
-              ? `<div class="audio-player-art audio-player-art-static" aria-hidden="true"></div>`
-              : `<video class="audio-player-art" src="${video || DEFAULT_NATURE_VIDEO}" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>`}
-            <div class="audio-player-info">
-              <div class="audio-player-title">${opts[0].title}</div>
-            </div>
-            <div class="audio-player-controls">
-              <span class="audio-ctrl-btn" aria-hidden="true">⇄</span>
-              <button type="button" class="audio-ctrl-btn audio-ctrl-skip" aria-hidden="true" tabindex="-1">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
-              </button>
-              <span class="audio-ctrl-btn audio-ctrl-play" aria-hidden="true">▶</span>
-              <button type="button" class="audio-ctrl-btn audio-ctrl-skip" aria-hidden="true" tabindex="-1">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
-              </button>
-              <span class="audio-ctrl-btn" aria-hidden="true">≡</span>
+          <div class="audio-player-card" data-video="${video || DEFAULT_NATURE_VIDEO}" data-minutes="${parseInt(opts[0].label) || 2}">
+            <div class="audio-player-art-wrap">
+              ${SAVE_DATA
+                ? `<div class="audio-player-art audio-player-art-static" aria-hidden="true"></div>`
+                : `<video class="audio-player-art" src="${video || DEFAULT_NATURE_VIDEO}" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>`}
+              <div class="audio-player-overlay-top">
+                <div class="audio-player-title">${opts[0].title}</div>
+              </div>
+              <div class="audio-player-breath" aria-hidden="true">
+                <div class="breath-circle-sm">
+                  <span class="breath-ring breath-ring-3"></span>
+                  <span class="breath-ring breath-ring-2"></span>
+                  <span class="breath-ring breath-ring-1"></span>
+                  <span class="breath-core"></span>
+                </div>
+              </div>
+              <div class="audio-player-overlay-bottom">
+                <div class="audio-player-controls">
+                  <span class="audio-ctrl-btn" aria-hidden="true">⇄</span>
+                  <button type="button" class="audio-ctrl-btn audio-ctrl-skip" aria-hidden="true" tabindex="-1">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
+                  </button>
+                  <button type="button" class="audio-ctrl-btn audio-ctrl-play" onclick="openAudioSessionFromCard(this)" aria-label="Start guided session">▶</button>
+                  <button type="button" class="audio-ctrl-btn audio-ctrl-skip" aria-hidden="true" tabindex="-1">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
+                  </button>
+                  <span class="audio-ctrl-btn" aria-hidden="true">≡</span>
+                </div>
+                ${opts.length > 1 ? `
+                  <div class="audio-length-tabs">
+                    ${opts.map((opt, oi) => `
+                      <button type="button" class="audio-length-btn ${oi === 0 ? 'active' : ''}" data-title="${opt.title}" onclick="setAudioLength(event)" aria-pressed="${oi === 0 ? 'true' : 'false'}">${opt.label}</button>
+                    `).join('')}
+                  </div>
+                ` : ''}
+              </div>
             </div>
             <div class="audio-player-track"><div class="audio-player-track-fill"></div></div>
-            <p class="audio-player-note">Audio will be added here</p>
-            ${opts.length > 1 ? `
-              <div class="audio-length-tabs">
-                ${opts.map((opt, oi) => `
-                  <button type="button" class="audio-length-btn ${oi === 0 ? 'active' : ''}" data-title="${opt.title}" onclick="setAudioLength(event)" aria-pressed="${oi === 0 ? 'true' : 'false'}">${opt.label}</button>
-                `).join('')}
-              </div>
-            ` : ''}
           </div>
         `;
 
@@ -2741,6 +3051,146 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       if (titleEl) titleEl.textContent = event.target.dataset.title;
       const fill = card.querySelector('.audio-player-track-fill');
       if (fill) fill.style.width = '0%';
+      const minutes = parseInt(event.target.textContent);
+      if (minutes) card.dataset.minutes = minutes;
+    }
+
+    /* ── GUIDED AUDIO SESSION — full-screen player over the module's
+       nature video, with a breathing guide (circle shrinks 5s on "Breathe
+       in", grows 5s on "Breathe out", repeating) since there's no real
+       audio to follow yet. ── */
+    let audioSessionInterval = null;
+    let audioSessionBreathInterval = null;
+    let audioSessionElapsedSeconds = 0;
+    let audioSessionTotalSeconds = 0;
+    let audioSessionPaused = false;
+
+    function openAudioSessionFromCard(btn) {
+      const card = btn.closest('.audio-player-card');
+      if (!card) return;
+      const title = card.querySelector('.audio-player-title').textContent;
+      const video = card.dataset.video;
+      const minutes = Number(card.dataset.minutes) || 2;
+      openAudioSession(title, video, minutes);
+    }
+
+    function formatSessionTime(totalSeconds) {
+      const m = Math.floor(totalSeconds / 60);
+      const s = totalSeconds % 60;
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function openAudioSession(title, video, minutes) {
+      const overlay = document.getElementById('audioSessionOverlay');
+      const videoEl = document.getElementById('audioSessionVideo');
+      document.getElementById('audioSessionTitle').textContent = title;
+
+      const saveData = navigator.connection && navigator.connection.saveData;
+      if (saveData) {
+        videoEl.style.display = 'none';
+      } else {
+        videoEl.style.display = '';
+        videoEl.src = video;
+        videoEl.play().catch(() => {});
+      }
+
+      audioSessionTotalSeconds = minutes * 60;
+      audioSessionElapsedSeconds = 0;
+      audioSessionPaused = false;
+      overlay.classList.remove('paused', 'complete');
+      overlay.classList.add('visible');
+      setAudioSessionPlayIcon(true);
+      updateSessionTimerDisplay();
+      startAudioSessionTimers();
+    }
+
+    function startAudioSessionTimers() {
+      stopAudioSessionTimers();
+      audioSessionInterval = setInterval(() => {
+        audioSessionElapsedSeconds++;
+        updateSessionTimerDisplay();
+        if (audioSessionElapsedSeconds >= audioSessionTotalSeconds) completeAudioSession();
+      }, 1000);
+      // Deferred a frame so the overlay/circle paint their resting state
+      // first — otherwise the very first shrink happens with no visible
+      // transition since it lands in the same paint as becoming visible.
+      requestAnimationFrame(() => requestAnimationFrame(runBreathCycle));
+      audioSessionBreathInterval = setInterval(runBreathCycle, 5000);
+    }
+
+    function stopAudioSessionTimers() {
+      if (audioSessionInterval) clearInterval(audioSessionInterval);
+      if (audioSessionBreathInterval) clearInterval(audioSessionBreathInterval);
+      audioSessionInterval = null;
+      audioSessionBreathInterval = null;
+    }
+
+    let breathIn = true;
+    function runBreathCycle() {
+      const circle = document.getElementById('breathCircle');
+      const label = document.getElementById('breathLabel');
+      if (!circle || !label) return;
+      circle.classList.toggle('shrink', breathIn);
+      label.textContent = breathIn ? 'Breathe in' : 'Breathe out';
+      breathIn = !breathIn;
+    }
+
+    function updateSessionTimerDisplay() {
+      const el = document.getElementById('audioSessionTimer');
+      if (el) el.textContent = formatSessionTime(Math.min(audioSessionTotalSeconds, audioSessionElapsedSeconds));
+    }
+
+    function setAudioSessionPlayIcon(playing) {
+      const btn = document.getElementById('audioSessionPlayBtn');
+      if (!btn) return;
+      btn.innerHTML = playing ? ICONS.pause : ICONS.play;
+      btn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    }
+
+    function toggleAudioSessionPlay() {
+      const overlay = document.getElementById('audioSessionOverlay');
+      const videoEl = document.getElementById('audioSessionVideo');
+      audioSessionPaused = !audioSessionPaused;
+      overlay.classList.toggle('paused', audioSessionPaused);
+      setAudioSessionPlayIcon(!audioSessionPaused);
+      if (audioSessionPaused) {
+        videoEl.pause();
+        stopAudioSessionTimers();
+      } else {
+        videoEl.play().catch(() => {});
+        startAudioSessionTimers();
+      }
+    }
+
+    function restartAudioSession() {
+      const overlay = document.getElementById('audioSessionOverlay');
+      overlay.classList.remove('paused', 'complete');
+      audioSessionPaused = false;
+      audioSessionElapsedSeconds = 0;
+      breathIn = true;
+      updateSessionTimerDisplay();
+      setAudioSessionPlayIcon(true);
+      const videoEl = document.getElementById('audioSessionVideo');
+      videoEl.play().catch(() => {});
+      startAudioSessionTimers();
+    }
+
+    function completeAudioSession() {
+      stopAudioSessionTimers();
+      const overlay = document.getElementById('audioSessionOverlay');
+      overlay.classList.add('complete');
+      document.getElementById('breathLabel').textContent = 'Session complete';
+      setAudioSessionPlayIcon(false);
+    }
+
+    function closeAudioSession() {
+      const overlay = document.getElementById('audioSessionOverlay');
+      const videoEl = document.getElementById('audioSessionVideo');
+      overlay.classList.remove('visible');
+      stopAudioSessionTimers();
+      videoEl.pause();
+      videoEl.removeAttribute('src');
+      videoEl.load();
     }
 
     function showCircleTab(event, num, system) {
