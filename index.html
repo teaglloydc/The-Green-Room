@@ -748,6 +748,20 @@
     }
     .hero-video-btn.active { background: rgba(255,251,243,0.92); }
 
+    .tgr-video-wrap { position: relative; }
+    .tgr-video-btn {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      z-index: 2;
+      width: 40px;
+      height: 40px;
+      background: rgba(16,36,27,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .tgr-video-btn.active { background: rgba(255,251,243,0.92); }
+
     .back-to-top {
       position: fixed;
       right: 20px;
@@ -911,7 +925,10 @@
         <p class="lead">The program includes 8 self guided modules, each with a video, written information, exercises and an emotional check-in. Each module builds on the last.</p>
         <p class="lead">Life with a preemie baby is busy. That's why our program is designed to fit around your schedule. You can work through it at your own pace and return whenever you need to. The aim is not perfection, but steady engagement.</p>
       </div>
-      <video class="image-panel" src="WhatisTGR.mp4" poster="WhatisTGR-poster.jpg" controls autoplay muted loop playsinline preload="auto" aria-label="What is The Green Room? — explainer video"></video>
+      <div class="tgr-video-wrap">
+        <video class="image-panel" id="tgrVideo" src="WhatisTGR.mp4" poster="WhatisTGR-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="What is The Green Room? — explainer video"></video>
+        <button class="float-btn tgr-video-btn" id="tgrVideoBtn" onclick="toggleTgrVideo()" aria-label="Pause video" title="Pause video" aria-pressed="false"></button>
+      </div>
     </div>
   </section>
 
@@ -1134,7 +1151,7 @@
       <div class="footer-divider"></div>
 
       <div class="footer-safety">
-        <p>The Green Room isn't a replacement for professional support — talk to your doctor if you need mental health care.</p>
+        <p>The Green Room isn't a replacement for professional support. Talk to your doctor if you need mental health care.</p>
         <p><strong>In immediate danger, call 000.</strong> For crisis support, call Lifeline on <a href="tel:131114">13 11 14</a> (24/7).</p>
       </div>
 
@@ -1199,6 +1216,38 @@
         btn.setAttribute('aria-label', label);
         btn.title = label;
       }
+      // Pausing the hero video also quiets the "What is The Green Room"
+      // video below it, so stopping the motion at the top doesn't leave
+      // a second clip still autoplaying further down the page.
+      if (heroVideoPaused) pauseTgrVideo();
+    }
+
+    /* ── "WHAT IS THE GREEN ROOM" VIDEO PAUSE CONTROL ───────────────
+       No native <video controls> here (no scrubber/timeline) — just this
+       single play/pause button, same pattern as the hero video above. */
+    let tgrVideoPaused = false;
+    function setTgrButtonState() {
+      const btn = document.getElementById('tgrVideoBtn');
+      if (!btn) return;
+      btn.innerHTML = tgrVideoPaused ? ICONS.play : ICONS.pause;
+      btn.classList.toggle('active', tgrVideoPaused);
+      btn.setAttribute('aria-pressed', tgrVideoPaused);
+      const label = tgrVideoPaused ? 'Play video' : 'Pause video';
+      btn.setAttribute('aria-label', label);
+      btn.title = label;
+    }
+    function toggleTgrVideo() {
+      tgrVideoPaused = !tgrVideoPaused;
+      const v = document.getElementById('tgrVideo');
+      if (v) { if (tgrVideoPaused) v.pause(); else v.play().catch(() => {}); }
+      setTgrButtonState();
+    }
+    function pauseTgrVideo() {
+      if (tgrVideoPaused) return;
+      tgrVideoPaused = true;
+      const v = document.getElementById('tgrVideo');
+      if (v) v.pause();
+      setTgrButtonState();
     }
 
     function applyDark(on) {
@@ -1447,6 +1496,7 @@
     applyDark(localStorage.getItem('darkMode') === 'true');
     document.getElementById('soundBtn').innerHTML = ICONS.mute;
     document.getElementById('heroVideoBtn').innerHTML = ICONS.pause;
+    document.getElementById('tgrVideoBtn').innerHTML = ICONS.pause;
     initHeroVideo();
     initModuleTilt();
     initTestimonials();
