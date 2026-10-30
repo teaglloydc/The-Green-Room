@@ -379,18 +379,20 @@
       margin-top: 18px;
       color: var(--muted);
       font-size: 1.02rem;
-      line-height: 1.9;
+      line-height: 2;
     }
 
     /* Extra breathing room when several .lead paragraphs stack back-to-back
        (e.g. the "What is The Green Room?" intro) so they read as distinct
        thoughts rather than one dense block. */
-    .lead + .lead { margin-top: 28px; }
+    .lead + .lead { margin-top: 36px; }
 
     .image-panel {
-      min-height: 480px;
+      min-height: 360px;
+      max-width: 420px;
       width: 100%;
       display: block;
+      margin-left: auto;
       border-radius: var(--radius);
       object-fit: cover;
       background: rgba(16,36,27,0.08);
@@ -748,20 +750,6 @@
     }
     .hero-video-btn.active { background: rgba(255,251,243,0.92); }
 
-    .tgr-video-wrap { position: relative; }
-    .tgr-video-btn {
-      position: absolute;
-      right: 16px;
-      bottom: 16px;
-      z-index: 2;
-      width: 40px;
-      height: 40px;
-      background: rgba(16,36,27,0.55);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
-    .tgr-video-btn.active { background: rgba(255,251,243,0.92); }
-
     .back-to-top {
       position: fixed;
       right: 20px;
@@ -869,7 +857,7 @@
       .steps-header,
       .closing-grid { grid-template-columns: 1fr; }
 
-      .image-panel { min-height: 320px; }
+      .image-panel { min-height: 320px; max-width: none; margin-left: 0; }
       .steps-grid { grid-template-columns: 1fr; }
 
       .modules-header { flex-direction: column; align-items: flex-start; }
@@ -925,10 +913,7 @@
         <p class="lead">The program includes 8 self guided modules, each with a video, written information, exercises and an emotional check-in. Each module builds on the last.</p>
         <p class="lead">Life with a preemie baby is busy. That's why our program is designed to fit around your schedule. You can work through it at your own pace and return whenever you need to. The aim is not perfection, but steady engagement.</p>
       </div>
-      <div class="tgr-video-wrap">
-        <video class="image-panel" id="tgrVideo" src="WhatisTGR.mp4" poster="WhatisTGR-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="What is The Green Room? — explainer video"></video>
-        <button class="float-btn tgr-video-btn" id="tgrVideoBtn" onclick="toggleTgrVideo()" aria-label="Pause video" title="Pause video" aria-pressed="false"></button>
-      </div>
+      <img class="image-panel" src="Indexpage.png" alt="A woman working on a laptop in a bright, plant-filled room" loading="lazy">
     </div>
   </section>
 
@@ -1216,38 +1201,6 @@
         btn.setAttribute('aria-label', label);
         btn.title = label;
       }
-      // Pausing the hero video also quiets the "What is The Green Room"
-      // video below it, so stopping the motion at the top doesn't leave
-      // a second clip still autoplaying further down the page.
-      if (heroVideoPaused) pauseTgrVideo();
-    }
-
-    /* ── "WHAT IS THE GREEN ROOM" VIDEO PAUSE CONTROL ───────────────
-       No native <video controls> here (no scrubber/timeline) — just this
-       single play/pause button, same pattern as the hero video above. */
-    let tgrVideoPaused = false;
-    function setTgrButtonState() {
-      const btn = document.getElementById('tgrVideoBtn');
-      if (!btn) return;
-      btn.innerHTML = tgrVideoPaused ? ICONS.play : ICONS.pause;
-      btn.classList.toggle('active', tgrVideoPaused);
-      btn.setAttribute('aria-pressed', tgrVideoPaused);
-      const label = tgrVideoPaused ? 'Play video' : 'Pause video';
-      btn.setAttribute('aria-label', label);
-      btn.title = label;
-    }
-    function toggleTgrVideo() {
-      tgrVideoPaused = !tgrVideoPaused;
-      const v = document.getElementById('tgrVideo');
-      if (v) { if (tgrVideoPaused) v.pause(); else v.play().catch(() => {}); }
-      setTgrButtonState();
-    }
-    function pauseTgrVideo() {
-      if (tgrVideoPaused) return;
-      tgrVideoPaused = true;
-      const v = document.getElementById('tgrVideo');
-      if (v) v.pause();
-      setTgrButtonState();
     }
 
     function applyDark(on) {
@@ -1496,7 +1449,6 @@
     applyDark(localStorage.getItem('darkMode') === 'true');
     document.getElementById('soundBtn').innerHTML = ICONS.mute;
     document.getElementById('heroVideoBtn').innerHTML = ICONS.pause;
-    document.getElementById('tgrVideoBtn').innerHTML = ICONS.pause;
     initHeroVideo();
     initModuleTilt();
     initTestimonials();

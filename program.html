@@ -217,17 +217,33 @@
   align-items: end;
   min-height: 380px;
   padding: clamp(88px, 9vw, 110px) clamp(20px, 5vw, 64px) 48px;
-
-  background:
-    linear-gradient(to bottom,
-      rgba(0,0,0,0.32) 0%,
-      rgba(0,0,0,0.22) 45%,
-      rgba(0,0,0,0.62) 100%),
-    url("https://images.unsplash.com/photo-1750183000298-82115e4618dd?auto=format&fit=crop&w=1800&q=80") center/cover;
-
+  overflow: hidden;
+  background: #14241b;
   color: #fffbf3;
 }
-    .program-intro-inner { width: min(1180px, 100%); margin: 0 auto; }
+
+.program-intro-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(1.08) saturate(1.05);
+}
+
+.program-intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom,
+    rgba(0,0,0,0.32) 0%,
+    rgba(0,0,0,0.22) 45%,
+    rgba(0,0,0,0.62) 100%);
+  pointer-events: none;
+}
+
+    .program-intro-inner { position: relative; z-index: 2; width: min(1180px, 100%); margin: 0 auto; }
 
     .eyebrow,
     .module-label,
@@ -256,6 +272,19 @@
       font-size: 1rem;
       line-height: 1.85;
     }
+
+    .tgr-video-btn {
+      position: absolute;
+      right: clamp(20px, 5vw, 64px);
+      bottom: 24px;
+      z-index: 3;
+      width: 40px;
+      height: 40px;
+      background: rgba(16,36,27,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .tgr-video-btn.active { background: rgba(255,251,243,0.92); }
 
     /* ── PROGRAM LAYOUT ────────────────────────── */
     .program-layout {
@@ -1512,6 +1541,8 @@
   </div>
 
   <header class="program-intro" id="main-content">
+    <video class="program-intro-video" id="tgrVideo" src="WhatisTGR.mp4" poster="WhatisTGR-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="What is The Green Room? — explainer video"></video>
+    <button class="float-btn tgr-video-btn" id="tgrVideoBtn" onclick="toggleTgrVideo()" aria-label="Pause video" title="Pause video" aria-pressed="false"></button>
     <div class="program-intro-inner">
       <p class="eyebrow">The Program</p>
       <h1>Move through the modules at your own pace.</h1>
@@ -2320,7 +2351,9 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
       sun: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>',
       volume: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>',
-      mute: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>'
+      mute: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>',
+      play: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>',
+      pause: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>'
     };
 
     /* ── NATURE SOUNDS ──────────────────────────── */
@@ -2391,6 +2424,25 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const on = !document.body.classList.contains('dark-mode');
       localStorage.setItem('darkMode', on);
       applyDark(on);
+    }
+
+    /* ── "WHAT IS THE GREEN ROOM" EXPLAINER VIDEO ───────────────────
+       No native <video controls> (no scrubber/timeline) — just this one
+       play/pause button, same pattern used elsewhere on the site. */
+    let tgrVideoPaused = false;
+    function toggleTgrVideo() {
+      tgrVideoPaused = !tgrVideoPaused;
+      const v = document.getElementById('tgrVideo');
+      if (v) { if (tgrVideoPaused) v.pause(); else v.play().catch(() => {}); }
+      const btn = document.getElementById('tgrVideoBtn');
+      if (btn) {
+        btn.innerHTML = tgrVideoPaused ? ICONS.play : ICONS.pause;
+        btn.classList.toggle('active', tgrVideoPaused);
+        btn.setAttribute('aria-pressed', tgrVideoPaused);
+        const label = tgrVideoPaused ? 'Play video' : 'Pause video';
+        btn.setAttribute('aria-label', label);
+        btn.title = label;
+      }
     }
 
     /* ── THREE CIRCLES — now measured before AND after each module, so
@@ -2803,6 +2855,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     window.addEventListener('load', () => {
       applyDark(localStorage.getItem('darkMode') === 'true');
       document.getElementById('soundBtn').innerHTML = ICONS.mute;
+      document.getElementById('tgrVideoBtn').innerHTML = ICONS.pause;
 
       renderProgramModules();
       renderThreeCircleTools();
