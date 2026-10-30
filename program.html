@@ -2346,6 +2346,11 @@
           </div>
         `;
 
+        // The heading already sits right above the 2/5/10 min pills, so
+        // repeating "— 2 min practice" etc. in the title itself is
+        // redundant — strip it and just keep the base name.
+        const stripPracticeLength = title => title.replace(/\s*—\s*\d+\s*min practice$/i, '');
+
         const renderAudioOptions = (opts, img, subtitle, video) => `
           <div class="headphones-note">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
@@ -2357,7 +2362,7 @@
                 ? `<div class="audio-player-art audio-player-art-static" aria-hidden="true"></div>`
                 : `<video class="audio-player-art" src="${video || DEFAULT_NATURE_VIDEO}" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>`}
               <div class="audio-player-overlay-top">
-                <div class="audio-player-title">${opts[0].title}</div>
+                <div class="audio-player-title">${stripPracticeLength(opts[0].title)}</div>
               </div>
               <div class="audio-player-breath" aria-hidden="true">
                 <div class="breath-circle-sm">
@@ -3050,7 +3055,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       event.target.classList.add('active');
       event.target.setAttribute('aria-pressed', 'true');
       const titleEl = card.querySelector('.audio-player-title');
-      if (titleEl) titleEl.textContent = event.target.dataset.title;
+      if (titleEl) titleEl.textContent = event.target.dataset.title.replace(/\s*—\s*\d+\s*min practice$/i, '');
       const fill = card.querySelector('.audio-player-track-fill');
       if (fill) fill.style.width = '0%';
       const minutes = parseInt(event.target.textContent);
