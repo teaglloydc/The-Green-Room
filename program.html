@@ -1798,6 +1798,17 @@
         height: 100dvh;
       }
       .breath-circle-sm { max-width: 200px; max-height: 200px; }
+
+      /* The audio video's own control bar now pins to the bottom of the
+         screen too, so move the dark-mode/sound floating buttons up near
+         the nav instead of letting them sit on top of it. */
+      .floating-controls {
+        top: 76px;
+        bottom: auto;
+        right: 16px;
+        left: auto;
+        flex-direction: column;
+      }
     }
   </style>
 </head>
