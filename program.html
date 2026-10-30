@@ -549,34 +549,6 @@
       margin-bottom: 10px;
     }
 
-    /* ── SOFT LANDING (Introduction module only) ── */
-    .soft-landing-card {
-      margin-bottom: 44px;
-      padding: 0;
-    }
-
-    .soft-landing-label {
-      font-size: 0.76rem;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--wood-dark);
-      margin-bottom: 6px;
-    }
-
-    .soft-landing-card h3 {
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .soft-landing-card > p {
-      color: var(--muted);
-      line-height: 1.85;
-      margin-bottom: 16px;
-      font-size: 0.97rem;
-    }
 
     .module-card-shell [id^="sec-"] { scroll-margin-top: 70px; }
 
@@ -1571,7 +1543,7 @@
       <div class="footer-divider"></div>
 
       <div class="footer-safety">
-        <p>The Green Room isn't a replacement for professional support. Talk to your doctor if you need mental health care.</p>
+        <p>The Green Room isn't a replacement for professional support.</p>
         <p><strong>In immediate danger, call 000.</strong> For crisis support, call Lifeline on <a href="tel:131114">13 11 14</a> (24/7).</p>
       </div>
 
@@ -1648,13 +1620,7 @@
           { label: '2 min', title: 'Introduction — 2 min practice', file: '' },
           { label: '5 min', title: 'Introduction — 5 min practice', file: '' },
           { label: '10 min', title: 'Introduction — 10 min practice', file: '' }
-        ],
-        softLanding: {
-          title: 'Soft landing — guided practice',
-          description: 'Before you start reading, take a few minutes just to arrive. There is no right or wrong way to do this — simply notice what feels supportive to you right now.',
-          audioImage: 'Introduction.jpg',
-          natureVideo: 'Audioimagery2.mp4'
-        } },
+        ] },
 
       { title: 'Motherhood and the brain', summary: ['How does motherhood change the brain?','How do these changes impact me after preterm birth?','How can these changes impact my mental health?'],
         written:`
@@ -2140,23 +2106,12 @@
           </div>
         ` : '';
 
-        /* ── MODULE 1 (INTRODUCTION) — kept as a single scrolling page,
-           with a Soft Landing practice added at the very start ── */
+        /* ── MODULE 1 (INTRODUCTION) — kept as a single scrolling page ── */
         if (num === 1) {
-          const softLandingHTML = m.softLanding ? `
-            <div class="soft-landing-card">
-              <div class="soft-landing-label">Before you begin</div>
-              <h3>Soft landing</h3>
-              <p>${m.softLanding.description}</p>
-              ${renderAudioOptions([{ title: m.softLanding.title }], m.softLanding.audioImage, 'Guided audio — Soft landing', m.softLanding.natureVideo)}
-            </div>
-          ` : '';
-
           return `
             <section class="module-section active" id="module-${num}">
               <div class="module-card-shell">
                 ${moduleHeaderHTML}
-                ${softLandingHTML}
 
                 <div class="summary-box">
                   <h3>What this module covers</h3>
