@@ -1069,72 +1069,65 @@
     }
     .brain-detail-content p { color: var(--muted); line-height: 1.85; font-size: 0.97rem; }
 
-    /* ── COLLAPSIBLE EXERCISE BLOCK ────── */
-    .exercise-block {
-      margin: 40px 0;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      overflow: hidden;
+    /* ── REFLECTION CARDS — one coloured card per prompt, each with its
+       own private write-in space (saved to localStorage only — never
+       sent anywhere, so it stays private from the site owner too). ── */
+    .reflection-cards { margin: 40px 0; display: grid; gap: 18px; }
+
+    .reflection-intro {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 4px;
     }
 
-    .exercise-toggle {
-      padding: 18px 22px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      background: var(--surface);
-      user-select: none;
-      transition: background 0.2s;
+    .reflection-card {
+      padding: 26px 24px;
+      border-radius: 22px;
+      color: #fffbf3;
+      box-shadow: 0 14px 34px rgba(16,36,27,0.16);
     }
 
-    .exercise-toggle:hover { background: rgba(16,36,27,0.04); }
+    .reflection-card.refl-a { background: linear-gradient(135deg, var(--green-900), var(--green-800)); }
+    .reflection-card.refl-b { background: linear-gradient(135deg, var(--green-700), var(--green-600)); }
+    .reflection-card.refl-c { background: linear-gradient(135deg, var(--wood-dark), var(--wood)); }
 
-    .exercise-toggle h3 {
+    .reflection-prompt {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-      font-size: 1.3rem;
-      font-weight: 600;
-      line-height: 1.2;
-      color: var(--text);
-      margin: 0;
-    }
-
-    .exercise-hint {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.8rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      color: var(--muted);
-      white-space: nowrap;
-      flex-shrink: 0;
+      line-height: 1.35;
+      margin-bottom: 18px;
     }
 
-    .exercise-chevron {
-      font-size: 11px;
-      transition: transform 0.25s ease;
-      display: inline-block;
+    .reflection-textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(255,251,243,0.14);
+      border: 1px solid rgba(255,251,243,0.3);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #fffbf3;
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+      min-height: 90px;
     }
+    .reflection-textarea::placeholder { color: rgba(255,251,243,0.55); }
+    .reflection-textarea:focus { outline: none; border-color: rgba(255,251,243,0.6); }
 
-    .exercise-block.open .exercise-chevron { transform: rotate(180deg); }
-
-    .exercise-body {
-      display: none;
-      padding: 18px 22px 22px;
-      background: var(--surface);
-      border-top: 1px solid var(--line);
+    .reflection-privacy {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      margin-bottom: 14px;
+      color: rgba(255,251,243,0.85);
+      font-size: 0.82rem;
+      line-height: 1.5;
     }
-
-    .exercise-block.open .exercise-body { display: block; }
-
-    .exercise-body p {
-      color: var(--muted);
-      line-height: 1.85;
-      font-size: 0.97rem;
-      margin-bottom: 10px;
-    }
-    .exercise-body p:last-child { margin-bottom: 0; }
+    .reflection-privacy svg { flex-shrink: 0; margin-top: 2px; }
+    .reflection-privacy strong { color: #fffbf3; }
 
     /* ── EMOTION TABS ───────────────────────────── */
     .emotion-tab-buttons {
@@ -2015,13 +2008,11 @@
       { label: '5 min', title: 'Motherhood and the brain — 5 min practice', file: '' },
       { label: '10 min', title: 'Motherhood and the brain — 10 min practice', file: '' }
     ],
-    exerciseTitle: 'Reflection activity',
-    exercise: `
-    <p>Take a moment to reflect</p>
-    <p>Have you noticed any change in how you think, feel or behave since giving birth?</p>
-    <p>There's no need to fix or explain anything. Just notice what comes to mind.</p>
-    <p>Then ask yourself: "What is this trying to help me to do or cope with?"</p>
-  `,
+    reflectionIntro: "There's no need to fix or explain anything. Just notice what comes to mind.",
+    reflectionPrompts: [
+      'Have you noticed any change in how you think, feel or behave since giving birth?',
+      'What is this trying to help me to do or cope with?'
+    ],
     brainDiagram: {
       image: 'BrainDiagram.png',
       intro: 'Each of the changes above is linked to a part of the brain. Tap a numbered pin below to see what’s going on there.',
@@ -2069,12 +2060,11 @@
      { label: '5 min', title: 'Compassion and our tricky brains — 5 min practice', file: '' },
      { label: '10 min', title: 'Compassion and our tricky brains — 10 min practice', file: '' }
    ],
-   exerciseTitle: 'Reflection activity',
-   exercise:`
-   <p>What are some examples of times when somebody showing compassion toward you?</p>
-   <p>What are some examples of times when you have beeen compassionate towards someone else?</p>
-   <p>What are some examples of times when you have been compassionate towards yourself?</p>
-   `,
+   reflectionPrompts: [
+     'What are some examples of times when somebody showed compassion toward you?',
+     'What are some examples of times when you have been compassionate towards someone else?',
+     'What are some examples of times when you have been compassionate towards yourself?'
+   ],
   },
       { title: 'Our three circles',
         summary: ['What are the three circles?','How does preterm birth disrupt my three circles?'],
@@ -2153,8 +2143,9 @@
           { label: '5 min', title: 'Our three circles — 5 min practice', file: '' },
           { label: '10 min', title: 'Our three circles — 10 min practice', file: '' }
         ],
-        exerciseTitle: 'Reflection activity',
-        exercise: '<p>What circle did you spend the most time in this week as a mother of a premature baby? What did time in each circle look like for you?</p>' },
+        reflectionPrompts: [
+          'What circle did you spend the most time in this week as a mother of a premature baby? What did time in each circle look like for you?'
+        ] },
 
       { title: 'Working with your inner critic',
         summary: ['What is self-criticism?','How can it impact me after preterm birth?','Why does the inner critic show up?','How do I shift towards compassion?'],
@@ -2186,11 +2177,10 @@
           { label: '5 min', title: 'Working with your inner critic — 5 min practice', file: '' },
           { label: '10 min', title: 'Working with your inner critic — 10 min practice', file: '' }
         ],
-        exerciseTitle: 'Reflection activity',
-        exercise: `
-        <p>What happens when you focus on a difficult aspect of your baby and parenting? How do you feel inside? What kinds of thoughts come to mind?</p>
-        <p>What happens when you focus on aspect of your baby and parenting that bring you joy?How do you feel inside? What kinds of thoughts come to mind?</p>
-        `,
+        reflectionPrompts: [
+          'What happens when you focus on a difficult aspect of your baby and parenting? How do you feel inside? What kinds of thoughts come to mind?',
+          'What happens when you focus on an aspect of your baby and parenting that brings you joy? How do you feel inside? What kinds of thoughts come to mind?'
+        ],
        },
 
       { title: 'Building your compassionate self',
@@ -2210,13 +2200,12 @@
           { label: '5 min', title: 'Building your compassionate self — 5 min practice', file: '' },
           { label: '10 min', title: 'Building your compassionate self — 10 min practice', file: '' }
         ],
-        exerciseTitle: 'Reflection activity',
-        exercise: `
-        <p>What does your compassionate self look like?</p>
-        <p>How do they stand?</p>
-        <p>What do they prioritise?</p>
-        <p>What do they ignore?</p>
-        `,
+        reflectionPrompts: [
+          'What does your compassionate self look like?',
+          'How do they stand?',
+          'What do they prioritise?',
+          'What do they ignore?'
+        ],
        },
 
       { title: 'Working with complex emotions',
@@ -2255,8 +2244,7 @@
             ]
           }
         },
-        exerciseTitle: 'Reflection activity',
-        exercise: '<p>exercise content here</p>' },
+        reflectionPrompts: ['Exercise content will be added here.'] },
 
       { title: 'Next steps',
         summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
@@ -2271,7 +2259,7 @@
           { label: '5 min', title: 'Next steps — 5 min practice', file: '' },
           { label: '10 min', title: 'Next steps — 10 min practice', file: '' }
         ],
-        exercise: '<p>exercise content here</p>' }
+        reflectionPrompts: ['Exercise content will be added here.'] }
     ];
 
     const TOTAL_MODULES = modules.length;
@@ -2307,7 +2295,7 @@
     const dragState = {};
 
     function estimateReadMinutes(m) {
-      const raw = (m.written || '') + ' ' + (m.exercise || '') + ' ' + (m.summary || []).join(' ');
+      const raw = (m.written || '') + ' ' + (m.reflectionPrompts || []).join(' ') + ' ' + (m.summary || []).join(' ');
       const words = raw.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
       return Math.max(1, Math.round(words / 200)) + ' min read';
     }
@@ -2331,7 +2319,7 @@
       if (!('IntersectionObserver' in window)) return;
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const targets = document.querySelectorAll(
-        '.module-section .summary-box, .module-section .video-placeholder, .module-section .content-block, .module-section .exercise-block, .module-section .tc-section'
+        '.module-section .summary-box, .module-section .video-placeholder, .module-section .content-block, .module-section .reflection-cards, .module-section .tc-section'
       );
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -2384,15 +2372,31 @@
         const num = i + 1;
         const isLast = num === TOTAL_MODULES;
 
+        // Each reflection prompt gets its own coloured card (private
+        // write-in space included) instead of one shared collapsible
+        // block — colours rotate through our own tonal palette rather
+        // than a fixed order, so a module with several prompts still
+        // reads as a visually varied stack.
+        const REFLECTION_COLORS = ['refl-a', 'refl-b', 'refl-c'];
+        const prompts = m.reflectionPrompts && m.reflectionPrompts.length
+          ? m.reflectionPrompts
+          : ['Exercise content will be added here.'];
         const exerciseBlock = `
-          <div class="exercise-block" id="exercise-mod-${num}">
-            <div class="exercise-toggle" onclick="toggleExercise('exercise-mod-${num}')" onkeydown="handleKeyActivate(event, () => toggleExercise('exercise-mod-${num}'))" role="button" tabindex="0" aria-expanded="false" aria-controls="exercise-mod-${num}">
-              <h3>Take a moment to reflect</h3>
-              <span class="exercise-hint">Tap to open <span class="exercise-chevron">▾</span></span>
-            </div>
-            <div class="exercise-body">
-              ${m.exercise || '<p>Exercise content will be added here.</p>'}
-            </div>
+          <div class="reflection-cards">
+            ${m.reflectionIntro ? `<p class="reflection-intro">${m.reflectionIntro}</p>` : ''}
+            ${prompts.map((prompt, pi) => {
+              const fieldId = `reflection-${num}-${pi}`;
+              return `
+                <div class="reflection-card ${REFLECTION_COLORS[pi % REFLECTION_COLORS.length]}">
+                  <p class="reflection-prompt">${prompt}</p>
+                  <p class="reflection-privacy">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <strong>Anonymous. Only you can see this.</strong> Saved to this device only, never sent to us or anyone else.
+                  </p>
+                  <textarea class="reflection-textarea" id="${fieldId}" rows="4" placeholder="Write as much or as little as you like..."></textarea>
+                </div>
+              `;
+            }).join('')}
           </div>
         `;
 
@@ -2710,13 +2714,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
           </section>
         `;
       }).join('');
-    }
-
-    function toggleExercise(id) {
-      const el = document.getElementById(id);
-      const open = el.classList.toggle('open');
-      const toggle = el.querySelector('.exercise-toggle');
-      if (toggle) toggle.setAttribute('aria-expanded', open);
     }
 
     function handleKeyActivate(event, fn) {
@@ -3406,6 +3403,18 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       cards.forEach(card => observer.observe(card));
     }
 
+    // Reflection responses are never sent anywhere — each textarea just
+    // saves its own value to this browser's localStorage, keyed by its
+    // own id, and reloads it next visit. Nothing leaves the device.
+    function initReflectionTextareas() {
+      document.querySelectorAll('.reflection-textarea').forEach(ta => {
+        const key = 'reflectionResponse-' + ta.id;
+        const saved = localStorage.getItem(key);
+        if (saved) ta.value = saved;
+        ta.addEventListener('input', () => localStorage.setItem(key, ta.value));
+      });
+    }
+
     /* ── INIT ───────────────────────────────────── */
     window.addEventListener('load', () => {
       applyDark(localStorage.getItem('darkMode') === 'true');
@@ -3415,6 +3424,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
       renderProgramModules();
       setupAudioChromeObserver();
+      initReflectionTextareas();
       renderThreeCircleTools();
       setupCircleDragging();
       setupScrollReveal();
