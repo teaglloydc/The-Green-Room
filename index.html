@@ -18,8 +18,12 @@
       --green-700: #416b55;
       --green-600: #527a63;
       --green-100: #dceadb;
-      --wood: #b5722e;
-      --wood-dark: #8a5423;
+      /* Tonal sage — dropped the brown/wood accent, replaced it with a
+         brighter, more yellow-leaning sage so hierarchy still reads
+         clearly, but purely through lightness/warmth within the green
+         family rather than a second hue. */
+      --wood: #8fae6e;
+      --wood-dark: #5c7a3f;
       --text: #1e2b21;
       --muted: #56675a;
       --line: rgba(31, 52, 39, 0.14);
@@ -47,8 +51,8 @@
       --green-700: #dfe8dd;
       --green-600: #9fb89e;
       --green-100: #233226;
-      --wood: #d89b54;
-      --wood-dark: #f0be86;
+      --wood: #a8c49a;
+      --wood-dark: #c9dcb8;
       --text: #eef3ea;
       --muted: #a9b8a2;
       --line: rgba(238, 243, 234, 0.14);
@@ -95,7 +99,7 @@
     body {
       min-height: 100vh;
       background:
-        radial-gradient(circle at 8% 0%, rgba(181,114,46,0.1), transparent 28%),
+        radial-gradient(circle at 8% 0%, rgba(143,174,110,0.1), transparent 28%),
         linear-gradient(180deg, var(--bg), #edf0e4 48%, var(--bg));
       color: var(--text);
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -106,7 +110,7 @@
 
     body.dark-mode {
       background:
-        radial-gradient(circle at 8% 0%, rgba(194,160,126,0.09), transparent 28%),
+        radial-gradient(circle at 8% 0%, rgba(168,196,154,0.09), transparent 28%),
         linear-gradient(180deg, #0f1711, #141d15 48%, #101711);
     }
 
