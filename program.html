@@ -1821,17 +1821,10 @@
       }
 
       /* Module-stage nav (Check-in/Page 1/Page 2/Reflect/Practice/Check-in)
-         was getting squeezed into unreadable slivers inline on phones —
-         trial: pin it as a frosted glass bar that follows the page as you
-         scroll through a module instead, same bar reused per module since
-         only the active module-section's copy is ever visible. */
+         — a fixed bottom bar was tried here and got in the way, so it
+         stays inline at the top of the module, just with the frosted
+         glass treatment kept. */
       .subpage-nav-dots {
-        position: fixed;
-        left: 12px;
-        right: 12px;
-        bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-        z-index: 60;
-        margin: 0;
         background: rgba(255,255,255,0.4);
         border: 1px solid rgba(255,255,255,0.6);
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 10px 28px rgba(16,36,27,0.18);
@@ -1839,13 +1832,6 @@
         -webkit-backdrop-filter: blur(16px) saturate(160%);
       }
       .subpage-dot.active { background: rgba(255,255,255,0.8); }
-
-      /* Room so the fixed bar never covers the Continue/Back/Complete
-         buttons or the end of a subpage's content. */
-      .module-card-shell { padding-bottom: 92px; }
-
-      /* Standing back-to-top button would collide with the new bar. */
-      .back-to-top { display: none !important; }
     }
   </style>
 </head>
