@@ -1,12 +1,18 @@
 /* Site-wide feedback tab. Lets a visitor point at a specific part of the
-   page (or just leave general feedback) and sends it straight to the site
-   owner's inbox via mailto, with the page and the picked component noted —
-   no backend needed since this is a static site. Included on every page via
-   a single <script src="feedback-widget.js" defer></script>. */
+   page (or just leave general feedback) and sends it anonymously to the
+   site owner's inbox via FormSubmit (https://formsubmit.co) — no visitor
+   name or email is collected or sent, and no backend of our own is needed
+   since this is a static site. Included on every page via a single
+   <script src="feedback-widget.js" defer></script>.
+
+   One-time setup: the first submission after this goes live triggers a
+   confirmation email from FormSubmit to FEEDBACK_EMAIL — click the link in
+   it once to activate the endpoint, or future submissions won't arrive. */
 (function () {
   'use strict';
 
   var FEEDBACK_EMAIL = 'teaglloyd@outlook.com';
+  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/' + FEEDBACK_EMAIL;
 
   var style = document.createElement('style');
   style.textContent = [
