@@ -1787,6 +1787,10 @@
       .module-header-top { flex-direction: column; gap: 10px; }
       .module-header h2 { font-size: clamp(2.2rem, 9vw, 3.2rem); }
 
+      /* Mobile uses the original (pre-flip, not-moved-right) framing via
+         the <picture> source above — desktop keeps the later version. */
+      .program-intro-video { object-position: 75% 0%; }
+
       .tc-circle-tool {
         min-height: 340px;
         padding: 30px 14px;
@@ -1893,7 +1897,10 @@
   </div>
 
   <header class="program-intro" id="main-content">
-    <img class="program-intro-video" src="WhatisTGR-poster.jpg" alt="A woman smiling as she looks at her phone, sitting outside in a park" loading="eager">
+    <picture>
+      <source media="(max-width: 900px)" srcset="WhatisTGR-poster-mobile.jpg">
+      <img class="program-intro-video" src="WhatisTGR-poster.jpg" alt="A woman smiling as she looks at her phone, sitting outside in a park" loading="eager">
+    </picture>
     <div class="program-intro-inner">
       <p class="eyebrow">The Program</p>
       <h1>Move through the modules at your own pace.</h1>
