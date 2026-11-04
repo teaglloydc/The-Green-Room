@@ -255,6 +255,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 75% 20%;
   filter: brightness(1.08) saturate(1.05);
 }
 
@@ -299,19 +300,6 @@
       font-size: 1rem;
       line-height: 1.85;
     }
-
-    .tgr-video-btn {
-      position: absolute;
-      right: clamp(20px, 5vw, 64px);
-      bottom: 24px;
-      z-index: 3;
-      width: 40px;
-      height: 40px;
-      background: rgba(16,36,27,0.55);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
-    .tgr-video-btn.active { background: rgba(255,251,243,0.92); }
 
     /* ── PROGRAM LAYOUT ────────────────────────── */
     .program-layout {
@@ -636,31 +624,78 @@
       background: var(--wood);
     }
 
+    /* 16:9 — matches a landscape iPhone video's real dimensions, so
+       the box is already sized correctly for the real footage that'll
+       eventually replace this stand-in clip. */
     .video-placeholder {
-      display: grid;
-      place-items: center;
-      min-height: 300px;
+      position: relative;
+      aspect-ratio: 16 / 9;
       margin-bottom: 40px;
       border-radius: var(--radius);
-      background:
-        linear-gradient(135deg, rgba(16,36,27,0.62), rgba(16,36,27,0.22)),
-        url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1400&q=80") center/cover;
-      color: #fffbf3;
-      text-align: center;
+      overflow: hidden;
+      background: #14241b;
     }
 
-    .play-icon {
-      width: 64px;
-      height: 64px;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 12px;
-      border-radius: 50%;
-      background: rgba(255,250,240,0.9);
-      color: var(--green-900);
-      font-size: 22px;
-      font-weight: 900;
+    .video-placeholder video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
+
+    /* Frosted-glass transport controls — same look as the audio cards'
+       control bar, but these are real play/pause and skip buttons since
+       each module video is a single real clip, not a track picker. */
+    .video-controls-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 18px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(to top, rgba(8,15,11,0.6) 0%, rgba(8,15,11,0.3) 55%, rgba(8,15,11,0) 100%);
+    }
+
+    .video-ctrl-btn {
+      border: 0;
+      background: none;
+      color: #fffbf3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .video-ctrl-play {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,251,243,0.22);
+      border: 1.5px solid rgba(255,251,243,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .video-ctrl-play:hover { transform: scale(1.06); background: rgba(255,251,243,0.32); }
+
+    .video-ctrl-skip {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1.5px solid rgba(255,251,243,0.4);
+      border-radius: 50%;
+      background: rgba(255,251,243,0.08);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      color: rgba(255,251,243,0.85);
+      transition: background 0.2s ease;
+    }
+    .video-ctrl-skip:hover { background: rgba(255,251,243,0.18); }
 
     .content-block { margin: 40px 0; }
     .content-block h3 { margin-bottom: 8px; }
@@ -1751,7 +1786,6 @@
       .module-card-shell { padding: 18px 16px; }
       .module-header-top { flex-direction: column; gap: 10px; }
       .module-header h2 { font-size: clamp(2.2rem, 9vw, 3.2rem); }
-      .video-placeholder { min-height: 220px; }
 
       .tc-circle-tool {
         min-height: 340px;
@@ -1859,8 +1893,7 @@
   </div>
 
   <header class="program-intro" id="main-content">
-    <video class="program-intro-video" id="tgrVideo" src="WhatisTGR.mp4" poster="WhatisTGR-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="What is The Green Room? — explainer video"></video>
-    <button class="float-btn tgr-video-btn" id="tgrVideoBtn" onclick="toggleTgrVideo()" aria-label="Pause video" title="Pause video" aria-pressed="false"></button>
+    <img class="program-intro-video" src="WhatisTGR-poster.jpg" alt="A woman smiling as she looks at her phone, sitting outside in a park" loading="eager">
     <div class="program-intro-inner">
       <p class="eyebrow">The Program</p>
       <h1>Move through the modules at your own pace.</h1>
@@ -2557,7 +2590,18 @@
                 </div>
 
                 <div class="video-placeholder">
-                  <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
+                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
+                  <div class="video-controls-overlay">
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
+                    </button>
+                  </div>
                 </div>
 
                 <div class="content-block written-block">
@@ -2670,7 +2714,18 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                   <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
                 </div>
                 <div class="video-placeholder">
-                  <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
+                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
+                  <div class="video-controls-overlay">
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
+                    </button>
+                  </div>
                 </div>
                 <div class="content-block written-block">
                   <div class="written-content">${page1Written}</div>
@@ -2683,7 +2738,18 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
 
               <div class="subpage" id="subpage-${num}-3">
                 <div class="video-placeholder">
-                  <div><div class="play-icon">▶</div><p>Video will be added here</p></div>
+                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
+                  <div class="video-controls-overlay">
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
+                    </button>
+                  </div>
                 </div>
                 <div class="content-block written-block">
                   <div class="written-content">${page2Written}</div>
@@ -2819,25 +2885,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const on = !document.body.classList.contains('dark-mode');
       localStorage.setItem('darkMode', on);
       applyDark(on);
-    }
-
-    /* ── "WHAT IS THE GREEN ROOM" EXPLAINER VIDEO ───────────────────
-       No native <video controls> (no scrubber/timeline) — just this one
-       play/pause button, same pattern used elsewhere on the site. */
-    let tgrVideoPaused = false;
-    function toggleTgrVideo() {
-      tgrVideoPaused = !tgrVideoPaused;
-      const v = document.getElementById('tgrVideo');
-      if (v) { if (tgrVideoPaused) v.pause(); else v.play().catch(() => {}); }
-      const btn = document.getElementById('tgrVideoBtn');
-      if (btn) {
-        btn.innerHTML = tgrVideoPaused ? ICONS.play : ICONS.pause;
-        btn.classList.toggle('active', tgrVideoPaused);
-        btn.setAttribute('aria-pressed', tgrVideoPaused);
-        const label = tgrVideoPaused ? 'Play video' : 'Pause video';
-        btn.setAttribute('aria-label', label);
-        btn.title = label;
-      }
     }
 
     /* ── THREE CIRCLES — now measured before AND after each module, so
@@ -3070,6 +3117,27 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       scope.querySelectorAll('video[autoplay]').forEach(v => {
         if (v.paused) v.play().catch(() => {});
       });
+    }
+
+    function toggleModuleVideo(btn) {
+      const video = btn.closest('.video-placeholder').querySelector('video');
+      if (!video) return;
+      if (video.paused) {
+        video.play().catch(() => {});
+        btn.innerHTML = ICONS.pause;
+        btn.setAttribute('aria-label', 'Pause video');
+      } else {
+        video.pause();
+        btn.innerHTML = ICONS.play;
+        btn.setAttribute('aria-label', 'Play video');
+      }
+    }
+
+    function skipModuleVideo(btn, seconds) {
+      const video = btn.closest('.video-placeholder').querySelector('video');
+      if (!video) return;
+      const max = isFinite(video.duration) ? video.duration : Infinity;
+      video.currentTime = Math.max(0, Math.min(max, video.currentTime + seconds));
     }
 
     function showSubpage(num, page) {
@@ -3435,7 +3503,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     window.addEventListener('load', () => {
       applyDark(localStorage.getItem('darkMode') === 'true');
       document.getElementById('soundBtn').innerHTML = ICONS.mute;
-      document.getElementById('tgrVideoBtn').innerHTML = ICONS.pause;
       setChromeColors('WhatisTGR.mp4');
 
       renderProgramModules();
