@@ -3153,6 +3153,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     }
 
     function requestVideoFullscreen(video) {
+      video.controls = true;
       if (video.webkitEnterFullscreen) {
         video.webkitEnterFullscreen();
       } else if (video.requestFullscreen) {
@@ -3187,6 +3188,32 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const max = isFinite(video.duration) ? video.duration : Infinity;
       video.currentTime = Math.max(0, Math.min(max, video.currentTime + seconds));
     }
+
+    function syncModuleVideoButton(video) {
+      const overlay = video.closest('.video-placeholder');
+      const btn = overlay && overlay.querySelector('.video-ctrl-play');
+      if (!btn) return;
+      btn.innerHTML = video.paused ? ICONS.play : ICONS.pause;
+      btn.setAttribute('aria-label', video.paused ? 'Play video' : 'Pause video');
+    }
+
+    ['fullscreenchange', 'webkitfullscreenchange'].forEach(evt => {
+      document.addEventListener(evt, () => {
+        if (document.fullscreenElement || document.webkitFullscreenElement) return;
+        document.querySelectorAll('.video-placeholder video').forEach(video => {
+          video.controls = false;
+          syncModuleVideoButton(video);
+        });
+      });
+    });
+
+    document.addEventListener('webkitendfullscreen', (e) => {
+      const video = e.target;
+      if (video && video.closest && video.closest('.video-placeholder')) {
+        video.controls = false;
+        syncModuleVideoButton(video);
+      }
+    }, true);
 
     function showSubpage(num, page) {
       const scope = document.getElementById('module-' + num);
