@@ -649,6 +649,16 @@
       background: var(--wood);
     }
 
+    .summary-box li a {
+      color: var(--muted);
+      text-decoration: underline;
+      text-decoration-color: var(--wood);
+      text-underline-offset: 3px;
+      transition: color 0.15s ease;
+    }
+    .summary-box li a:hover,
+    .summary-box li a:focus-visible { color: var(--green-700); }
+
     /* 16:9 — matches a landscape iPhone video's real dimensions, so
        the box is already sized correctly for the real footage that'll
        eventually replace this stand-in clip. */
@@ -2138,7 +2148,7 @@
     const modules = [
       { title: 'Introduction', summary: ['Who is this program for?','How can this program help me?','How do I use this program?'],
         written: `
-<p>Motherhood can be a wonderful time – but it can also be a very difficult one. If your baby arrived early, your parenting journey likely started very differently to what you expected.</p>
+<p><strong>Who is this program for?</strong></p>
 
 <p>This program has been designed to support mothers after experiencing a preterm birth, who:</p>
 
@@ -2150,7 +2160,11 @@
   <li>Would like to parent with more calmness and compassion.</li>
 </ul>
 
-<p><strong>How to use this program</strong></p>
+<p><strong>How can this program help me?</strong></p>
+
+<p>Add text here.</p>
+
+<p><strong>How do I use this program?</strong></p>
 
 <p>There are 8 modules in this program, each touching on an important component of compassion. Each module includes an introductory video, written information, and exercises.</p>
 
@@ -2171,18 +2185,26 @@
 
       { title: 'Motherhood and the brain', summary: ['How does motherhood change the brain?','How do these changes impact me after preterm birth?','How can these changes impact my mental health?'],
         written:`
+<p><strong>How does motherhood change the brain?</strong></p>
+
 <p>Have you noticed any changes since giving birth?</p>
 
 <p>Changes are different for every mother, but some describe experiences such as:</p>
 
 <ul>
-  <li><strong>text here.</li>
-  <li><strong>text here </li>
-  <li><strong>text here.</li>
-  <li><strong>text here.</li>
+  <li>Add text here.</li>
+  <li>Add text here.</li>
+  <li>Add text here.</li>
+  <li>Add text here.</li>
 </ul>
 
-<p>Text here</p>
+<p><strong>How do these changes impact me after preterm birth?</strong></p>
+
+<p>Add text here.</p>
+
+<p><strong>How can these changes impact my mental health?</strong></p>
+
+<p>Add text here.</p>
 `,
     audio: 'Guided audio — Motherhood and the brain',
     audioImage: "Mindfulness2.jpg",
@@ -2221,7 +2243,21 @@
 },
       { title: 'Compassion and our tricky brains', summary: ['What is Tricky Brain?','How can my tricky brain impact me after preterm birth?','What is compassion?','How can compassion help?'],
         written: `
-<p>Write the module content for Page 1 here.</p>
+<p><strong>What is Tricky Brain?</strong></p>
+
+<p>Add text here.</p>
+
+<p><strong>How can my tricky brain impact me after preterm birth?</strong></p>
+
+<p>Add text here.</p>
+
+<p><strong>What is compassion?</strong></p>
+
+<p>Add text here.</p>
+
+<p><strong>How can compassion help?</strong></p>
+
+<p>Add text here.</p>
 `,
    audio: 'Guided audio — Compassion and our tricky brains',
    audioImage: "sooth2.png",
@@ -2318,7 +2354,15 @@
 `,
           }
         ],
-        written: `<p>Our minds and bodies are organised into three interconnected systems that help us respond to life: threat, drive, and soothing. After a preterm birth, these systems can become highly activated in different ways. Select a tab below to read about each system and how it can show up after a preterm birth.</p>`,
+        written: `
+<p><strong>What are the three circles?</strong></p>
+
+<p>Our minds and bodies are organised into three interconnected systems that help us respond to life: threat, drive, and soothing. Select a tab below to read about each system.</p>
+
+<p><strong>How does preterm birth disrupt my three circles?</strong></p>
+
+<p>After a preterm birth, these systems can become highly activated in different ways. Select a tab below to read about each system and how it can show up after a preterm birth.</p>
+`,
         audio: 'Guided audio — Our three circles',
         audioImage: "SoothingRythm.jpg",
         natureVideo: 'Audioimagery5.mp4',
@@ -2336,18 +2380,17 @@
         written: `
 <p><strong>What is self criticism?</strong></p>
 
-<p>Add text here</p>
+<p>Add text here.</p>
+
+<p><strong>How can it impact me after preterm birth?</strong></p>
 
 <p>Add text here.</p>
 
+<p><strong>Why does the inner critic show up?</strong></p>
+
 <p>Add text here.</p>
 
-<p><strong>add text here.</strong></p>
-
-<p>Add text here.:</p>
-
-<
-</ul>
+<p><strong>How do I shift towards compassion?</strong></p>
 
 <p>Add text here.</p>
 
@@ -2373,6 +2416,12 @@
 <p><strong>What is the compassionate self?</strong></p>
 
 <p>Add text here.</p>
+
+<p><strong>Why is it important?</strong></p>
+
+<p>Add text here.</p>
+
+<p><strong>How do I develop my compassionate self after preterm birth?</strong></p>
 
 <p>Add text here.</p>
 `,
@@ -2497,6 +2546,54 @@
       const first = blocks.slice(0, mid).map(el => el.outerHTML).join('');
       const second = blocks.slice(mid).map(el => el.outerHTML).join('');
       return [first, second];
+    }
+
+    /* Turns "In this module:" bullets into jump links. A bullet becomes a
+       link only when its wording matches a <p><strong>…</strong></p>
+       sub-heading already present in that module's written content (Page 1
+       or Page 2) — so as real content/headings are added, matching bullets
+       light up on their own rather than needing to be wired by hand, and a
+       bullet with no matching heading yet just stays as plain text. */
+    function linkifySummaryHeadings(num, summary, page1Html, page2Html) {
+      const normalize = s => (s || '').replace(/[?:.!]+$/, '').trim().toLowerCase();
+      const found = [];
+      let counter = 0;
+
+      function scanPage(html, pageNum) {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html || '';
+        wrapper.querySelectorAll('p').forEach(p => {
+          const onlyChild = p.children.length === 1 && p.children[0].tagName === 'STRONG';
+          const text = p.textContent.trim();
+          if (!onlyChild || !text || text !== p.children[0].textContent.trim()) return;
+          counter++;
+          const id = `section-${num}-${counter}`;
+          p.id = id;
+          found.push({ normText: normalize(text), page: pageNum, id });
+        });
+        return wrapper.innerHTML;
+      }
+
+      const page1Out = scanPage(page1Html, 2);
+      const page2Out = scanPage(page2Html, 3);
+
+      const links = (summary || []).map(s => {
+        const norm = normalize(s);
+        const match = found.find(h => h.normText === norm)
+          || found.find(h => norm && (h.normText.includes(norm) || norm.includes(h.normText)));
+        return match ? { page: match.page, id: match.id } : null;
+      });
+
+      return { page1: page1Out, page2: page2Out, links };
+    }
+
+    function jumpToModuleSection(event, num, page, id) {
+      if (event) event.preventDefault();
+      const section = document.getElementById('module-' + num);
+      if (!section) return;
+      activateSubpage(section, page);
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function setupScrollReveal() {
@@ -2762,6 +2859,9 @@
 
         /* ── MODULE 1 (INTRODUCTION) — kept as a single scrolling page ── */
         if (num === 1) {
+          const m1Linked = linkifySummaryHeadings(num, m.summary, m.written, '');
+          const m1Written = m1Linked.page1;
+          const m1SummaryLinks = m1Linked.links;
           return `
             <section class="module-section active" id="module-${num}">
               <div class="module-card-shell">
@@ -2769,7 +2869,10 @@
 
                 <div class="summary-box">
                   <h3>In this module:</h3>
-                  <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
+                  <ul>${m.summary.map((s, i) => m1SummaryLinks[i]
+                    ? `<li><a href="#${m1SummaryLinks[i].id}" onclick="jumpToModuleSection(event, ${num}, 1, '${m1SummaryLinks[i].id}')">${s}</a></li>`
+                    : `<li>${s}</li>`
+                  ).join('')}</ul>
                 </div>
 
                 <div class="video-placeholder">
@@ -2788,7 +2891,7 @@
                 </div>
 
                 <div class="content-block written-block">
-                  <div class="written-content">${m.written}</div>
+                  <div class="written-content">${m1Written}</div>
                 </div>
 
                 <div class="section-divider"></div>
@@ -2842,7 +2945,11 @@
 
         /* ── MODULES 2–8 — click through 5 pages instead of scrolling:
            before-measure → video+writing → video+writing → reflect+audio → after-measure ── */
-        const [page1Written, page2Written] = splitWrittenContent(m.written);
+        let [page1Written, page2Written] = splitWrittenContent(m.written);
+        const summaryLinked = linkifySummaryHeadings(num, m.summary, page1Written, page2Written);
+        page1Written = summaryLinked.page1;
+        page2Written = summaryLinked.page2;
+        const summaryLinks = summaryLinked.links;
 
         let page3ExtraHTML;
         if (m.emotions) {
@@ -2924,7 +3031,10 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               <div class="subpage" id="subpage-${num}-2">
                 <div class="summary-box">
                   <h3>In this module:</h3>
-                  <ul>${m.summary.map(s => `<li>${s}</li>`).join('')}</ul>
+                  <ul>${m.summary.map((s, i) => summaryLinks[i]
+                    ? `<li><a href="#${summaryLinks[i].id}" onclick="jumpToModuleSection(event, ${num}, ${summaryLinks[i].page}, '${summaryLinks[i].id}')">${s}</a></li>`
+                    : `<li>${s}</li>`
+                  ).join('')}</ul>
                 </div>
                 <div class="video-placeholder">
                   <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
