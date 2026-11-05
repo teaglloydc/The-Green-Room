@@ -1027,20 +1027,21 @@
     /* ── CIRCLE TABS — one tab per system, only the selected one shows ── */
     .circle-tab-buttons {
       display: flex;
-      gap: 10px;
+      justify-content: center;
+      gap: 12px;
       margin: 28px 0 4px;
       flex-wrap: wrap;
     }
 
     .circle-tab-btn {
-      min-height: 38px;
-      padding: 0 18px;
+      min-height: 46px;
+      padding: 0 24px;
       border: 0;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font: inherit;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 1rem;
       transition: background 0.2s, color 0.2s;
     }
 
@@ -1949,7 +1950,7 @@
       .emotion-tab-buttons { display: flex; flex-wrap: wrap; border-radius: var(--radius); width: 100%; }
       .emotion-tab-btn { flex: 1; min-width: 80px; }
 
-      .circle-tab-buttons { display: flex; flex-wrap: wrap; border-radius: var(--radius); width: 100%; }
+      .circle-tab-buttons { display: flex; flex-wrap: wrap; justify-content: center; border-radius: var(--radius); width: 100%; }
       .circle-tab-btn { flex: 1; min-width: 100px; }
 
       .audio-player-card { max-width: none; }
@@ -2162,8 +2163,6 @@
 
 <p><strong>How can this program help me?</strong></p>
 
-<p>Add text here.</p>
-
 <p><strong>How do I use this program?</strong></p>
 
 <p>There are 8 modules in this program, each touching on an important component of compassion. Each module includes an introductory video, written information, and exercises.</p>
@@ -2189,22 +2188,9 @@
 
 <p>Have you noticed any changes since giving birth?</p>
 
-<p>Changes are different for every mother, but some describe experiences such as:</p>
-
-<ul>
-  <li>Add text here.</li>
-  <li>Add text here.</li>
-  <li>Add text here.</li>
-  <li>Add text here.</li>
-</ul>
-
 <p><strong>How do these changes impact me after preterm birth?</strong></p>
 
-<p>Add text here.</p>
-
 <p><strong>How can these changes impact my mental health?</strong></p>
-
-<p>Add text here.</p>
 `,
     audio: 'Guided audio — Motherhood and the brain',
     audioImage: "Mindfulness2.jpg",
@@ -2245,19 +2231,11 @@
         written: `
 <p><strong>What is Tricky Brain?</strong></p>
 
-<p>Add text here.</p>
-
 <p><strong>How can my tricky brain impact me after preterm birth?</strong></p>
-
-<p>Add text here.</p>
 
 <p><strong>What is compassion?</strong></p>
 
-<p>Add text here.</p>
-
 <p><strong>How can compassion help?</strong></p>
-
-<p>Add text here.</p>
 `,
    audio: 'Guided audio — Compassion and our tricky brains',
    audioImage: "sooth2.png",
@@ -2380,19 +2358,11 @@
         written: `
 <p><strong>What is self criticism?</strong></p>
 
-<p>Add text here.</p>
-
 <p><strong>How can it impact me after preterm birth?</strong></p>
-
-<p>Add text here.</p>
 
 <p><strong>Why does the inner critic show up?</strong></p>
 
-<p>Add text here.</p>
-
 <p><strong>How do I shift towards compassion?</strong></p>
-
-<p>Add text here.</p>
 
 <p>In the next module, we will begin exploring how to develop this more compassionate way of relating to yourself.</p>
 `,
@@ -2415,15 +2385,9 @@
         written: `
 <p><strong>What is the compassionate self?</strong></p>
 
-<p>Add text here.</p>
-
 <p><strong>Why is it important?</strong></p>
 
-<p>Add text here.</p>
-
 <p><strong>How do I develop my compassionate self after preterm birth?</strong></p>
-
-<p>Add text here.</p>
 `,
         audio: 'Guided audio — Building your compassionate self',
         audioImage: "CompassionateSelf.jpg",
@@ -2443,9 +2407,7 @@
 
       { title: 'Working with complex emotions',
         summary: ['Add overview here','Add overview here','Add overview here','Specific practices for each emotion'],
-        written: `
-<p>Add text here.</p>
-`,
+        written: ``,
         audio: 'Guided audio — Working with complex emotions',
         emotions: true,
         emotionOptions: {
@@ -2531,21 +2493,6 @@
       const raw = (m.written || '') + ' ' + (m.reflectionPrompts || []).join(' ') + ' ' + (m.summary || []).join(' ');
       const words = raw.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
       return Math.max(1, Math.round(words / 200)) + ' min read';
-    }
-
-    /* Splits a module's written HTML roughly in half by top-level block
-       (<p>, <ul>, ...) so it can be spread across two click-through pages
-       as "a small amount of writing" each, without hand-editing every
-       module's content. */
-    function splitWrittenContent(html) {
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = html || '';
-      const blocks = Array.from(wrapper.children);
-      if (blocks.length <= 1) return [html || '', ''];
-      const mid = Math.ceil(blocks.length / 2);
-      const first = blocks.slice(0, mid).map(el => el.outerHTML).join('');
-      const second = blocks.slice(mid).map(el => el.outerHTML).join('');
-      return [first, second];
     }
 
     /* Turns "In this module:" bullets into jump links. A bullet becomes a
@@ -2944,11 +2891,11 @@
         }
 
         /* ── MODULES 2–8 — click through 5 pages instead of scrolling:
-           before-measure → video+writing → video+writing → reflect+audio → after-measure ── */
-        let [page1Written, page2Written] = splitWrittenContent(m.written);
-        const summaryLinked = linkifySummaryHeadings(num, m.summary, page1Written, page2Written);
-        page1Written = summaryLinked.page1;
-        page2Written = summaryLinked.page2;
+           before-measure → intro video → video+writing → reflect+audio → after-measure.
+           All written psychoeducation lives on Page 2 — Page 1 is just the
+           module overview and intro video, nothing is split any more. */
+        const summaryLinked = linkifySummaryHeadings(num, m.summary, '', m.written);
+        const page2Written = summaryLinked.page2;
         const summaryLinks = summaryLinked.links;
 
         let page3ExtraHTML;
@@ -3049,9 +2996,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
                     </button>
                   </div>
-                </div>
-                <div class="content-block written-block">
-                  <div class="written-content">${page1Written}</div>
                 </div>
                 <div class="subpage-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},1)">← Back</button>
@@ -3246,7 +3190,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       section.innerHTML = `
         <div class="tc-header">
           <h3>A quick check-in</h3>
-          <p>Add text here</p>
           <div class="tc-legend">
             <div class="tc-legend-item"><div class="tc-legend-dot drive"></div><span>Drive (blue)</span></div>
             <div class="tc-legend-item"><div class="tc-legend-dot soothing"></div><span>Soothing (green)</span></div>
