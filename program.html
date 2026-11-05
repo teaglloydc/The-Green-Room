@@ -1077,6 +1077,108 @@
     .circle-tab-content li { margin-bottom: 6px; }
     .circle-tab-content p:last-child, .circle-tab-content ul:last-child { margin-bottom: 0; }
 
+    /* ── COMPASSIONATE SELF TREE — "Compassion" grows in the leaves, the
+       qualities that grow it sit down among the roots. ── */
+    .tree-diagram {
+      margin: 0 0 40px;
+      text-align: center;
+    }
+    .tree-diagram h3 { margin-bottom: 18px; }
+
+    .tree-canopy-wrap { position: relative; width: min(500px, 98%); margin: 0 auto; }
+    .tree-illustration { display: block; width: 100%; height: auto; }
+
+    /* Sits directly on the leaves (no card/background) — "Compassion" and
+       its definition visibly grow out of the canopy. A fixed cream colour
+       and shadow (not theme tokens) keep it legible against the green
+       artwork, which doesn't change between light and dark mode. */
+    .tree-definition {
+      position: absolute;
+      top: 21%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70%;
+      max-width: 340px;
+      text-align: center;
+    }
+    .tree-definition-label {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fffbf3;
+      text-shadow: 0 2px 6px rgba(16,36,27,0.55), 0 1px 2px rgba(16,36,27,0.4);
+      margin-bottom: 6px;
+    }
+    .tree-definition-text {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 0.86rem;
+      font-weight: 600;
+      font-style: italic;
+      line-height: 1.5;
+      color: #fffbf3;
+      text-shadow: 0 2px 5px rgba(16,36,27,0.55), 0 1px 2px rgba(16,36,27,0.4);
+      margin: 0;
+    }
+
+    @media (max-width: 480px) {
+      .tree-definition { width: 82%; }
+      .tree-definition-label { font-size: 0.95rem; }
+      .tree-definition-text { font-size: 0.8rem; }
+    }
+
+    /* Positioned at percentage coordinates (set inline per quality) so each
+       stays anchored to its root tip at any width — same technique as the
+       brain diagram's numbered pins. */
+    .tree-quality-btn {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      min-height: 42px;
+      padding: 0 20px;
+      border-radius: 999px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      font-size: 0.92rem;
+      white-space: nowrap;
+      background: var(--surface);
+      color: var(--green-700);
+      border: 1.5px solid var(--wood);
+      box-shadow: 0 2px 8px rgba(16,36,27,0.16);
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+    .tree-quality-btn:hover { transform: translate(-50%, -50%) translateY(-2px); }
+    .tree-quality-btn.active { background: var(--green-700); color: #fffbf3; border-color: var(--green-700); }
+
+    @media (max-width: 480px) {
+      .tree-quality-btn { font-size: 0.8rem; padding: 0 14px; min-height: 36px; }
+    }
+
+    .tree-quality-hint { margin-top: 22px; color: var(--muted); font-size: 0.93rem; font-style: italic; }
+    .tree-quality-hint.hidden { display: none; }
+
+    /* Grey frosted glass, matching the module nav pills elsewhere. */
+    .tree-quality-content {
+      display: none;
+      margin: 20px auto 0;
+      max-width: 440px;
+      padding: 22px;
+      border-radius: 16px;
+      text-align: center;
+      background: color-mix(in srgb, var(--muted) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--muted) 25%, transparent);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 24px rgba(16,36,27,0.12);
+    }
+    .tree-quality-content.active { display: block; }
+    .tree-quality-content h4 {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .tree-quality-content p { color: var(--muted); line-height: 1.8; font-size: 0.95rem; margin: 0; }
+
     /* ── BRAIN DIAGRAM — Module 2 only, clickable regions ── */
     .brain-diagram-card { margin: 40px 0; }
     .brain-diagram-card h3 { margin-bottom: 8px; }
@@ -2041,7 +2143,7 @@
 <p>This program has been designed to support mothers after experiencing a preterm birth, who:</p>
 
 <ul>
-  <li>Are self-critical</li>
+  <li>Are self critical</li>
   <li>Struggle with feelings of guilt, shame, anger, sadness or anxiety,</li>
   <li>Find it hard to be compassionate toward themselves,</li>
   <li>Find it difficult to accept compassion from others,</li>
@@ -2119,23 +2221,7 @@
 },
       { title: 'Compassion and our tricky brains', summary: ['What is Tricky Brain?','How can my tricky brain impact me after preterm birth?','What is compassion?','How can compassion help?'],
         written: `
-<p> add text here</p>
-
-<ul>
-  <li>add text here</li>
-  <li>add text here</li>
-  <li>Radd text here</li>
-</ul>
-
-<p>Add text here</p>
-
-<p><strong>add text hereg></p>
-
-<p>Add text here.</p>
-
-<p>Add text here</p>
-
-<p>Add text here.</p>
+<p>Write the module content for Page 1 here.</p>
 `,
    audio: 'Guided audio — Compassion and our tricky brains',
    audioImage: "sooth2.png",
@@ -2149,6 +2235,19 @@
      'What are some examples of times when somebody showed compassion toward you?',
      'What are some examples of times when you have been compassionate towards someone else?',
      'What are some examples of times when you have been compassionate towards yourself?'
+   ],
+   definitionBox: {
+     label: 'Compassion',
+     text: 'Compassion is being sensitive to one’s own and others’ suffering, combined with a desire to alleviate and prevent it.'
+   },
+   trickyBrainDiagram: true,
+   compassionateSelfTree: [
+     { id: 'wisdom', label: 'Wisdom',
+       text: 'We just happen to find ourselves here as part of the flow of life, with a tricky brain that can get caught up in angry or worry loops, and this is not our fault.' },
+     { id: 'strength', label: 'Strength',
+       text: 'Strength comes from our compassionate body posture and our breathing, which allows us to cultivate a sense of groundedness.' },
+     { id: 'commitment', label: 'Commitment',
+       text: 'We try, whenever we can, to be kind and compassionate to the suffering around us, and to prevent and alleviate suffering in a wise way. This is a journey which requires our commitment.' }
    ],
   },
       { title: 'Our three circles',
@@ -2187,7 +2286,7 @@
 
 <ul>
   <li>Needing to do something to reduce anxiety or prevent problems</li>
-  <li>Constant planning, problem-solving, information seeking, or Googling</li>
+  <li>Constant planning, problem solving, information seeking, or Googling</li>
   <li>Pushing through exhaustion in order to stay on top of everything</li>
   <li>Feeling responsible for coordinating care, information, and decisions</li>
   <li>A sense that rest is only possible once everything is “handled” (which rarely happens)</li>
@@ -2233,9 +2332,9 @@
         ] },
 
       { title: 'Working with your inner critic',
-        summary: ['What is self-criticism?','How can it impact me after preterm birth?','Why does the inner critic show up?','How do I shift towards compassion?'],
+        summary: ['What is self criticism?','How can it impact me after preterm birth?','Why does the inner critic show up?','How do I shift towards compassion?'],
         written: `
-<p><strong>What is self-criticism?</strong></p>
+<p><strong>What is self criticism?</strong></p>
 
 <p>Add text here</p>
 
@@ -2589,6 +2688,54 @@
           </div>
         ` : '';
 
+        /* Plain text instead of a boxes and loop diagram — a flag
+           (m.trickyBrainDiagram = true) rather than per-module data, since
+           this doesn't change module to module. */
+        const trickyBrainHTML = m.trickyBrainDiagram ? `
+          <div class="content-block">
+            <h3>Our tricky brain</h3>
+            <p>Our brain is built from two systems that don't always work smoothly together. The "old brain" handles fast emotions, drives and threat responses we share with other animals. The "new brain" is responsible for thinking, imagining and planning, our more recently evolved abilities.</p>
+            <p>These two systems constantly talk to each other, and can get caught in loops, like worry or self criticism, that keep going round and round. This isn't a flaw. It's just how brains like ours work.</p>
+            <p>This is where compassion can help. It gives us a way to notice these loops without judging ourselves for having them, and to gently guide our thinking toward something kinder and more helpful instead.</p>
+          </div>
+        ` : '';
+
+        /* Compassionate-self tree — a real illustration (compassionate-self-tree.png)
+           with labelled roots: the definition sits up by the canopy, and
+           the three qualities (m.compassionateSelfTree = array of
+           { id, label, text }) sit as click-to-reveal pins at the tip of
+           each root, positioned the same way as the brain diagram's pins
+           (percentage coordinates over the image, so they track at any width). */
+        const TREE_ROOT_POSITIONS = [
+          { left: 12, top: 78 },
+          { left: 50, top: 95 },
+          { left: 88, top: 74 }
+        ];
+        const compassionTreeHTML = m.compassionateSelfTree ? `
+          <div class="tree-diagram">
+            <h3>Growing your compassionate self</h3>
+            <div class="tree-canopy-wrap">
+              <img class="tree-illustration" src="compassionate-self-tree.png" alt="Illustration of a tree with spreading roots" loading="lazy">
+              ${m.definitionBox ? `
+                <div class="tree-definition">
+                  <p class="tree-definition-label">${m.definitionBox.label}</p>
+                  <p class="tree-definition-text">“${m.definitionBox.text}”</p>
+                </div>
+              ` : ''}
+              ${m.compassionateSelfTree.map((q, i) => `
+                <button type="button" class="tree-quality-btn" style="left:${TREE_ROOT_POSITIONS[i].left}%;top:${TREE_ROOT_POSITIONS[i].top}%" onclick="showTreeQuality(event, ${num}, '${q.id}')" aria-pressed="false">${q.label}</button>
+              `).join('')}
+            </div>
+            <p class="tree-quality-hint" id="tree-hint-${num}">Select a quality in the roots above to read about it.</p>
+            ${m.compassionateSelfTree.map(q => `
+              <div class="tree-quality-content" id="tree-${num}-${q.id}">
+                <h4>${q.label}</h4>
+                <p>${q.text}</p>
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
+
         const moduleHeaderHTML = `
           <div class="module-header">
             <div class="module-label">Module ${num}</div>
@@ -2646,6 +2793,36 @@
 
                 <div class="section-divider"></div>
                 ${exerciseBlock}
+
+                <div class="video-placeholder">
+                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
+                  <div class="video-controls-overlay">
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="video-placeholder">
+                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
+                  <div class="video-controls-overlay">
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                    </button>
+                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
+                    </button>
+                  </div>
+                </div>
 
                 <div class="content-block">
                   <h3>Settle in and listen</h3>
@@ -2787,11 +2964,13 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                     </button>
                   </div>
                 </div>
+                ${trickyBrainHTML}
                 <div class="content-block written-block">
                   <div class="written-content">${page2Written}</div>
                 </div>
                 ${brainDiagramHTML}
                 ${circleBubblesHTML}
+                ${compassionTreeHTML}
                 <div class="subpage-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},2)">← Back</button>
                   <button class="btn-module-nav btn-next" onclick="showSubpage(${num},4)">Continue →</button>
@@ -3429,6 +3608,18 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       event.target.classList.add('active');
       event.target.setAttribute('aria-pressed', 'true');
       const hint = document.getElementById('circle-hint-' + num);
+      if (hint) hint.classList.add('hidden');
+    }
+
+    function showTreeQuality(event, num, quality) {
+      const scope = document.getElementById('module-' + num);
+      if (!scope) return;
+      scope.querySelectorAll('.tree-quality-content').forEach(t => t.classList.remove('active'));
+      scope.querySelectorAll('.tree-quality-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+      document.getElementById('tree-' + num + '-' + quality).classList.add('active');
+      event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
+      const hint = document.getElementById('tree-hint-' + num);
       if (hint) hint.classList.add('hidden');
     }
 
