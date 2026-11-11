@@ -1132,9 +1132,16 @@
     }
 
     @media (max-width: 480px) {
-      .tree-definition { width: 82%; }
-      .tree-definition-label { font-size: 0.95rem; }
-      .tree-definition-text { font-size: 0.8rem; }
+      /* Bleed the whole tree out to the screen edges (cancelling the
+         card's own 16px side padding here) so the canopy renders bigger
+         in absolute pixels — the "Compassion" text inside it is a fixed
+         size, so a bigger canopy is what keeps it from overflowing the
+         leaves on narrow phones. */
+      .tree-diagram { margin-left: -16px; margin-right: -16px; }
+      .tree-canopy-wrap { width: min(500px, 100%); }
+      .tree-definition { width: 72%; }
+      .tree-definition-label { font-size: 0.92rem; }
+      .tree-definition-text { font-size: 0.74rem; }
     }
 
     /* Positioned at percentage coordinates (set inline per quality) so each
