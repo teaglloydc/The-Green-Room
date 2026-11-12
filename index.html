@@ -490,101 +490,6 @@
       filter: brightness(1.18) saturate(1.12) contrast(1.02);
     }
 
-    /* ── TESTIMONIALS ───────────────────────────── */
-    .testimonials { background: var(--surface-soft); }
-
-    .testimonials h2 { margin-bottom: 4px; }
-
-    .testimonial-carousel {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding: 32px 4px 22px;
-      margin: 0 -4px;
-      scrollbar-width: none;
-    }
-    .testimonial-carousel::-webkit-scrollbar { display: none; }
-
-    .testimonial-card {
-      flex: 0 0 min(360px, 82vw);
-      scroll-snap-align: center;
-      display: flex;
-      flex-direction: column;
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 28px;
-    }
-
-    .testimonial-avatar {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: var(--green-100);
-      color: var(--green-700);
-      display: grid;
-      place-items: center;
-      margin-bottom: 16px;
-    }
-
-    .testimonial-quote-mark {
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-      font-size: 2.4rem;
-      line-height: 1;
-      color: var(--wood);
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .testimonial-card blockquote { margin: 0 0 22px; }
-
-    .testimonial-card blockquote p {
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-      font-size: 1.15rem;
-      font-weight: 600;
-      line-height: 1.42;
-      color: var(--text);
-    }
-
-    .testimonial-name { font-weight: 700; color: var(--text); font-size: 0.95rem; margin-top: auto; }
-    .testimonial-role { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
-
-    .testimonial-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      margin-top: 4px;
-    }
-
-    .testimonial-arrow {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--text);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      font-size: 16px;
-      transition: background 0.2s ease, transform 0.2s ease;
-    }
-    .testimonial-arrow:hover { background: var(--green-100); transform: translateY(-2px); }
-
-    .testimonial-dots { display: flex; gap: 6px; }
-    .testimonial-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--line);
-      border: 0;
-      padding: 0;
-      cursor: pointer;
-    }
-    .testimonial-dot.active { background: var(--wood); }
-
     /* ── STEPS ───────────────────────────────────── */
     .steps { background: var(--green-900); color: #fffbf3; }
     .steps h2, .steps .section-label { color: #fffbf3; }
@@ -976,10 +881,10 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">Home</a>
     <a href="program.html">Program</a>
+    <a href="audio-library.html">My Audio Library</a>
     <a href="about.html" class="menu-section-link">About Us</a>
     <a href="about.html#people" class="menu-sub-link">The People</a>
     <a href="about.html#the-program" class="menu-sub-link">The Program</a>
-    <a href="about.html#research" class="menu-sub-link">The Research</a>
   </div>
 
   <main id="main-content">
@@ -1005,78 +910,6 @@
         <p class="lead">Life with a preemie baby is busy. That's why our program is designed to fit around your schedule. You can work through it at your own pace and return whenever you need to. The aim is not perfection, but steady engagement.</p>
       </div>
       <img class="image-panel" src="Indexpage.png" alt="A woman working on a laptop in a bright, plant-filled room" loading="lazy">
-    </div>
-  </section>
-
-  <section class="section testimonials">
-    <div class="section-inner">
-      <h2>The voices that shaped The Room.</h2>
-      <p class="lead">This program was developed by researchers, with help from mothers of preterm babies.</p>
-      <p class="lead">These are some things the mothers wanted to see.</p>
-
-      <div class="testimonial-carousel" id="testimonialTrack">
-        <!-- Testimonial 1 -->
-        <div class="testimonial-card">
-          <div class="testimonial-avatar" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
-          </div>
-          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
-          <blockquote>
-            <p>You could do it whenever suits you and it can just be in the moment. You could even be doing something while you&rsquo;re sitting by the bed, or if you get a moment away.</p>
-          </blockquote>
-          <div class="testimonial-name">Sarah</div>
-        </div>
-        <!-- Testimonial 2 -->
-        <div class="testimonial-card">
-          <div class="testimonial-avatar" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
-          </div>
-          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
-          <blockquote>
-            <p>Just to sort of reset, or help with something that you&rsquo;re particularly struggling with at the time.</p>
-          </blockquote>
-          <div class="testimonial-name">Priya</div>
-        </div>
-        <!-- Testimonial 3 -->
-        <div class="testimonial-card">
-          <div class="testimonial-avatar" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
-          </div>
-          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
-          <blockquote>
-            <p>Having something really easily accessible, something you can just connect to, put your headphones in&hellip; something you can listen to while you&rsquo;re also attending to your baby.</p>
-          </blockquote>
-          <div class="testimonial-name">Emily</div>
-        </div>
-        <!-- Testimonial 4 -->
-        <div class="testimonial-card">
-          <div class="testimonial-avatar" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
-          </div>
-          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
-          <blockquote>
-            <p>I really like the idea of an online resource, because trying to find time during the day, especially being back at work now, to even just go to like a doctor&rsquo;s appointment for myself is like bottom of the list, you know?</p>
-          </blockquote>
-          <div class="testimonial-name">Hannah</div>
-        </div>
-        <!-- Testimonial 5 -->
-        <div class="testimonial-card">
-          <div class="testimonial-avatar" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
-          </div>
-          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
-          <blockquote>
-            <p>So that&rsquo;s very much how I did my own learning in those times where it was flexible, I could do it whilst I was breastfeeding.</p>
-          </blockquote>
-          <div class="testimonial-name">Megan</div>
-        </div>
-      </div>
-
-      <div class="testimonial-controls">
-        <button type="button" class="testimonial-arrow" onclick="scrollTestimonials(-1)" aria-label="Previous testimonial">←</button>
-        <div class="testimonial-dots" id="testimonialDots"></div>
-        <button type="button" class="testimonial-arrow" onclick="scrollTestimonials(1)" aria-label="Next testimonial">→</button>
-      </div>
     </div>
   </section>
 
@@ -1521,52 +1354,6 @@
       });
     }
 
-    /* Testimonials carousel — native horizontal scroll-snap does the swipe
-       gesture for free on touch devices; the arrows/dots just scroll the
-       same track programmatically and stay in sync via the scroll event. */
-    function testimonialStep(track) {
-      const card = track.querySelector('.testimonial-card');
-      const gap = 20;
-      return card ? card.getBoundingClientRect().width + gap : 300;
-    }
-
-    function scrollTestimonials(dir) {
-      const track = document.getElementById('testimonialTrack');
-      if (!track) return;
-      track.scrollBy({ left: dir * testimonialStep(track), behavior: 'smooth' });
-    }
-
-    function scrollTestimonialTo(index) {
-      const track = document.getElementById('testimonialTrack');
-      if (!track) return;
-      track.scrollTo({ left: index * testimonialStep(track), behavior: 'smooth' });
-    }
-
-    function initTestimonials() {
-      const track = document.getElementById('testimonialTrack');
-      const dotsWrap = document.getElementById('testimonialDots');
-      if (!track || !dotsWrap) return;
-      const cards = Array.from(track.querySelectorAll('.testimonial-card'));
-
-      dotsWrap.innerHTML = cards.map((_, i) => `
-        <button type="button" class="testimonial-dot ${i === 0 ? 'active' : ''}" aria-label="Go to testimonial ${i + 1}" onclick="scrollTestimonialTo(${i})" aria-current="${i === 0 ? 'true' : 'false'}"></button>
-      `).join('');
-      const dots = Array.from(dotsWrap.querySelectorAll('.testimonial-dot'));
-
-      let scrollTimer;
-      track.addEventListener('scroll', () => {
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(() => {
-          const maxScroll = track.scrollWidth - track.clientWidth;
-          const idx = maxScroll <= 0 ? 0 : Math.round((track.scrollLeft / maxScroll) * (cards.length - 1));
-          dots.forEach((d, i) => {
-            d.classList.toggle('active', i === idx);
-            d.setAttribute('aria-current', i === idx ? 'true' : 'false');
-          });
-        }, 80);
-      });
-    }
-
     /* Runs immediately rather than waiting on window's "load" event — that
        event only fires once every image on the page (including the ~2MB+
        of below-the-fold module tile photos) has finished downloading, which
@@ -1578,7 +1365,6 @@
     document.getElementById('heroVideoBtn').innerHTML = ICONS.pause;
     initHeroVideo();
     initModuleTilt();
-    initTestimonials();
 
     window.addEventListener('scroll', () => {
       document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 420);

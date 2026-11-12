@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Your Audio Library - The Green Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FCFBF9;
+      --surface: #ffffff;
+      --surface-soft: #dceadb;
+      --green-900: #234334;
+      --green-800: #2e5542;
+      --green-700: #416b55;
+      --green-600: #527a63;
+      --green-100: #dceadb;
+      /* Tonal sage — dropped the brown/wood accent, replaced it with a
+         brighter, more yellow-leaning sage so hierarchy still reads
+         clearly, but purely through lightness/warmth within the green
+         family rather than a second hue. */
+      --wood: #8fae6e;
+      --wood-dark: #5c7a3f;
+      --text: #1e2b21;
+      --muted: #56675a;
+      --line: rgba(31, 52, 39, 0.14);
+      --shadow: 0 22px 60px rgba(16, 36, 27, 0.12);
+      --radius: 14px;
+    }
+
+    body.dark-mode {
+      --bg: #111812;
+      --surface: #172119;
+      --surface-soft: #1f2a20;
+      --green-900: #080f0b;
+      --green-800: #0d1710;
+      --green-700: #dfe8dd;
+      --green-600: #9fb89e;
+      --green-100: #233226;
+      --wood: #a8c49a;
+      --wood-dark: #c9dcb8;
+      --text: #eef3ea;
+      --muted: #a9b8a2;
+      --line: rgba(238, 243, 234, 0.14);
+      --shadow: 0 22px 70px rgba(0, 0, 0, 0.38);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -80px;
+      left: 12px;
+      z-index: 999;
+      background: var(--green-900);
+      color: #fffbf3;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus { top: 12px; }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(143,174,110,0.1), transparent 28%),
+        linear-gradient(180deg, var(--bg), #FCFBF9 48%, var(--bg));
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body.dark-mode {
+      background:
+        radial-gradient(circle at 8% 0%, rgba(168,196,154,0.09), transparent 28%),
+        linear-gradient(180deg, #0f1711, #141d15 48%, #101711);
+    }
+
+    /* ── FLOATING MODERN NAV ────────────────────── */
+    .site-nav {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 24px;
+  width: 100%;
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  color: #fff8ea;
+}
+
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    }
+
+    .logo-text {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 600;
+      white-space: nowrap;
+      color: #fff8ea;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.35),
+    0 6px 16px rgba(0,0,0,0.45);
+    }
+
+    .hamburger {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
+      color: #fff8ea;
+      cursor: pointer;
+      transition: background 0.2s;
+      position: relative;
+      z-index: 101;
+    }
+    .hamburger:hover { background: rgba(255,255,255,0.2); }
+    .hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── MOBILE MENU — compact dropdown box, not a full-screen takeover ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 78px;
+      right: 20px;
+      z-index: 95;
+      width: min(260px, calc(100vw - 40px));
+      max-height: calc(100vh - 100px);
+      padding: 18px 22px;
+      background: var(--green-900);
+      border-radius: var(--radius);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      overflow-y: auto;
+    }
+    .mobile-menu.open {
+      display: flex;
+      flex-direction: column;
+      animation: menu-in 0.25s ease;
+    }
+    @keyframes menu-in {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mobile-menu.open { animation: none; }
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 8px 10px;
+      margin: 0 -10px;
+      border-radius: 10px;
+      color: #fffbf3;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 1.15rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      transition: background 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+    }
+    .mobile-menu a:hover,
+    .mobile-menu a:focus-visible {
+      background: rgba(255,251,243,0.1);
+      opacity: 1;
+      transform: translateX(3px);
+    }
+    .menu-section-link { color: #fffbf3 !important; }
+    .menu-sub-link {
+      font-size: 0.92rem !important;
+      font-weight: 700 !important;
+      opacity: 0.55;
+      padding: 5px 10px 5px 20px !important;
+    }
+    /* ── FULL-WIDTH HERO BANNER ─────────────────── */
+    .page-hero {
+      position: relative;
+      min-height: 320px;
+      display: flex;
+      align-items: flex-end;
+      padding: clamp(96px, 10vw, 130px) clamp(20px, 5vw, 64px) 52px;
+      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      color: #fffbf3;
+      overflow: hidden;
+    }
+
+    .page-hero-inner { position: relative; z-index: 1; width: min(860px, 100%); }
+
+    .eyebrow {
+      color: rgba(255,250,240,0.82);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .page-hero h1 {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: clamp(3.4rem, 8vw, 7rem);
+      font-weight: 800;
+      line-height: 0.94;
+      letter-spacing: -0.01em;
+      color: #fffbf3;
+      text-wrap: balance;
+      margin-bottom: 18px;
+    }
+
+    .page-hero p {
+      color: rgba(255,250,240,0.88);
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+      line-height: 1.85;
+      max-width: 600px;
+    }
+
+    /* ── AUDIO LIBRARY ──────────────────────────── */
+    .library-wrap {
+      width: min(820px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: clamp(40px, 6vw, 72px) 0 clamp(48px, 7vw, 84px);
+    }
+
+    .lib-intro { color: var(--muted); line-height: 1.8; font-size: 0.97rem; margin-bottom: 28px; max-width: 620px; }
+
+    .lib-progress { display: flex; align-items: center; gap: 14px; margin-bottom: 30px; }
+    .lib-progress-bar { flex: 1; height: 8px; border-radius: 999px; background: var(--green-100); overflow: hidden; }
+    .lib-progress-fill { height: 100%; background: var(--green-700); border-radius: 999px; width: 0%; transition: width 0.4s ease; }
+    .lib-progress-label { font-size: 0.85rem; color: var(--muted); font-weight: 700; white-space: nowrap; }
+
+    .lib-group { margin-bottom: 26px; }
+    .lib-group-title {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--wood-dark); margin-bottom: 12px;
+    }
+
+    .lib-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+    .lib-row.unlocked { background: var(--green-100); border-color: transparent; }
+    .lib-row.locked { opacity: 0.6; }
+
+    .lib-icon {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface); border: 1.5px solid var(--line); color: var(--muted);
+    }
+    .lib-row.unlocked .lib-icon { background: var(--green-700); border-color: var(--green-700); color: #fffbf3; }
+
+    .lib-row-main { flex: 1; min-width: 0; }
+    .lib-row-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 700; font-size: 0.97rem; margin: 0; color: var(--text); }
+    .lib-row-sub { font-size: 0.82rem; color: var(--muted); margin: 3px 0 0; }
+    .lib-row-sub.lib-lock-note { font-style: italic; }
+
+    .lib-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .lib-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--surface); color: var(--green-700);
+      border: 1.5px solid var(--green-700);
+      padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: 0.8rem;
+      cursor: pointer; text-decoration: none; font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+    }
+    .lib-btn:hover { background: var(--green-700); color: #fffbf3; }
+    .lib-btn.primary { background: var(--green-700); color: #fffbf3; }
+    .lib-btn.primary:hover { background: var(--green-800); }
+    .lib-btn[disabled] {
+      opacity: 0.55; cursor: default; pointer-events: none;
+      border-color: var(--line); color: var(--muted); background: var(--surface);
+    }
+
+    @media (max-width: 560px) {
+      .lib-row { flex-wrap: wrap; }
+      .lib-actions { width: 100%; justify-content: flex-start; margin-left: 56px; }
+    }
+
+    /* ── FLOATING CONTROLS ─────────────────────── */
+    .floating-controls {
+      position: fixed;
+      right: 76px;
+      bottom: 24px;
+      z-index: 80;
+      display: flex;
+      gap: 10px;
+    }
+    .float-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      background: var(--green-700);
+      color: #fffbf3;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 16px rgba(16,36,27,0.24);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .float-btn:hover { transform: scale(1.1); }
+    .float-btn.active { background: #fffbf3; color: var(--green-900); }
+
+    .back-to-top {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      z-index: 80;
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--green-700);
+      color: #fffbf3;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      font-size: 20px;
+      font-weight: 900;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .back-to-top:hover { transform: translateY(-2px); }
+    .back-to-top.visible { display: flex; }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer {
+      padding: clamp(24px, 3.5vw, 36px) clamp(16px, 4vw, 48px) clamp(18px, 2.5vw, 24px);
+      background: var(--green-900);
+      color: rgba(255,250,240,0.78);
+    }
+
+    .footer-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-flags {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .footer-flags img {
+      height: 24px;
+      width: auto;
+      border-radius: 3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    .footer-acknowledgement { text-align: center; }
+
+    .footer-statement {
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: rgba(255,250,240,0.7);
+      max-width: 680px;
+      margin: 0 auto 6px;
+    }
+    .footer-statement:last-child { margin-bottom: 0; }
+
+    .footer-divider { height: 1px; background: rgba(255,250,240,0.12); }
+
+    .footer-safety, .footer-contact {
+      text-align: center;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: rgba(255,250,240,0.78);
+    }
+    .footer-safety p, .footer-contact p { max-width: 680px; margin: 0 auto 6px; }
+    .footer-safety p:last-child, .footer-contact p:last-child { margin-bottom: 0; }
+    .footer-safety a, .footer-contact a { color: #f8ecd8; text-decoration: underline; }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-logos { display: flex; align-items: center; gap: 18px; }
+    .footer-logos img { height: 56px; width: auto; display: block; opacity: 0.92; }
+    .cmrg-logo { height: 140px; width: auto; }
+    .footer-copyright { font-size: 0.78rem; color: rgba(255,250,240,0.6); }
+
+    @media (max-width: 600px) {
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 860px) {
+      .page-hero { min-height: 340px; padding-bottom: 40px; }
+      .page-hero h1 { font-size: clamp(2.4rem, 8vw, 3.4rem); margin-bottom: 14px; }
+
+      .people-grid { grid-template-columns: 1fr; }
+
+      .person-card.full-width {
+        grid-column: 1;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .person-avatar { width: 80px; height: 80px; }
+
+      .tab-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        border-radius: var(--radius);
+      }
+
+      .tab-btn { border-radius: 6px; text-align: center; }
+
+      .person-card h3 { font-size: 1.5rem; }
+
+      .floating-controls { right: 14px; bottom: 76px; }
+      .back-to-top { right: 14px; bottom: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">
+      <img src="TheGreenRoomLogo6.png" alt="The Green Room Logo">
+      <span class="logo-text">The Green Room</span>
+    </a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="program.html">Program</a>
+    <a href="audio-library.html" class="menu-section-link">My Audio Library</a>
+    <a href="about.html" class="menu-section-link">About Us</a>
+    <a href="about.html#people" class="menu-sub-link">The People</a>
+    <a href="about.html#the-program" class="menu-sub-link">The Program</a>
+  </div>
+
+  <main id="main-content">
+  <header class="page-hero">
+    <div class="page-hero-inner">
+      <p class="eyebrow">Guided practice</p>
+      <h1>Your Audio Library.</h1>
+    </div>
+  </header>
+
+  <div class="library-wrap">
+    <p class="lib-intro">Every guided audio you unlock as you work through the program, all in one place. A track unlocks once you've marked its module complete — so this fills up as you go, and you can always come back to listen again or download it.</p>
+
+    <div class="lib-progress">
+      <div class="lib-progress-bar"><div class="lib-progress-fill" id="libProgressFill"></div></div>
+      <div class="lib-progress-label" id="libProgressLabel">0 of 0 unlocked</div>
+    </div>
+
+    <div id="libGroups"></div>
+  </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+
+      <div class="footer-acknowledgement">
+        <div class="footer-flags">
+          <img src="AustralianFlag.png" alt="Australian flag">
+          <img src="AboriginalFlag.png" alt="Aboriginal flag">
+          <img src="TorresStraitFlag.png" alt="Torres Strait Islander flag">
+          <img src="RainbowFlag.png" alt="Pride flag">
+        </div>
+        <p class="footer-statement">The Green Room supports mothers across Australia with their wellbeing.</p>
+        <p class="footer-statement">We acknowledge the Aboriginal and Torres Strait Islander peoples as Traditional Owners of the land, and pay our respects to Elders past and present.</p>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-safety">
+        <p>The Green Room is not a replacement for professional support.</p>
+        <p><strong>In immediate danger, call 000.</strong> For crisis support, call Lifeline on <a href="tel:131114">13 11 14</a> (24/7).</p>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <div class="footer-logos">
+          <img src="uqlogo4.png" alt="University of Queensland logo">
+          <img src="CMRGLogo.png" alt="Compassionate Mind Research Group logo" class="cmrg-logo">
+        </div>
+        <p class="footer-copyright">Copyright &copy; 2026 The Green Room. All rights reserved.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <div class="floating-controls">
+    <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode" aria-pressed="false"></button>
+  </div>
+
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+  <script>
+    const ICONS = {
+      moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
+      sun: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>'
+    };
+
+    function applyDark(on) {
+      document.body.classList.toggle('dark-mode', on);
+      const btn = document.getElementById('darkBtn');
+      if (btn) {
+        btn.classList.toggle('active', on);
+        btn.innerHTML = on ? ICONS.sun : ICONS.moon;
+        btn.title = on ? 'Light mode' : 'Dark mode';
+        btn.setAttribute('aria-pressed', on);
+      }
+    }
+
+    function toggleDark() {
+      const on = !document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', on);
+      applyDark(on);
+    }
+
+    /* Mirrors the module list in program.html (title, audio label, and the
+       2/5/10 min durations each guided audio comes in) just enough to list
+       them here — update this alongside program.html's `modules` array if
+       a module's audio changes. Every "file" is still '' until real audio
+       is uploaded; the Download button below just goes inert until then. */
+    const LIB_DURATIONS = ['2 min', '5 min', '10 min'];
+    function libTrack(label) {
+      return { label, durations: LIB_DURATIONS.map(len => ({ len, file: '' })) };
+    }
+    const MODULE_AUDIO = [
+      { num: 1, title: 'Introduction', tracks: [libTrack('Guided audio — Introduction')] },
+      { num: 2, title: 'Motherhood and the brain', tracks: [libTrack('Guided audio — Motherhood and the brain')] },
+      { num: 3, title: 'Compassion and our tricky brains', tracks: [libTrack('Guided audio — Compassion and our tricky brains')] },
+      { num: 4, title: 'Our three circles', tracks: [libTrack('Guided audio — Our three circles')] },
+      { num: 5, title: 'Working with your inner critic', tracks: [libTrack('Guided audio — Working with your inner critic')] },
+      { num: 6, title: 'Building your compassionate self', tracks: [libTrack('Guided audio — Building your compassionate self')] },
+      { num: 7, title: 'Working with complex emotions', tracks: [
+          libTrack('Guided audio — Anger'),
+          libTrack('Guided audio — Sadness'),
+          libTrack('Guided audio — Anxiety')
+        ] },
+      { num: 8, title: 'Reflection and Next Steps', tracks: [libTrack('Guided audio — Next steps')] }
+    ];
+
+    const ICON_PLAY = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>';
+    const ICON_LOCK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path></svg>';
+    const ICON_DOWNLOAD = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"></path></svg>';
+
+    function getCompletedModules() {
+      try { return JSON.parse(localStorage.getItem('completedModulesV2') || '[]'); }
+      catch (e) { return []; }
+    }
+
+    function renderLibrary() {
+      const completed = getCompletedModules();
+      const totalTracks = MODULE_AUDIO.reduce((sum, m) => sum + m.tracks.length, 0);
+      const unlockedTracks = MODULE_AUDIO
+        .filter(m => completed.includes(m.num))
+        .reduce((sum, m) => sum + m.tracks.length, 0);
+
+      document.getElementById('libProgressFill').style.width = (totalTracks ? (unlockedTracks / totalTracks * 100) : 0) + '%';
+      document.getElementById('libProgressLabel').textContent = `${unlockedTracks} of ${totalTracks} unlocked`;
+
+      document.getElementById('libGroups').innerHTML = MODULE_AUDIO.map(m => {
+        const unlocked = completed.includes(m.num);
+        return `
+          <div class="lib-group">
+            <div class="lib-group-title">Module ${m.num} — ${m.title}</div>
+            ${m.tracks.map(t => {
+              const fiveMin = t.durations.find(d => d.len === '5 min') || t.durations[0];
+              return `
+                <div class="lib-row ${unlocked ? 'unlocked' : 'locked'}">
+                  <div class="lib-icon">${unlocked ? ICON_PLAY : ICON_LOCK}</div>
+                  <div class="lib-row-main">
+                    <p class="lib-row-title">${t.label}</p>
+                    <p class="lib-row-sub ${unlocked ? '' : 'lib-lock-note'}">${unlocked ? fiveMin.len + ' guided audio' : 'Complete Module ' + m.num + ' to unlock'}</p>
+                  </div>
+                  <div class="lib-actions">
+                    ${unlocked ? `
+                      <a class="lib-btn" href="program.html?module=${m.num}&page=5">Listen</a>
+                      ${fiveMin.file
+                        ? `<a class="lib-btn primary" href="${fiveMin.file}" download>${ICON_DOWNLOAD} Download</a>`
+                        : `<button class="lib-btn" disabled title="Audio file coming soon">${ICON_DOWNLOAD} Download</button>`}
+                    ` : `<button class="lib-btn" disabled>Locked</button>`}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleMenu() {
+      const open = document.getElementById('mobileMenu').classList.toggle('open');
+      const hamburger = document.querySelector('.hamburger');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+      hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      document.body.classList.toggle('menu-open', open);
+    }
+
+    window.addEventListener('load', () => {
+      applyDark(localStorage.getItem('darkMode') === 'true');
+      renderLibrary();
+    });
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 420);
+    });
+
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  </script>
+</body>
+</html>

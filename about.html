@@ -411,26 +411,6 @@
 
     .program-copy p { color: var(--muted); line-height: 1.88; font-size: 0.97rem; }
 
-    /* ── RESEARCH TAB — just a list of linked publications ── */
-    .research-list { display: grid; gap: 24px; }
-
-    .research-item { padding-bottom: 24px; border-bottom: 1px solid var(--line); }
-    .research-item:last-child { padding-bottom: 0; border-bottom: 0; }
-
-    .research-item p {
-      color: var(--text);
-      line-height: 1.7;
-      font-size: 0.97rem;
-      margin-bottom: 6px;
-    }
-    .research-item p.no-link { margin-bottom: 0; }
-
-    .research-item a {
-      color: var(--wood-dark);
-      font-size: 0.9rem;
-      word-break: break-word;
-    }
-
     /* ── CONTACT US SECTION ─────────────────────── */
     .contact-section {
       width: min(1100px, calc(100% - 32px));
@@ -643,10 +623,10 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">Home</a>
     <a href="program.html">Program</a>
+    <a href="audio-library.html">My Audio Library</a>
     <a href="about.html" class="menu-section-link">About Us</a>
     <a href="about.html#people" class="menu-sub-link">The People</a>
     <a href="about.html#the-program" class="menu-sub-link">The Program</a>
-    <a href="about.html#research" class="menu-sub-link">The Research</a>
   </div>
 
   <main id="main-content">
@@ -661,7 +641,6 @@
     <div class="tab-buttons">
       <button class="tab-btn active" onclick="showTab(event, 'people')" aria-pressed="true">The People</button>
       <button class="tab-btn" onclick="showTab(event, 'the-program')" aria-pressed="false">The Program</button>
-      <button class="tab-btn" onclick="showTab(event, 'research')" aria-pressed="false">The Research</button>
     </div>
 
     <section class="tab-content active" id="tab-people">
@@ -720,54 +699,6 @@
           <div>
             <h3>Who it is for</h3>
             <p>A description of who this program is designed to help will go here.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="tab-content" id="tab-research">
-      <div class="program-about">
-        <h2 class="sr-only">Research</h2>
-        <p style="color:var(--muted);line-height:1.88;font-size:0.97rem;margin:0 0 28px;">The Green Room is grounded in published research on compassion-focused therapy and the experience of parents after preterm birth.</p>
-        <div class="research-list">
-          <div class="research-item">
-            <p>Lloyd-Collins, T.M., Fitzallen, G.C. &amp; Kirby, J.N. A Compassion-Focused Approach to Support Parents After Preterm Birth. <em>Clin Child Fam Psychol Rev</em> 28, 954–972 (2025).</p>
-            <a href="https://doi.org/10.1007/s10567-025-00549-z" target="_blank" rel="noopener">https://doi.org/10.1007/s10567-025-00549-z</a>
-          </div>
-          <div class="research-item">
-            <p>Kirby, J.N. Compassion as a transdiagnostic target to reduce mental health symptoms and promote well-being. <em>Nat Rev Psychol</em> 4, 249–263 (2025).</p>
-            <a href="https://doi.org/10.1038/s44159-025-00422-4" target="_blank" rel="noopener">https://doi.org/10.1038/s44159-025-00422-4</a>
-          </div>
-          <div class="research-item">
-            <p>Fitzallen, G.C., Kirby, J.N., Taylor, H.G. et al. Evaluating multidimensional facets of the maternal experience after preterm birth. <em>J Perinatol</em> 44, 635–642 (2024).</p>
-            <a href="https://doi.org/10.1038/s41372-024-01865-y" target="_blank" rel="noopener">https://doi.org/10.1038/s41372-024-01865-y</a>
-          </div>
-          <div class="research-item">
-            <p>Millard, L.A. &amp; Wittkowski, A. (2023). Compassion focused therapy for women in the perinatal period: a summary of the current literature. <em>Front. Psychiatry</em> 14:1288797.</p>
-            <a href="https://doi.org/10.3389/fpsyt.2023.1288797" target="_blank" rel="noopener">https://doi.org/10.3389/fpsyt.2023.1288797</a>
-          </div>
-          <div class="research-item">
-            <p>Kirby, J. N., Hoang, A., &amp; Ramos, N. (2023). A brief compassion focused therapy intervention can help self-critical parents and their children: A randomised controlled trial. <em>Psychology and Psychotherapy: Theory, Research and Practice</em>, 96, 608–626.</p>
-            <a href="https://doi.org/10.1111/papt.12459" target="_blank" rel="noopener">https://doi.org/10.1111/papt.12459</a>
-          </div>
-          <div class="research-item">
-            <p>Lennard, G., Mitchell, A. &amp; Whittingham, K. (2020). Randomized controlled trial of a brief online self-compassion intervention for mothers of infants: effects on mental health outcomes. <em>J Clin Psychol</em> 77:473–87.</p>
-            <a href="https://doi.org/10.1002/jclp.23068" target="_blank" rel="noopener">https://doi.org/10.1002/jclp.23068</a>
-          </div>
-          <div class="research-item">
-            <p>Gammer, I., Hartley-Jones, C. &amp; Jones, F. (2020). A randomized controlled trial of an online, compassion-based intervention for maternal psychological well-being in the first year postpartum. <em>Mindfulness</em> 11:928–39.</p>
-            <a href="https://doi.org/10.1007/s12671-020-01306-9" target="_blank" rel="noopener">https://doi.org/10.1007/s12671-020-01306-9</a>
-          </div>
-          <div class="research-item">
-            <p>Kelman, A., Evare, B., Barrera, A., Muñoz, R. &amp; Gilbert, P. (2018). A proof-of-concept pilot randomized comparative trial of brief Internet-based compassionate mind training and cognitive-behavioral therapy for perinatal and intending to become pregnant women. <em>Clin Psychol Psychother</em> 25:608–19.</p>
-            <a href="https://doi.org/10.1002/cpp.2185" target="_blank" rel="noopener">https://doi.org/10.1002/cpp.2185</a>
-          </div>
-          <div class="research-item">
-            <p>Mitchell, A., Whittingham, K., Steindl, S. &amp; Kirby, J. (2018). Feasibility and acceptability of a brief online self-compassion intervention for mothers of infants. <em>Arch Womens Ment Health</em> 21:553–61.</p>
-            <a href="https://doi.org/10.1007/s00737-018-0829-y" target="_blank" rel="noopener">https://doi.org/10.1007/s00737-018-0829-y</a>
-          </div>
-          <div class="research-item">
-            <p class="no-link">Cree, M. (2015). <em>The Compassionate Mind Approach to Postnatal Depression: Using Compassion-Focused Therapy to Enhance Mood, Confidence and Bonding.</em> London: Robinson.</p>
           </div>
         </div>
       </div>
@@ -869,7 +800,7 @@
       applyDark(localStorage.getItem('darkMode') === 'true');
 
       const hash = window.location.hash.replace('#', '');
-      const tabOrder = ['people', 'the-program', 'research'];
+      const tabOrder = ['people', 'the-program'];
       const tabIndex = tabOrder.indexOf(hash);
       if (tabIndex !== -1) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));

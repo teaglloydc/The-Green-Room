@@ -371,6 +371,24 @@
       font-weight: 600;
     }
 
+    .sidebar-library-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 20px;
+      margin-bottom: 18px;
+      border-radius: 999px;
+      background: var(--wood);
+      color: #fffbf3;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+      box-shadow: var(--glass-shadow);
+      transition: transform var(--motion-ease), background var(--motion-ease);
+    }
+    .sidebar-library-link:hover { transform: translateY(-2px); background: var(--wood-dark); }
+    .sidebar-library-link svg { flex-shrink: 0; }
+
     /* ── LIQUID GLASS — module pills ── */
     .sidebar-module {
       display: grid;
@@ -574,16 +592,6 @@
       .subpage-dot-label { font-size: 0.64rem; }
     }
 
-    .carry-forward-note {
-      margin-bottom: 16px;
-      padding: 10px 14px;
-      border-radius: var(--radius);
-      background: var(--green-100);
-      color: var(--green-700);
-      font-size: 0.86rem;
-      font-weight: 700;
-    }
-
     .subpage-nav-buttons {
       display: flex;
       align-items: center;
@@ -600,6 +608,10 @@
       color: var(--wood-dark);
       margin-bottom: 10px;
     }
+
+    .audio-library-nudge { margin: 18px 0 0; font-size: 0.9rem; }
+    .audio-library-nudge a { color: var(--green-700); font-weight: 700; text-decoration: underline; }
+    body.dark-mode .audio-library-nudge a { color: var(--wood); }
 
 
     .module-card-shell [id^="sec-"] { scroll-margin-top: 70px; }
@@ -1103,7 +1115,6 @@
       margin: 0 0 40px;
       text-align: center;
     }
-    .tree-diagram h3 { margin-bottom: 18px; }
 
     .tree-canopy-wrap { position: relative; width: min(500px, 98%); margin: 0 auto; }
     .tree-illustration { display: block; width: 100%; height: auto; }
@@ -1574,6 +1585,41 @@
 
     .float-btn:hover { transform: scale(1.1); }
     .float-btn.active { background: #fffbf3; color: var(--green-900); }
+
+    /* ── BACK TO DASHBOARD — pinned to the left edge, vertically centred,
+       so it never collides with the sound/dark-mode cluster or back-to-top
+       button (both anchored bottom-right, and the former even moves to
+       top-right on narrow screens). Only shown while a module is open. */
+    .back-to-dashboard {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 85;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 18px 13px 14px;
+      border: none;
+      border-radius: 0 999px 999px 0;
+      background: var(--green-900);
+      color: #fffbf3;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 4px 6px 18px rgba(16,36,27,0.28);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .back-to-dashboard.visible { display: flex; }
+    .back-to-dashboard:hover { transform: translateY(-50%) translateX(4px); background: var(--green-800); }
+    .back-to-dashboard svg { flex-shrink: 0; }
+
+    @media (max-width: 560px) {
+      .back-to-dashboard span { display: none; }
+      .back-to-dashboard { padding: 13px 14px; border-radius: 0 999px 999px 0; }
+    }
 
     /* ── BACK TO TOP ────────────────────────────── */
     .back-to-top {
@@ -2058,10 +2104,10 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">Home</a>
     <a href="program.html">Program</a>
+    <a href="audio-library.html">My Audio Library</a>
     <a href="about.html" class="menu-section-link">About Us</a>
     <a href="about.html#people" class="menu-sub-link">The People</a>
     <a href="about.html#the-program" class="menu-sub-link">The Program</a>
-    <a href="about.html#research" class="menu-sub-link">The Research</a>
   </div>
 
   <header class="program-intro" id="main-content">
@@ -2118,6 +2164,11 @@
     <button class="float-btn" id="soundBtn" onclick="toggleSound()" aria-label="Toggle calming nature sounds" title="Nature sounds" aria-pressed="false"></button>
     <button class="float-btn" id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode" title="Toggle dark mode" aria-pressed="false"></button>
   </div>
+
+  <button type="button" class="back-to-dashboard" id="backToDashboard" onclick="goToDashboard()" aria-label="Back to all modules">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+    <span>All modules</span>
+  </button>
 
   <audio id="natureSound" loop preload="none">
     <source src="nature-ambience.mp3" type="audio/mpeg">
@@ -2211,15 +2262,15 @@
           { label: '10 min', title: 'Introduction — 10 min practice', file: '' }
         ] },
 
-      { title: 'Motherhood and the brain', summary: ['How does motherhood change the brain?','How do these changes impact me after preterm birth?','How can these changes impact my mental health?'],
+      { title: 'Motherhood and the brain', summary: ['Changes in the brain during pregnancy and motherhood','The brain’s alarm and reward systems','The impact of preterm birth on the brain and emotions'],
         written:`
-<p><strong>How does motherhood change the brain?</strong></p>
+<p><strong>Changes in the brain during pregnancy and motherhood</strong></p>
 
 <p>Have you noticed any changes since giving birth?</p>
 
-<p><strong>How do these changes impact me after preterm birth?</strong></p>
+<p><strong>The brain’s alarm and reward systems</strong></p>
 
-<p><strong>How can these changes impact my mental health?</strong></p>
+<p><strong>The impact of preterm birth on the brain and emotions</strong></p>
 `,
     audio: 'Guided audio — Motherhood and the brain',
     audioImage: "Mindfulness2.jpg",
@@ -2256,16 +2307,8 @@
       ]
     },
 },
-      { title: 'Compassion and our tricky brains', summary: ['What is Tricky Brain?','How can my tricky brain impact me after preterm birth?','What is compassion?','How can compassion help?'],
-        written: `
-<p><strong>What is Tricky Brain?</strong></p>
-
-<p><strong>How can my tricky brain impact me after preterm birth?</strong></p>
-
-<p><strong>What is compassion?</strong></p>
-
-<p><strong>How can compassion help?</strong></p>
-`,
+      { title: 'Compassion and our tricky brains', summary: ['Understanding our tricky brains','What is compassion?','Why is self-compassion difficult?'],
+        written: ``,
    audio: 'Guided audio — Compassion and our tricky brains',
    audioImage: "sooth2.png",
    natureVideo: 'Audioimagery8.mp4',
@@ -2283,7 +2326,6 @@
      label: 'Compassion',
      text: 'Compassion is being sensitive to one’s own and others’ suffering, combined with a desire to alleviate and prevent it.'
    },
-   trickyBrainDiagram: true,
    compassionateSelfTree: [
      { id: 'wisdom', label: 'Wisdom',
        text: 'We just happen to find ourselves here as part of the flow of life, with a tricky brain that can get caught up in angry or worry loops, and this is not our fault.' },
@@ -2294,7 +2336,7 @@
    ],
   },
       { title: 'Our three circles',
-        summary: ['What are the three circles?','How does preterm birth disrupt my three circles?'],
+        summary: ['Understanding the three emotional systems: threat, drive and soothing','Why the threat and drive systems can become more active after preterm birth','Finding ways to bring more balance and reconnect with your soothing system'],
         /*
          * CHANGE: circleDefs now has two fields per system:
          *   content  — the definition shown inside the collapsible bubble
@@ -2383,7 +2425,7 @@
         ] },
 
       { title: 'Working with your inner critic',
-        summary: ['Recognising our inner critic','Why does our inner critic show up?','How self criticism can affect us','Shifting towards compassion'],
+        summary: ['Understanding the inner critic','Why we can become self-critical','Developing a more compassionate inner voice'],
         written: `
 <p><strong>Recognising our inner critic</strong></p>
 
@@ -2410,13 +2452,13 @@
        },
 
       { title: 'Building your compassionate self',
-        summary: ['What is the compassionate self?','Why is it important?','How do I develop my compassionate self after preterm birth?'],
+        summary: ['Understanding our caring motivation','Imagining your compassionate self','Developing your compassionate qualities'],
         written: `
-<p><strong>What is the compassionate self?</strong></p>
+<p><strong>Understanding our caring motivation</strong></p>
 
-<p><strong>Why is it important?</strong></p>
+<p><strong>Imagining your compassionate self</strong></p>
 
-<p><strong>How do I develop my compassionate self after preterm birth?</strong></p>
+<p><strong>Developing your compassionate qualities</strong></p>
 `,
         audio: 'Guided audio — Building your compassionate self',
         audioImage: "CompassionateSelf.jpg",
@@ -2435,7 +2477,7 @@
        },
 
       { title: 'Working with complex emotions',
-        summary: ['Add overview here','Add overview here','Add overview here','Specific practices for each emotion'],
+        summary: ['Understanding sadness','Understanding anger','Understanding anxiety'],
         written: ``,
         audio: 'Guided audio — Working with complex emotions',
         emotions: true,
@@ -2470,8 +2512,8 @@
         },
         reflectionPrompts: ['Exercise content will be added here.'] },
 
-      { title: 'Next steps',
-        summary: ['Add overview here','Add overview here','Add overview here','Add overview here'],
+      { title: 'Reflection and Next Steps',
+        summary: ['Reflecting on your journey through The Green Room','Bringing compassion into everyday life','Continuing your compassion practice'],
         written: `
 <p>Your written content for module 8 will go here.</p>
 `,
@@ -2551,7 +2593,7 @@
       }
 
       const page1Out = scanPage(page1Html, 2);
-      const page2Out = scanPage(page2Html, 3);
+      const page2Out = scanPage(page2Html, 2);
 
       const links = (summary || []).map(s => {
         const norm = normalize(s);
@@ -2602,6 +2644,10 @@
           </div>
           <div class="progress-text" id="progressText">0 of ${TOTAL_MODULES} modules completed</div>
         </div>
+        <a class="sidebar-library-link" href="audio-library.html">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+          My Audio Library
+        </a>
         ${modules.map((m, i) => `
           <div class="sidebar-module ${i === 0 ? 'active' : ''}" onclick="showModule(${i+1})" onkeydown="handleKeyActivate(event, () => showModule(${i+1}))" id="sidebar-${i+1}" role="button" tabindex="0" aria-current="${i === 0 ? 'true' : 'false'}">
             <div>
@@ -2761,18 +2807,6 @@
           </div>
         ` : '';
 
-        /* Plain text instead of a boxes and loop diagram — a flag
-           (m.trickyBrainDiagram = true) rather than per-module data, since
-           this doesn't change module to module. */
-        const trickyBrainHTML = m.trickyBrainDiagram ? `
-          <div class="content-block">
-            <h3>Our tricky brain</h3>
-            <p>Our brain is built from two systems that don't always work smoothly together. The "old brain" handles fast emotions, drives and threat responses we share with other animals. The "new brain" is responsible for thinking, imagining and planning, our more recently evolved abilities.</p>
-            <p>These two systems constantly talk to each other, and can get caught in loops, like worry or self criticism, that keep going round and round. This isn't a flaw. It's just how brains like ours work.</p>
-            <p>This is where compassion can help. It gives us a way to notice these loops without judging ourselves for having them, and to gently guide our thinking toward something kinder and more helpful instead.</p>
-          </div>
-        ` : '';
-
         /* Compassionate-self tree — a real illustration (compassionate-self-tree.png)
            with labelled roots: the definition sits up by the canopy, and
            the three qualities (m.compassionateSelfTree = array of
@@ -2786,7 +2820,6 @@
         ];
         const compassionTreeHTML = m.compassionateSelfTree ? `
           <div class="tree-diagram">
-            <h3>Growing your compassionate self</h3>
             <div class="tree-canopy-wrap">
               <img class="tree-illustration" src="compassionate-self-tree.png" alt="Illustration of a tree with spreading roots" loading="lazy">
               ${m.definitionBox ? `
@@ -2987,24 +3020,15 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               ${moduleHeaderHTML}
 
               <div class="subpage-nav-dots" aria-label="Jump to any part of this module">
-                <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" aria-label="Check-in before this module" aria-current="true"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Check-in</span></button>
-                <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" aria-label="Page 1" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 1</span></button>
-                <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" aria-label="Page 2" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 2</span></button>
-                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Reflection activity" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Reflect</span></button>
+                <button type="button" class="subpage-dot active" data-page="1" onclick="showSubpage(${num},1)" aria-label="Page 1" aria-current="true"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 1</span></button>
+                <button type="button" class="subpage-dot" data-page="2" onclick="showSubpage(${num},2)" aria-label="Page 2" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Page 2</span></button>
+                <button type="button" class="subpage-dot" data-page="3" onclick="showSubpage(${num},3)" aria-label="Reflection activity" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Reflect</span></button>
+                <button type="button" class="subpage-dot" data-page="4" onclick="showSubpage(${num},4)" aria-label="Check-in before practice" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Check-in</span></button>
                 <button type="button" class="subpage-dot" data-page="5" onclick="showSubpage(${num},5)" aria-label="Audio practice" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Practice</span></button>
-                <button type="button" class="subpage-dot" data-page="6" onclick="showSubpage(${num},6)" aria-label="Check-in after this module" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Check-in</span></button>
+                <button type="button" class="subpage-dot" data-page="6" onclick="showSubpage(${num},6)" aria-label="Check-in after practice" aria-current="false"><span class="subpage-dot-mark"></span><span class="subpage-dot-label">Check-in</span></button>
               </div>
 
               <div class="subpage active" id="subpage-${num}-1">
-                <p class="subpage-label">Check-in</p>
-                <div class="tc-section" data-module="${num}" data-phase="before"></div>
-                <div class="subpage-nav-buttons">
-                  <span></span>
-                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},2)">Continue →</button>
-                </div>
-              </div>
-
-              <div class="subpage" id="subpage-${num}-2">
                 <div class="summary-box">
                   <h3>In this module:</h3>
                   <ul>${m.summary.map((s, i) => summaryLinks[i]
@@ -3027,12 +3051,12 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                   </div>
                 </div>
                 <div class="subpage-nav-buttons">
-                  <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},1)">← Back</button>
-                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},3)">Continue →</button>
+                  <span></span>
+                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},2)">Continue →</button>
                 </div>
               </div>
 
-              <div class="subpage" id="subpage-${num}-3">
+              <div class="subpage" id="subpage-${num}-2">
                 <div class="video-placeholder">
                   <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
                   <div class="video-controls-overlay">
@@ -3047,7 +3071,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                     </button>
                   </div>
                 </div>
-                ${trickyBrainHTML}
                 <div class="content-block written-block">
                   <div class="written-content">${page2Written}</div>
                 </div>
@@ -3055,14 +3078,23 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
                 ${circleBubblesHTML}
                 ${compassionTreeHTML}
                 <div class="subpage-nav-buttons">
+                  <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},1)">← Back</button>
+                  <button class="btn-module-nav btn-next" onclick="showSubpage(${num},3)">Continue →</button>
+                </div>
+              </div>
+
+              <div class="subpage" id="subpage-${num}-3">
+                <p class="subpage-label">Reflect</p>
+                ${exerciseBlock}
+                <div class="subpage-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},2)">← Back</button>
                   <button class="btn-module-nav btn-next" onclick="showSubpage(${num},4)">Continue →</button>
                 </div>
               </div>
 
               <div class="subpage" id="subpage-${num}-4">
-                <p class="subpage-label">Reflect</p>
-                ${exerciseBlock}
+                <p class="subpage-label">Check-in</p>
+                <div class="tc-section" data-module="${num}" data-phase="before"></div>
                 <div class="subpage-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},3)">← Back</button>
                   <button class="btn-module-nav btn-next" onclick="showSubpage(${num},5)">Continue →</button>
@@ -3072,6 +3104,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
               <div class="subpage" id="subpage-${num}-5">
                 <p class="subpage-label">Practice</p>
                 ${page3ExtraHTML}
+                <p class="audio-library-nudge"><a href="audio-library.html">Visit your audio library →</a></p>
                 <div class="subpage-nav-buttons">
                   <button class="btn-module-nav btn-prev" onclick="showSubpage(${num},4)">← Back</button>
                   <button class="btn-module-nav btn-next" onclick="showSubpage(${num},6)">Continue →</button>
@@ -3357,8 +3390,34 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     }
 
     /* ── MODULE NAVIGATION ──────────────────────── */
-    function showModule(num, opts) {
-      opts = opts || {};
+    /* ── BROWSER HISTORY — so the Back button steps back through the
+       module/page a visitor was just on (then back out to the dashboard,
+       then out of the program page) instead of leaving program.html in
+       one jump. Every real navigation (switching modules, switching
+       pages inside one, going to the dashboard) pushes a history entry
+       via pushNavState; popstate just replays that state without pushing
+       again, which is what suppressHistory guards against. */
+    let suppressHistory = false;
+
+    function pushNavState(moduleNum, page) {
+      if (suppressHistory) return;
+      const params = new URLSearchParams(window.location.search);
+      if (moduleNum) {
+        params.set('module', moduleNum);
+        if (page) params.set('page', page); else params.delete('page');
+      } else {
+        params.delete('module');
+        params.delete('page');
+      }
+      const qs = params.toString();
+      history.pushState(
+        { module: moduleNum || null, page: page || null },
+        '',
+        window.location.pathname + (qs ? '?' + qs : '')
+      );
+    }
+
+    function showModule(num, page) {
       document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.sidebar-module').forEach(s => { s.classList.remove('active'); s.setAttribute('aria-current', 'false'); });
       const section = document.getElementById('module-' + num);
@@ -3366,23 +3425,38 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       const sidebarItem = document.getElementById('sidebar-' + num);
       sidebarItem.classList.add('active');
       sidebarItem.setAttribute('aria-current', 'true');
+      document.getElementById('backToDashboard').classList.add('visible');
 
       if (section.querySelector('.subpage')) {
-        if (completed.includes(num)) {
-          // Already done this module before — land straight in the content,
-          // don't force another before-measure just to get back to it.
-          activateSubpage(section, 2);
-        } else if (opts.continueForward && circleSubmitted[tcKey(num - 1, 'after')]) {
-          // Coming straight from the previous module's after-measure in the
-          // same sitting — that reading doubles as this module's before-measure.
-          carryForwardBeforeMeasure(num, num - 1);
-        } else {
-          activateSubpage(section, 1);
-        }
+        activateSubpage(section, page || 1);
+      } else {
+        pushNavState(num, null);
       }
 
       document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    /* Shows the full module list again (sidebar + intro), same screen a
+       fresh visit to program.html lands on — reachable from the floating
+       "All modules" button, which only appears once a module is open. */
+    function goToDashboard() {
+      document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.sidebar-module').forEach(s => { s.classList.remove('active'); s.setAttribute('aria-current', 'false'); });
+      document.getElementById('backToDashboard').classList.remove('visible');
+      pushNavState(null, null);
+      document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    window.addEventListener('popstate', (e) => {
+      suppressHistory = true;
+      const state = e.state;
+      if (state && state.module) {
+        showModule(state.module, state.page || 1);
+      } else {
+        goToDashboard();
+      }
+      suppressHistory = false;
+    });
 
     /* Every part of a module (before-measure / page 1 / page 2 / page 3 /
        after-measure) is reachable at any time via the dots — nothing is
@@ -3401,6 +3475,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         d.setAttribute('aria-current', isCurrent ? 'true' : 'false');
       });
       playVisibleVideos(target);
+      pushNavState(Number(num), page);
     }
 
     /* Mobile browsers (iOS Safari in particular) won't actually start an
@@ -3484,37 +3559,6 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       if (!scope) return;
       activateSubpage(scope, page);
       document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    /* Copies the previous module's after-measure into this module's
-       before-measure (silently saved, same as a real submission) and
-       skips straight past the before-measure page. */
-    function carryForwardBeforeMeasure(num, prevNum) {
-      const section = document.getElementById('module-' + num);
-      const key = tcKey(num, 'before');
-      if (!circleSubmitted[key]) {
-        const prevValues = getModuleValues(prevNum, 'after');
-        circleValues[key] = { ...prevValues };
-        circleChanged[key] = true;
-        circleSubmitted[key] = true;
-        const beforeSection = section.querySelector('.tc-section[data-phase="before"]');
-        if (beforeSection) {
-          renderThreeCircleTool(beforeSection);
-          const { tP, dP, sP, dom } = applyTcSubmittedUI(num, 'before', prevValues);
-          recordTcResponse(num, 'before', prevValues, dom, tP, dP, sP, true);
-        }
-        showCarryForwardNote(section, num);
-      }
-      activateSubpage(section, 2);
-    }
-
-    function showCarryForwardNote(section, num) {
-      const target = document.getElementById(`subpage-${num}-2`);
-      if (!target || target.querySelector('.carry-forward-note')) return;
-      const note = document.createElement('p');
-      note.className = 'carry-forward-note';
-      note.textContent = 'Your check-in from the end of the last module carried over as your starting point here — no need to do it twice.';
-      target.insertBefore(note, target.firstChild);
     }
 
     function showEmotion(event, emotion) {
@@ -3768,7 +3812,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       actions.innerHTML = isLast
         ? `<button class="btn-module-nav btn-complete" onclick="closeCelebration(); document.getElementById('postMeasuresBox').scrollIntoView({behavior:'smooth'});">Continue</button>`
         : `<button class="btn-module-nav btn-complete" onclick="closeCelebration()">Stay here</button>
-           <button class="btn-module-nav btn-next" onclick="closeCelebration(); showModule(${num + 1}, {continueForward:true})">Continue to Module ${num + 1} →</button>`;
+           <button class="btn-module-nav btn-next" onclick="closeCelebration(); showModule(${num + 1})">Continue to Module ${num + 1} →</button>`;
 
       document.getElementById('celebrationOverlay').classList.add('visible');
     }
@@ -3796,7 +3840,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
         };
       } else {
         btn.textContent = 'Next module →';
-        btn.onclick = () => showModule(num + 1, { continueForward: true });
+        btn.onclick = () => showModule(num + 1);
       }
     }
 
@@ -3872,9 +3916,21 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       // A module tile on the home page links here as ?module=N — only jump
       // straight to it if that module has actually been completed, so this
       // can't be used to skip ahead into content that isn't unlocked yet.
-      const requestedModule = parseInt(new URLSearchParams(window.location.search).get('module'), 10);
+      // The audio library's "Listen" links add &page=5 to land straight on
+      // that module's Practice page instead of its overview.
+      const urlParams = new URLSearchParams(window.location.search);
+      const requestedModule = parseInt(urlParams.get('module'), 10);
       if (requestedModule >= 1 && requestedModule <= TOTAL_MODULES && completed.includes(requestedModule)) {
-        showModule(requestedModule);
+        const requestedPageRaw = parseInt(urlParams.get('page'), 10);
+        const requestedPage = (requestedPageRaw >= 1 && requestedPageRaw <= 6) ? requestedPageRaw : 1;
+        // This link already created the browser's current history entry —
+        // show the module without pushing a duplicate one, then tag that
+        // existing entry with the matching state so Back from here still
+        // behaves correctly.
+        suppressHistory = true;
+        showModule(requestedModule, requestedPage);
+        suppressHistory = false;
+        history.replaceState({ module: requestedModule, page: requestedPage }, '', window.location.href);
       }
     });
   </script>
