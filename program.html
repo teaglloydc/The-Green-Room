@@ -1613,10 +1613,12 @@
     .back-to-dashboard.visible { display: flex; }
     .back-to-dashboard:hover { transform: translateY(-50%) translateX(4px); background: var(--green-800); }
     .back-to-dashboard svg { flex-shrink: 0; }
+    .back-to-dashboard .label-mobile { display: none; }
 
     @media (max-width: 560px) {
-      .back-to-dashboard span { display: none; }
-      .back-to-dashboard { padding: 13px 14px; border-radius: 0 999px 999px 0; }
+      .back-to-dashboard .label-full { display: none; }
+      .back-to-dashboard .label-mobile { display: inline; }
+      .back-to-dashboard { padding: 13px 16px; }
     }
 
     /* ── BACK TO TOP ────────────────────────────── */
@@ -2165,7 +2167,8 @@
 
   <button type="button" class="back-to-dashboard" id="backToDashboard" onclick="goToDashboard()" aria-label="Back to all modules">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
-    <span>All modules</span>
+    <span class="label-full">All modules</span>
+    <span class="label-mobile">Dashboard</span>
   </button>
 
   <audio id="natureSound" loop preload="none">
@@ -2259,15 +2262,7 @@
         ] },
 
       { title: 'Motherhood and the brain', summary: ['Changes in the brain during pregnancy and motherhood','The brain’s alarm and reward systems','The impact of preterm birth on the brain and emotions'],
-        written:`
-<p><strong>Changes in the brain during pregnancy and motherhood</strong></p>
-
-<p>Have you noticed any changes since giving birth?</p>
-
-<p><strong>The brain’s alarm and reward systems</strong></p>
-
-<p><strong>The impact of preterm birth on the brain and emotions</strong></p>
-`,
+        written: ``,
     audio: 'Guided audio — Motherhood and the brain',
     audioImage: "Mindfulness2.jpg",
     natureVideo: 'Indexvideo5.mp4',
