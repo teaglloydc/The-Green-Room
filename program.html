@@ -520,8 +520,6 @@
       flex-shrink: 0;
     }
 
-    .module-readtime { background: var(--surface-soft); color: var(--wood-dark); }
-
     .module-badges {
       display: flex;
       align-items: center;
@@ -1894,8 +1892,7 @@
 
     /* Transparent concentric rings over the video, like a breathing
        "target" — rather than a solid shape, so the footage stays visible
-       through it. The whole group grows on "Breathe out", shrinks on
-       "Breathe in" — each held for 5s to match the JS-driven label. */
+       through it. The whole group grows and shrinks on a 5s cycle, unlabelled. */
     .breath-circle {
       position: relative;
       width: 54vw;
@@ -1943,6 +1940,7 @@
       font-weight: 700;
       font-size: clamp(0.85rem, 2vw, 1.05rem);
       text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+      text-align: center;
     }
 
     .audio-session-overlay.paused .breath-circle { transition: none; }
@@ -2209,9 +2207,7 @@
         <span class="breath-ring breath-ring-3"></span>
         <span class="breath-ring breath-ring-2"></span>
         <span class="breath-ring breath-ring-1"></span>
-        <span class="breath-core">
-          <span class="breath-label" id="breathLabel">Breathe in</span>
-        </span>
+        <span class="breath-core"></span>
       </div>
     </div>
 
@@ -2560,12 +2556,6 @@
     const circleSubmitted = {};
     const dragState = {};
 
-    function estimateReadMinutes(m) {
-      const raw = (m.written || '') + ' ' + (m.reflectionPrompts || []).join(' ') + ' ' + (m.summary || []).join(' ');
-      const words = raw.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
-      return Math.max(1, Math.round(words / 200)) + ' min read';
-    }
-
     /* Turns "In this module:" bullets into jump links. A bullet becomes a
        link only when its wording matches a <p><strong>…</strong></p>
        sub-heading already present in that module's written content (Page 1
@@ -2849,7 +2839,6 @@
               <h2>${m.title}</h2>
               <div class="module-badges">
                 <span class="module-progress">Module ${num} of ${TOTAL_MODULES}</span>
-                <span class="module-progress module-readtime">${estimateReadMinutes(m)}</span>
               </div>
             </div>
           </div>
@@ -3586,9 +3575,9 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     }
 
     /* ── GUIDED AUDIO SESSION — full-screen player over the module's
-       nature video, with a breathing guide (circle shrinks 5s on "Breathe
-       in", grows 5s on "Breathe out", repeating) since there's no real
-       audio to follow yet. ── */
+       nature video, with a breathing guide (circle shrinks then grows on
+       a repeating 5s cycle, unlabelled) since there's no real audio to
+       follow yet. ── */
     let audioSessionInterval = null;
     let audioSessionBreathInterval = null;
     let audioSessionElapsedSeconds = 0;
@@ -3630,6 +3619,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       audioSessionPaused = false;
       overlay.classList.remove('paused', 'complete');
       overlay.classList.add('visible');
+      clearBreathLabel();
       setAudioSessionPlayIcon(true);
       updateSessionTimerDisplay();
       startAudioSessionTimers();
@@ -3659,11 +3649,18 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
     let breathIn = true;
     function runBreathCycle() {
       const circle = document.getElementById('breathCircle');
-      const label = document.getElementById('breathLabel');
-      if (!circle || !label) return;
+      if (!circle) return;
       circle.classList.toggle('shrink', breathIn);
-      label.textContent = breathIn ? 'Breathe in' : 'Breathe out';
       breathIn = !breathIn;
+    }
+
+    /* The circle itself just pulses, unlabelled, for the whole session —
+       this only ever gets text once, right at the end (see
+       completeAudioSession), so every fresh/restarted session needs it
+       cleared back out again first. */
+    function clearBreathLabel() {
+      const core = document.querySelector('#breathCircle .breath-core');
+      if (core) core.textContent = '';
     }
 
     function updateSessionTimerDisplay() {
@@ -3699,6 +3696,7 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       audioSessionPaused = false;
       audioSessionElapsedSeconds = 0;
       breathIn = true;
+      clearBreathLabel();
       updateSessionTimerDisplay();
       setAudioSessionPlayIcon(true);
       const videoEl = document.getElementById('audioSessionVideo');
@@ -3710,7 +3708,8 @@ Anger can show up as frustration, blame, or feeling upset that this experience h
       stopAudioSessionTimers();
       const overlay = document.getElementById('audioSessionOverlay');
       overlay.classList.add('complete');
-      document.getElementById('breathLabel').textContent = 'Session complete';
+      const core = document.querySelector('#breathCircle .breath-core');
+      if (core) core.innerHTML = '<span class="breath-label">Session complete</span>';
       setAudioSessionPlayIcon(false);
     }
 

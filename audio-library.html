@@ -227,11 +227,11 @@
     /* ── FULL-WIDTH HERO BANNER ─────────────────── */
     .page-hero {
       position: relative;
-      min-height: 320px;
+      min-height: 680px;
       display: flex;
       align-items: flex-end;
       padding: clamp(96px, 10vw, 130px) clamp(20px, 5vw, 64px) 52px;
-      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      background: url("AudioLibrary1.jpg") center 62%/cover;
       color: #fffbf3;
       overflow: hidden;
     }
@@ -239,12 +239,13 @@
     .page-hero-inner { position: relative; z-index: 1; width: min(860px, 100%); }
 
     .eyebrow {
-      color: rgba(255,250,240,0.82);
+      color: rgba(255,250,240,0.92);
       font-size: 0.78rem;
       font-weight: 800;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       margin-bottom: 14px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4);
     }
 
     .page-hero h1 {
@@ -256,13 +257,15 @@
       color: #fffbf3;
       text-wrap: balance;
       margin-bottom: 18px;
+      text-shadow: 0 4px 14px rgba(0,0,0,0.5), 0 2px 5px rgba(0,0,0,0.4);
     }
 
     .page-hero p {
-      color: rgba(255,250,240,0.88);
+      color: rgba(255,250,240,0.95);
       font-size: clamp(0.95rem, 1.4vw, 1.1rem);
       line-height: 1.85;
       max-width: 600px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4);
     }
 
     /* ── AUDIO LIBRARY ──────────────────────────── */
@@ -453,7 +456,7 @@
 
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 860px) {
-      .page-hero { min-height: 340px; padding-bottom: 40px; }
+      .page-hero { min-height: 560px; padding-bottom: 40px; }
       .page-hero h1 { font-size: clamp(2.4rem, 8vw, 3.4rem); margin-bottom: 14px; }
 
       .people-grid { grid-template-columns: 1fr; }
@@ -507,7 +510,6 @@
   <main id="main-content">
   <header class="page-hero">
     <div class="page-hero-inner">
-      <p class="eyebrow">Guided practice</p>
       <h1>Your Audio Library.</h1>
     </div>
   </header>
