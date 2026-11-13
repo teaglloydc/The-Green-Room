@@ -28,13 +28,17 @@
       --line: rgba(31, 52, 39, 0.14);
       --shadow: 0 22px 60px rgba(16, 36, 27, 0.12);
       --radius: 14px;
-      /* Shelf-tile gradients — four tasteful variants cycling within the
-         site's own green/sage palette (no off-brand hues), each dark
-         enough for the cream tile text to stay legible. */
-      --shelf-a: linear-gradient(135deg, #416b55, #234334);
-      --shelf-b: linear-gradient(135deg, #8fae6e, #5c7a3f);
-      --shelf-c: linear-gradient(135deg, #5c7a3f, #2e5542);
-      --shelf-d: linear-gradient(135deg, #2e5542, #8fae6e);
+      /* Shelf-tile palette — soft flat pastels (not gradients), each with
+         its own dark-green-family text colour rather than cream, for a
+         calmer, quieter feel than a bold saturated fill. */
+      --shelf-a: #e3eee0;
+      --shelf-b: #eef1dc;
+      --shelf-c: #e7f0ea;
+      --shelf-d: #ecf1e4;
+      --shelf-chip-bg: rgba(255,255,255,0.6);
+      --shelf-chip-border: rgba(35,67,52,0.18);
+      --shelf-chip-active-bg: #2e5542;
+      --shelf-chip-active-text: #fffbf3;
     }
 
     body.dark-mode {
@@ -53,12 +57,17 @@
       --line: rgba(238, 243, 234, 0.14);
       --shadow: 0 22px 70px rgba(0, 0, 0, 0.38);
       /* Fixed dark-mode values rather than the inverted tokens above (which
-         flip toward near-white for text use) — these need to stay dark
-         enough behind cream tile text. */
-      --shelf-a: linear-gradient(135deg, #2f4e3c, #16261c);
-      --shelf-b: linear-gradient(135deg, #4a5c38, #2a3620);
-      --shelf-c: linear-gradient(135deg, #3a4a2e, #1f3327);
-      --shelf-d: linear-gradient(135deg, #24382c, #4a5c38);
+         flip toward near-white for text use) — muted dark panels instead
+         of light pastels, with light text and a light active-chip fill
+         so contrast flips the right way round. */
+      --shelf-a: #1d2f24;
+      --shelf-b: #262a19;
+      --shelf-c: #1a2b22;
+      --shelf-d: #212e1e;
+      --shelf-chip-bg: rgba(255,255,255,0.08);
+      --shelf-chip-border: rgba(255,255,255,0.18);
+      --shelf-chip-active-bg: #eef3ea;
+      --shelf-chip-active-text: #0d1710;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -315,21 +324,20 @@
       flex-direction: column;
       gap: 12px;
       min-height: 192px;
-      color: #fffbf3;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 10px 26px rgba(16,36,27,0.14);
+      box-shadow: 0 6px 16px rgba(16,36,27,0.07);
     }
-    .shelf-tile.a { background: var(--shelf-a); }
-    .shelf-tile.b { background: var(--shelf-b); }
-    .shelf-tile.c { background: var(--shelf-c); }
-    .shelf-tile.d { background: var(--shelf-d); }
+    .shelf-tile.a { background: var(--shelf-a); color: var(--green-800); }
+    .shelf-tile.b { background: var(--shelf-b); color: var(--wood-dark); }
+    .shelf-tile.c { background: var(--shelf-c); color: var(--green-900); }
+    .shelf-tile.d { background: var(--shelf-d); color: var(--green-700); }
 
     .shelf-tile.locked {
-      background: var(--surface-soft);
+      background: var(--surface);
       color: var(--muted);
       box-shadow: none;
-      border: 1px solid var(--line);
+      border: 1px dashed var(--line);
     }
 
     .shelf-tile-num {
@@ -356,28 +364,28 @@
     .shelf-durations { display: flex; gap: 6px; }
     .shelf-dur-btn {
       flex: 1;
-      border: 1.5px solid rgba(255,251,243,0.4);
-      background: rgba(255,251,243,0.12);
-      color: #fffbf3;
+      border: 1.5px solid var(--shelf-chip-border);
+      background: var(--shelf-chip-bg);
+      color: inherit;
       border-radius: 999px;
       padding: 6px 0;
       font-weight: 700;
       font-size: 0.74rem;
       cursor: pointer;
       font-family: inherit;
-      transition: background 0.15s, border-color 0.15s;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
-    .shelf-dur-btn:hover { background: rgba(255,251,243,0.2); }
-    .shelf-dur-btn.active { background: #fffbf3; color: var(--green-900); border-color: #fffbf3; }
+    .shelf-dur-btn:hover { background: color-mix(in srgb, var(--shelf-chip-bg) 60%, var(--text) 10%); }
+    .shelf-dur-btn.active { background: var(--shelf-chip-active-bg); color: var(--shelf-chip-active-text); border-color: var(--shelf-chip-active-bg); }
 
     /* Action row */
     .shelf-actions { display: flex; gap: 8px; }
     .shelf-action-btn {
       flex: 1;
       display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-      border: 1.5px solid rgba(255,251,243,0.55);
-      background: rgba(255,251,243,0.14);
-      color: #fffbf3;
+      border: 1.5px solid var(--shelf-chip-border);
+      background: var(--shelf-chip-bg);
+      color: inherit;
       border-radius: 999px;
       padding: 8px 10px;
       font-weight: 700;
@@ -387,7 +395,7 @@
       font-family: inherit;
       transition: background 0.15s;
     }
-    .shelf-action-btn:hover { background: rgba(255,251,243,0.26); }
+    .shelf-action-btn:hover { background: color-mix(in srgb, var(--shelf-chip-bg) 60%, var(--text) 10%); }
     .shelf-action-btn[disabled] { opacity: 0.5; cursor: default; pointer-events: none; }
 
     @media (max-width: 560px) {
@@ -662,18 +670,18 @@
       return { label, durations: LIB_DURATIONS.map(len => ({ len, file: '' })) };
     }
     const MODULE_AUDIO = [
-      { num: 1, title: 'Introduction', tracks: [libTrack('Guided audio — Introduction')] },
-      { num: 2, title: 'Motherhood and the brain', tracks: [libTrack('Guided audio — Motherhood and the brain')] },
-      { num: 3, title: 'Compassion and our tricky brains', tracks: [libTrack('Guided audio — Compassion and our tricky brains')] },
-      { num: 4, title: 'Our three circles', tracks: [libTrack('Guided audio — Our three circles')] },
-      { num: 5, title: 'Working with your inner critic', tracks: [libTrack('Guided audio — Working with your inner critic')] },
-      { num: 6, title: 'Building your compassionate self', tracks: [libTrack('Guided audio — Building your compassionate self')] },
+      { num: 1, title: 'Introduction', tracks: [libTrack('Introduction')] },
+      { num: 2, title: 'Motherhood and the brain', tracks: [libTrack('Motherhood and the brain')] },
+      { num: 3, title: 'Compassion and our tricky brains', tracks: [libTrack('Compassion and our tricky brains')] },
+      { num: 4, title: 'Our three circles', tracks: [libTrack('Our three circles')] },
+      { num: 5, title: 'Working with your inner critic', tracks: [libTrack('Working with your inner critic')] },
+      { num: 6, title: 'Building your compassionate self', tracks: [libTrack('Building your compassionate self')] },
       { num: 7, title: 'Working with complex emotions', tracks: [
-          libTrack('Guided audio — Anger'),
-          libTrack('Guided audio — Sadness'),
-          libTrack('Guided audio — Anxiety')
+          libTrack('Anger'),
+          libTrack('Sadness'),
+          libTrack('Anxiety')
         ] },
-      { num: 8, title: 'Reflection and Next Steps', tracks: [libTrack('Guided audio — Next steps')] }
+      { num: 8, title: 'Reflection and Next Steps', tracks: [libTrack('Next steps')] }
     ];
 
     const ICON_PLAY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>';
