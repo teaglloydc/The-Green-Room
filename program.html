@@ -1618,7 +1618,12 @@
     @media (max-width: 560px) {
       .back-to-dashboard .label-full { display: none; }
       .back-to-dashboard .label-mobile { display: inline; }
-      .back-to-dashboard { padding: 13px 16px; }
+      .back-to-dashboard {
+        padding: 6px 10px 6px 7px;
+        gap: 4px;
+        font-size: 0.62rem;
+      }
+      .back-to-dashboard svg { width: 11px; height: 11px; }
     }
 
     /* ── BACK TO TOP ────────────────────────────── */
@@ -2958,30 +2963,12 @@
               <button class="emotion-tab-btn" onclick="showEmotion(event,'anxiety')" aria-pressed="false">Anxiety</button>
             </div>
             <div class="emotion-tab-content active" id="emotion-anger">
-              <div class="content-block written-block"><h3>Anger</h3><p>Anger may feel like irritation, blame, or frustration. It can arise when something feels unfair or overwhelming and can signal a need for boundaries or change.
-
-Anger can show up as frustration, blame, or feeling upset that this experience has happened to you. It may also be directed toward how others respond or how the situation is being managed.
-</p></div>
               ${renderEmotionAudio('anger')}
             </div>
             <div class="emotion-tab-content" id="emotion-sadness">
-              <div class="content-block written-block"><h3>Sadness</h3>
-
-<p>Sadness can bring feelings of loss, grief, loneliness, or vulnerability. It often slows us down and can support us in seeking comfort, care, and connection.</p>
-
-<p>After preterm birth, sadness often reflects grief and loss. This may include grieving the birth experience you expected, the end of your pregnancy, or the loss of a typical newborn experience. Many mothers also grieve the gap between what they imagined and what has unfolded.</p>
-
-<p>It is also normal to feel sadness as part of adjusting to an experience that feels overwhelming, uncertain, or unfamiliar.</p></div>
               ${renderEmotionAudio('sadness')}
             </div>
             <div class="emotion-tab-content" id="emotion-anxiety">
-              <div class="content-block written-block"><h3>Anxiety</h3>
-
-<p>Anxiety often shows up as nervousness, fear, or "what if" thinking. It can create urges to stay alert, seek information, or focus on protecting your baby from possible threat.</p>
-
-<p>After preterm birth, anxiety is often linked to concerns about your baby's health, development, and wellbeing. It may show up as hypervigilance, constantly checking monitors, closely monitoring feeds or behaviours, seeking information, or finding it difficult to relax even when things are going well.</p>
-
-<p>While these reactions can be exhausting, they are often signs of a mind that is working hard to protect a baby it cares deeply about.</p></div>
               ${renderEmotionAudio('anxiety')}
             </div>
           `;
