@@ -2257,6 +2257,8 @@
 
 <p>If you have any questions or feedback about the program, please contact: <a href="mailto:teagan.collins@uq.edu.au">teagan.collins@uq.edu.au</a></p>
 `,
+        page1Video: { src: 'IntroMirka_1.mp4', poster: 'IntroMirka_1-poster.jpg' },
+        page2Videos: [],
         audio: 'Guided audio — Introduction',
         audioImage: "Introduction.jpg",
         natureVideo: 'Audioimagery7.mp4',
@@ -2699,6 +2701,27 @@
         // redundant — strip it and just keep the base name.
         const stripPracticeLength = title => title.replace(/\s*—\s*\d+\s*min practice$/i, '');
 
+        // Renders one video-placeholder block — pass a {src, poster} object
+        // for a real module video, or nothing for the generic muted/looping
+        // ambient placeholder used everywhere a module doesn't have its own
+        // video yet.
+        const renderModuleVideo = (video) => `
+          <div class="video-placeholder">
+            <video src="${video ? video.src : 'green-room-intro-sunlight.mp4'}" poster="${video ? video.poster : 'green-room-intro-sunlight-poster.jpg'}" ${video ? '' : 'muted loop'} playsinline preload="none"></video>
+            <div class="video-controls-overlay">
+              <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
+              </button>
+              <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+              </button>
+              <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
+              </button>
+            </div>
+          </div>
+        `;
+
         const renderAudioOptions = (opts, img, subtitle, video) => `
           <div class="headphones-note">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
@@ -2856,93 +2879,7 @@
           </div>
         ` : '';
 
-        /* ── MODULE 1 (INTRODUCTION) — kept as a single scrolling page ── */
-        if (num === 1) {
-          const m1Linked = linkifySummaryHeadings(num, m.summary, m.written, '');
-          const m1Written = m1Linked.page1;
-          const m1SummaryLinks = m1Linked.links;
-          return `
-            <section class="module-section active" id="module-${num}">
-              <div class="module-card-shell">
-                ${moduleHeaderHTML}
-
-                <div class="summary-box">
-                  <h3>In this module:</h3>
-                  <ul>${m.summary.map((s, i) => m1SummaryLinks[i]
-                    ? `<li><a href="#${m1SummaryLinks[i].id}" onclick="jumpToModuleSection(event, ${num}, 1, '${m1SummaryLinks[i].id}')">${s}</a></li>`
-                    : `<li>${s}</li>`
-                  ).join('')}</ul>
-                </div>
-
-                <div class="video-placeholder">
-                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
-                  <div class="video-controls-overlay">
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="content-block written-block">
-                  <div class="written-content">${m1Written}</div>
-                </div>
-
-                <div class="section-divider"></div>
-                ${exerciseBlock}
-
-                <div class="video-placeholder">
-                  <video src="IntroMirka_1.mp4" poster="IntroMirka_1-poster.jpg" playsinline preload="none"></video>
-                  <div class="video-controls-overlay">
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="video-placeholder">
-                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
-                  <div class="video-controls-overlay">
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="content-block">
-                  <h3>Settle in and listen</h3>
-                  ${renderAudioOptions(m.audioOptions, m.audioImage, m.audio, m.natureVideo)}
-                </div>
-
-                <div class="tc-section" data-module="${num}"></div>
-
-                <div class="module-nav-buttons">
-                  <span></span>
-                  <button class="btn-module-nav btn-complete" id="complete-btn-${num}" onclick="markComplete(${num})">Mark as complete</button>
-                </div>
-              </div>
-            </section>
-          `;
-        }
-
-        /* ── MODULES 2–8 — click through 5 pages instead of scrolling:
+        /* ── MODULES 1–8 — click through 6 pages instead of scrolling:
            before-measure → intro video → video+writing → reflect+audio → after-measure.
            All written psychoeducation lives on Page 2 — Page 1 is just the
            module overview and intro video, nothing is split any more. */
@@ -3008,20 +2945,7 @@
                     : `<li>${s}</li>`
                   ).join('')}</ul>
                 </div>
-                <div class="video-placeholder">
-                  <video src="${m.page1Video ? m.page1Video.src : 'green-room-intro-sunlight.mp4'}" poster="${m.page1Video ? m.page1Video.poster : 'green-room-intro-sunlight-poster.jpg'}" ${m.page1Video ? '' : 'muted loop'} playsinline preload="none"></video>
-                  <div class="video-controls-overlay">
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
-                    </button>
-                  </div>
-                </div>
+                ${renderModuleVideo(m.page1Video)}
                 <div class="subpage-nav-buttons">
                   <span></span>
                   <button class="btn-module-nav btn-next" onclick="showSubpage(${num},2)">Continue →</button>
@@ -3029,23 +2953,11 @@
               </div>
 
               <div class="subpage" id="subpage-${num}-2">
-                <div class="video-placeholder">
-                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
-                  <div class="video-controls-overlay">
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-play" onclick="toggleModuleVideo(this)" aria-label="Play video">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
-                    </button>
-                    <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,10)" aria-label="Forward 10 seconds">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"></path></svg>
-                    </button>
-                  </div>
-                </div>
+                ${renderModuleVideo(m.page2Videos ? m.page2Videos[0] : null)}
                 <div class="content-block written-block">
                   <div class="written-content">${page2Written}</div>
                 </div>
+                ${m.page2Videos ? renderModuleVideo(m.page2Videos[1]) : ''}
                 ${brainDiagramHTML}
                 ${circleBubblesHTML}
                 ${compassionTreeHTML}
@@ -3089,7 +3001,7 @@
                 <div class="tc-section" data-module="${num}" data-phase="after"></div>
 
                 <div class="module-nav-buttons">
-                  <button class="btn-module-nav btn-prev" onclick="showModule(${num-1})">← Previous module</button>
+                  ${num > 1 ? `<button class="btn-module-nav btn-prev" onclick="showModule(${num-1})">← Previous module</button>` : '<span></span>'}
                   <button class="btn-module-nav btn-complete" id="complete-btn-${num}" onclick="markComplete(${num})">${isLast ? 'Mark program complete' : 'Mark as complete'}</button>
                 </div>
 
