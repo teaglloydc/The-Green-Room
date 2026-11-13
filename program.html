@@ -2268,6 +2268,7 @@
 
       { title: 'Motherhood and the brain', summary: ['Changes in the brain during pregnancy and motherhood','The brain’s alarm and reward systems','The impact of preterm birth on the brain and emotions'],
         written: ``,
+        page1Video: { src: 'MotherhoodGreta_2_1.mp4', poster: 'MotherhoodGreta_2_1-poster.jpg' },
     audio: 'Guided audio — Motherhood and the brain',
     audioImage: "Mindfulness2.jpg",
     natureVideo: 'Indexvideo5.mp4',
@@ -3008,7 +3009,7 @@
                   ).join('')}</ul>
                 </div>
                 <div class="video-placeholder">
-                  <video src="green-room-intro-sunlight.mp4" poster="green-room-intro-sunlight-poster.jpg" muted loop playsinline preload="none"></video>
+                  <video src="${m.page1Video ? m.page1Video.src : 'green-room-intro-sunlight.mp4'}" poster="${m.page1Video ? m.page1Video.poster : 'green-room-intro-sunlight-poster.jpg'}" ${m.page1Video ? '' : 'muted loop'} playsinline preload="none"></video>
                   <div class="video-controls-overlay">
                     <button type="button" class="video-ctrl-btn video-ctrl-skip" onclick="skipModuleVideo(this,-10)" aria-label="Rewind 10 seconds">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6l-9 6 9 6z"></path></svg>
